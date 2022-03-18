@@ -30,7 +30,7 @@ class TracksPlayerImplVlc extends TracksPlayer {
     commandlineArguments: ['--no-video'],
   );
 
-  var _trackList = const TrackList.empty();
+  var _trackList = TrackList.empty();
 
   Track? _current;
 
@@ -72,9 +72,9 @@ class TracksPlayerImplVlc extends TracksPlayer {
   @override
   Future<void> insertToNext(Track track) async {
     final index = _trackList.tracks.cast().indexOf(current);
-    if (index == -1) {
-      return;
-    }
+    // if (index == -1) {
+      // return;
+    // }
     final nextIndex = index + 1;
     if (nextIndex >= _trackList.tracks.length) {
       _trackList.tracks.add(track);

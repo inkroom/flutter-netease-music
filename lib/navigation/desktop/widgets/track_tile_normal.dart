@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -276,7 +278,10 @@ class TrackTile extends ConsumerWidget {
                 toast(context.strings.trackNoCopyright);
                 return;
               }
-              TrackTileContainer.playTrack(context, track);
+             var r = TrackTileContainer.playTrack(context, track);
+             if(r != PlayResult.success){
+               toast(context.strings.failedToPlayMusic);
+             }
             },
             child: DefaultTextStyle(
               style: const TextStyle(),

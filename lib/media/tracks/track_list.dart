@@ -9,12 +9,12 @@ class TrackList {
   })  : assert(id != kFmTrackListId, 'id should not be $kFmTrackListId'),
         isFM = false;
 
-  const TrackList.empty()
+  TrackList.empty()
       : id = '',
-        tracks = const [],
+        tracks = List.empty(growable: true),
         isFM = false;
 
-  const TrackList.fm({required this.tracks})
+  TrackList.fm({required this.tracks})
       : isFM = true,
         id = kFmTrackListId;
 

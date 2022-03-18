@@ -50,7 +50,7 @@ class TracksPlayerState with EquatableMixin {
 
 abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   TracksPlayer()
-      : super(const TracksPlayerState(
+      : super(TracksPlayerState(
           isPlaying: false,
           isBuffering: false,
           playingTrack: null,
