@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiet/extension.dart';
@@ -19,20 +21,23 @@ class BottomPlayerBar extends StatelessWidget {
     return Material(
       elevation: 10,
       child: SizedBox(
-        height: 64,
-        child: Stack(
+        height: 70,
+        child: Column(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                Expanded(child: _PlayingItemWidget()),
-                SizedBox(width: 20),
-                _CenterControllerWidget(),
-                SizedBox(width: 20),
-                Expanded(child: _PlayerControlWidget()),
-              ],
+            const SizedBox(height: 20, child: _ProgressBar()),
+            SizedBox(
+              height: 50,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  Expanded(child: _PlayingItemWidget()),
+                  SizedBox(width: 20),
+                  _CenterControllerWidget(),
+                  SizedBox(width: 20),
+                  Expanded(child: _PlayerControlWidget()),
+                ],
+              ),
             ),
-            const Align(alignment: Alignment.topCenter, child: _ProgressBar()),
           ],
         ),
       ),
@@ -269,9 +274,11 @@ class _ProgressBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playingTrack = ref.watch(playingTrackProvider);
+    final player = ref.read(playerProvider);
     if (playingTrack == null) {
       return const SizedBox.shrink();
     }
+
     return const SizedBox(
       height: 10,
       child: FractionalTranslation(
