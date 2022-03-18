@@ -87,7 +87,7 @@ class _SearchBar extends HookConsumerWidget {
     final textEditingController = useTextEditingController();
     return SizedBox(
       height: 24,
-      width: 128,
+      width: 400,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
