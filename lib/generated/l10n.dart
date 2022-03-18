@@ -332,16 +332,6 @@ class S {
     );
   }
 
-  /// `Only used for personal study and research, commercial and illegal purposes are prohibited`
-  String get copyRightOverlay {
-    return Intl.message(
-      'Only used for personal study and research, commercial and illegal purposes are prohibited',
-      name: 'copyRightOverlay',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `OpenSource project https://github.com/boyan01/flutter-netease-music`
   String get projectDescription {
     return Intl.message(
@@ -567,16 +557,6 @@ class S {
     return Intl.message(
       'About',
       name: 'about',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Hide Copyright Overlay`
-  String get hideCopyrightOverlay {
-    return Intl.message(
-      'Hide Copyright Overlay',
-      name: 'hideCopyrightOverlay',
       desc: '',
       args: [],
     );

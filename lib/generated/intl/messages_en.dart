@@ -52,8 +52,6 @@ class MessageLookup extends MessageLookupByLibrary {
             "Drop your music file to here to upload."),
         "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("Cloud Usage"),
         "collectionLike": MessageLookupByLibrary.simpleMessage("Collections"),
-        "copyRightOverlay": MessageLookupByLibrary.simpleMessage(
-            "Only used for personal study and research, commercial and illegal purposes are prohibited"),
         "createdDate": m1,
         "createdSongList":
             MessageLookupByLibrary.simpleMessage("Created Song List"),
@@ -79,8 +77,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "friends": MessageLookupByLibrary.simpleMessage("Friends"),
         "functionDescription":
             MessageLookupByLibrary.simpleMessage("Description"),
-        "hideCopyrightOverlay":
-            MessageLookupByLibrary.simpleMessage("Hide Copyright Overlay"),
         "keySpace": MessageLookupByLibrary.simpleMessage("Space"),
         "latestPlayHistory":
             MessageLookupByLibrary.simpleMessage("Play History"),

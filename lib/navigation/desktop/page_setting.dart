@@ -34,16 +34,9 @@ class PageSetting extends StatelessWidget {
             const SizedBox(height: 12),
             const SkipAccompanimentCheckBox(),
             const Divider(height: 40),
-            const CopyRightOverlayCheckBox(),
-            const Divider(height: 40),
             const _HotkeyLayout(),
             const Divider(height: 40),
             Text(context.strings.about, style: context.textTheme.bodyMedium),
-            const SizedBox(height: 12),
-            Text(
-              context.strings.copyRightOverlay,
-              style: context.textTheme.caption,
-            ),
             const SizedBox(height: 8),
             Text(
               context.strings.projectDescription,

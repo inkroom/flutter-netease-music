@@ -30,7 +30,7 @@ class SettingState with EquatableMixin {
     return SettingState(
       themeMode: ThemeMode.values[mode.clamp(0, ThemeMode.values.length - 1)],
       skipWelcomePage: preference.getBool(_keySkipWelcomePage) ?? false,
-      copyright: preference.getBool(_keyCopyright) ?? false,
+      copyright: preference.getBool(_keyCopyright) ?? true,
       skipAccompaniment:
           preference.getBool('$_prefix:skipAccompaniment') ?? false,
     );
@@ -82,11 +82,6 @@ class Settings extends StateNotifier<SettingState> {
   void setThemeMode(ThemeMode themeMode) {
     _preferences.setInt(_keyThemeMode, themeMode.index);
     state = state.copyWith(themeMode: themeMode);
-  }
-
-  void setShowCopyrightOverlay({required bool show}) {
-    _preferences.setBool(_keyCopyright, show);
-    state = state.copyWith(copyright: show);
   }
 
   void setSkipWelcomePage() {

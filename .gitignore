@@ -28,7 +28,7 @@
 .pub-cache/
 .pub/
 build/
-
+pubspec.lock
 .gradle/
 
 # Android related

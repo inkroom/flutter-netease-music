@@ -39,24 +39,6 @@ class ThemeSwitchRadios extends ConsumerWidget {
   }
 }
 
-class CopyRightOverlayCheckBox extends ConsumerWidget {
-  const CopyRightOverlayCheckBox({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return CheckboxListTile(
-      value: ref.watch(settingStateProvider.select((value) => value.copyright)),
-      onChanged: (value) {
-        ref
-            .read(settingStateProvider.notifier)
-            .setShowCopyrightOverlay(show: value ?? false);
-      },
-      controlAffinity: ListTileControlAffinity.leading,
-      title: Text(context.strings.hideCopyrightOverlay),
-    );
-  }
-}
-
 class DebugPlatformNavigationRadios extends ConsumerWidget {
   const DebugPlatformNavigationRadios({
     Key? key,

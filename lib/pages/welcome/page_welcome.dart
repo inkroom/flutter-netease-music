@@ -74,12 +74,6 @@ class _WelcomeBody extends ConsumerWidget {
             ),
           ),
         ),
-        const SizedBox(height: 6),
-        Text(
-          context.strings.copyRightOverlay,
-          style: context.primaryTextTheme.caption,
-          textAlign: TextAlign.center,
-        ),
         const SizedBox(height: 20),
       ],
     );

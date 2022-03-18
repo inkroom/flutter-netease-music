@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/extension.dart';
-import 'package:quiet/material.dart';
 import 'package:quiet/navigation/desktop/home_window.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 
@@ -40,9 +39,6 @@ class QuietApp extends ConsumerWidget {
       ),
       home: home,
       debugShowCheckedModeBanner: false,
-      builder: (context, child) {
-        return CopyRightOverlay(child: child);
-      },
     );
   }
 }

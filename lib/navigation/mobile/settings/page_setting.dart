@@ -19,9 +19,6 @@ class PageSettings extends StatelessWidget {
             children: const [ThemeSwitchRadios()],
           ),
           const Divider(height: 20),
-          const SettingGroup(
-            children: [CopyRightOverlayCheckBox()],
-          ),
           if (!kReleaseMode) const _DebugNavigationPlatformSetting(),
           const Divider(height: 20),
           SettingGroup(
@@ -36,7 +33,6 @@ class PageSettings extends StatelessWidget {
                           applicationIcon:
                               Image.asset("assets/ic_launcher_round.png"),
                           applicationVersion: "0.3-alpha",
-                          applicationLegalese: context.strings.copyRightOverlay,
                         );
                       });
                 },

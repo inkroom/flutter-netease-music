@@ -50,8 +50,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("将音乐文件拖放到这里进行上传"),
         "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("云盘容量"),
         "collectionLike": MessageLookupByLibrary.simpleMessage("已购"),
-        "copyRightOverlay":
-            MessageLookupByLibrary.simpleMessage("只用作个人学习研究，禁止用于商业及非法用途"),
         "createdDate": m1,
         "createdSongList": MessageLookupByLibrary.simpleMessage("创建歌单"),
         "currentPlaying": MessageLookupByLibrary.simpleMessage("当前播放"),
@@ -69,7 +67,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "favoriteSongList": MessageLookupByLibrary.simpleMessage("收藏歌单"),
         "friends": MessageLookupByLibrary.simpleMessage("我的好友"),
         "functionDescription": MessageLookupByLibrary.simpleMessage("功能描述"),
-        "hideCopyrightOverlay": MessageLookupByLibrary.simpleMessage("隐藏版权浮层"),
         "keySpace": MessageLookupByLibrary.simpleMessage("空格"),
         "latestPlayHistory": MessageLookupByLibrary.simpleMessage("最近播放"),
         "library": MessageLookupByLibrary.simpleMessage("音乐库"),
