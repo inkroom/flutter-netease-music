@@ -75,7 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "login": MessageLookupByLibrary.simpleMessage("立即登录"),
         "loginWithPhone": MessageLookupByLibrary.simpleMessage("手机号登录"),
         "musicCountFormat": m2,
-        "musicName": MessageLookupByLibrary.simpleMessage("音乐标题"),
+        "musicName": MessageLookupByLibrary.simpleMessage("歌曲名"),
         "my": MessageLookupByLibrary.simpleMessage("我的"),
         "myDjs": MessageLookupByLibrary.simpleMessage("我的电台"),
         "myMusic": MessageLookupByLibrary.simpleMessage("我的音乐"),
