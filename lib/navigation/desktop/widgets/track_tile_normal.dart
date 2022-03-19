@@ -70,7 +70,7 @@ class _TrackTableContainerState extends State<_TrackTableContainer> {
   @override
   void initState() {
     super.initState();
-    nameWidth = widget.width * .30;
+    nameWidth = widget.width * .25;
     artistWidth = widget.width * .20;
     albumWidth = widget.width * .25;
     durationWidth = widget.width * .10;
