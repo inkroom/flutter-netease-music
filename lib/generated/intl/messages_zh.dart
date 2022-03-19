@@ -45,10 +45,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "albumShareContent": m0,
         "alreadyBuy": MessageLookupByLibrary.simpleMessage("收藏和赞"),
         "artists": MessageLookupByLibrary.simpleMessage("歌手"),
-        "cloudMusic": MessageLookupByLibrary.simpleMessage("云盘"),
+        "cloudMusic": MessageLookupByLibrary.simpleMessage("歌单"),
         "cloudMusicFileDropDescription":
             MessageLookupByLibrary.simpleMessage("将音乐文件拖放到这里进行上传"),
-        "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("云盘容量"),
+        "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("歌曲数量"),
         "collectionLike": MessageLookupByLibrary.simpleMessage("已购"),
         "createdDate": m1,
         "createdSongList": MessageLookupByLibrary.simpleMessage("创建歌单"),

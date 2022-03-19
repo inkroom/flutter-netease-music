@@ -2,7 +2,7 @@
   "my": "My",
   "discover": "Discover",
   "localMusic": "Local Music",
-  "cloudMusic": "Could Space",
+  "cloudMusic": "Music List",
   "latestPlayHistory": "Play History",
   "friends": "Friends",
   "myDjs": "Dj",
@@ -78,6 +78,6 @@
   "currentPlaying": "Current Playing",
   "searchMusicResultCount": "Find {value} music",
   "songs": "Songs",
-  "cloudMusicUsage": "Cloud Usage",
+  "cloudMusicUsage": "Musci Count",
   "cloudMusicFileDropDescription": "Drop your music file to here to upload."
 }

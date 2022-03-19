@@ -47,10 +47,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "albumShareContent": m0,
         "alreadyBuy": MessageLookupByLibrary.simpleMessage("Payed"),
         "artists": MessageLookupByLibrary.simpleMessage("Artists"),
-        "cloudMusic": MessageLookupByLibrary.simpleMessage("Could Space"),
+        "cloudMusic": MessageLookupByLibrary.simpleMessage("Music List"),
         "cloudMusicFileDropDescription": MessageLookupByLibrary.simpleMessage(
             "Drop your music file to here to upload."),
-        "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("Cloud Usage"),
+        "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("Music Count"),
         "collectionLike": MessageLookupByLibrary.simpleMessage("Collections"),
         "createdDate": m1,
         "createdSongList":

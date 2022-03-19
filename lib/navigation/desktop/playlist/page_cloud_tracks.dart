@@ -84,7 +84,7 @@ class _UserCloudInformation extends StatelessWidget {
           const SizedBox(width: 20),
           Text(context.strings.cloudMusicUsage),
           const SizedBox(width: 8),
-          Text(filesize(detail.size) + '/' + filesize(detail.maxSize)),
+          Text(detail.trackCount.toString()),
           const SizedBox(width: 20),
         ],
       ),

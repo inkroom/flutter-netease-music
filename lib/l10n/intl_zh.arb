@@ -3,7 +3,7 @@
   "my": "我的",
   "discover": "发现",
   "localMusic": "本地音乐",
-  "cloudMusic": "云盘",
+  "cloudMusic": "歌单",
   "latestPlayHistory": "最近播放",
   "friends": "我的好友",
   "myDjs": "我的电台",
@@ -78,6 +78,6 @@
   "currentPlaying": "当前播放",
   "searchMusicResultCount": "找到 {value} 首歌曲",
   "songs": "歌曲",
-  "cloudMusicUsage": "云盘容量",
+  "cloudMusicUsage": "歌曲数目",
   "cloudMusicFileDropDescription": "将音乐文件拖放到这里进行上传"
 }

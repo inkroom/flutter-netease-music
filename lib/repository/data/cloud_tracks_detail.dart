@@ -12,14 +12,14 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
             tracks: [], size: 0, maxSize: 0, trackCount: 0)) {
     _load();
   }
+  final _kCacheKey = 'user_cloud_tracks_detail';
 
   _load() {
-    const kCacheKey = 'user_cloud_tracks_detail';
-    final data = neteaseLocalData.get<Map<String, dynamic>>(kCacheKey);
+    final data = neteaseLocalData.get<Map<String, dynamic>>(_kCacheKey);
     data.then((value) {
       var c = CloudTracksDetail.fromJson(value as Map<String, dynamic>);
 
-      _notify(c.tracks,c.size,c.maxSize,c.trackCount);
+      _notify(c.tracks, c.size, c.maxSize, c.trackCount);
     });
   }
 
@@ -30,20 +30,40 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
         trackCount: trackCount,
         tracks: tracks);
   }
+
+  _save(List<Track> tracks, int size, int maxSize, int trackCount) {
+    var d = CloudTracksDetail(
+        tracks: tracks, size: size, maxSize: maxSize, trackCount: trackCount);
+    neteaseLocalData[_kCacheKey] = d.toJson();
+  }
+
+  add(Track track) {
+    if (state.tracks.indexWhere((element) => element.id == track.id) == -1) {
+      var tracks = state.tracks;
+      tracks.add(track);
+      _save(tracks, 0, 0, tracks.length);
+      _notify(tracks, 0, 0, tracks.length);
+    }
+  }
+
+  remove(Track track) {
+    var index = state.tracks.indexWhere((element) => element.id == track.id);
+    if (index != -1) {
+      state.tracks.removeAt(index);
+      _save(state.tracks, 0, 0, state.tracks.length);
+      _notify(state.tracks, 0, 0, state.tracks.length);
+    }
+  }
 }
 
 @JsonSerializable()
-class CloudTracksDetail extends StateNotifier<CloudTracksDetailState> {
+class CloudTracksDetail {
   CloudTracksDetail({
     required this.tracks,
     required this.size,
     required this.maxSize,
     required this.trackCount,
-  }) : super(CloudTracksDetailState(
-            tracks: tracks,
-            size: size,
-            maxSize: maxSize,
-            trackCount: trackCount));
+  });
 
   factory CloudTracksDetail.fromJson(Map<String, dynamic> json) =>
       _$CloudTracksDetailFromJson(json);
@@ -53,27 +73,7 @@ class CloudTracksDetail extends StateNotifier<CloudTracksDetailState> {
   final int maxSize;
   int trackCount;
 
-  final _kCacheKey = 'user_cloud_tracks_detail';
-
   Map<String, dynamic> toJson() => _$CloudTracksDetailToJson(this);
-
-  void addTrack(Track track) {
-    tracks.add(track);
-    trackCount = tracks.length;
-    notify();
-  }
-
-  @protected
-  void notify() {
-    // 存入文件
-    neteaseLocalData[_kCacheKey] = toJson();
-
-    state = CloudTracksDetailState(
-        maxSize: maxSize,
-        size: maxSize,
-        trackCount: trackCount,
-        tracks: tracks);
-  }
 }
 
 class CloudTracksDetailState with EquatableMixin {

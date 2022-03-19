@@ -6,6 +6,7 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/common/like_button.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
+import 'package:quiet/providers/cloud_tracks_provider.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 import 'package:quiet/providers/player_provider.dart';
 import 'package:quiet/repository.dart';
@@ -58,30 +59,35 @@ class _TrackTableContainerState extends State<_TrackTableContainer> {
   double artistWidth = 0;
   double albumWidth = 0;
   double durationWidth = 0;
+  double operatorWidth = 0;
 
-  static const _nameMinWidth = 80.0;
-  static const _artistMinWidth = 80.0;
-  static const _albumMinWidth = 80.0;
+  static const _nameMinWidth = 70.0;
+  static const _artistMinWidth = 70.0;
+  static const _albumMinWidth = 70.0;
   static const _durationMinWidth = 40.0;
 
   @override
   void initState() {
     super.initState();
     nameWidth = widget.width * .30;
-    artistWidth = widget.width * .30;
+    artistWidth = widget.width * .20;
     albumWidth = widget.width * .30;
     durationWidth = widget.width * .10;
+    operatorWidth = widget.width * .15;
   }
 
   @override
   void didUpdateWidget(covariant _TrackTableContainer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.width != widget.width) {
-      final totalWidth = nameWidth + artistWidth + albumWidth + durationWidth;
+      // 重新计算宽度
+      final totalWidth =
+          nameWidth + artistWidth + albumWidth + durationWidth + operatorWidth;
       nameWidth = widget.width * nameWidth / totalWidth;
       artistWidth = widget.width * artistWidth / totalWidth;
       albumWidth = widget.width * albumWidth / totalWidth;
       durationWidth = widget.width * durationWidth / totalWidth;
+      operatorWidth = widget.width * operatorWidth / totalWidth;
     }
   }
 
@@ -143,6 +149,7 @@ class _TrackTableContainerState extends State<_TrackTableContainer> {
       artistWidth: artistWidth,
       albumWidth: albumWidth,
       durationWidth: durationWidth,
+      operatorWidth: operatorWidth,
       child: widget.child,
     );
   }
@@ -156,12 +163,14 @@ class _TrackTableConfiguration extends InheritedWidget {
     required this.artistWidth,
     required this.albumWidth,
     required this.durationWidth,
+    required this.operatorWidth,
   }) : super(key: key, child: child);
 
   final double nameWidth;
   final double artistWidth;
   final double albumWidth;
   final double durationWidth;
+  final double operatorWidth;
 
   static _TrackTableConfiguration of(BuildContext context) {
     final _TrackTableConfiguration? result =
@@ -175,7 +184,8 @@ class _TrackTableConfiguration extends InheritedWidget {
     return nameWidth != old.nameWidth ||
         artistWidth != old.artistWidth ||
         albumWidth != old.albumWidth ||
-        durationWidth != old.durationWidth;
+        durationWidth != old.durationWidth ||
+        operatorWidth != old.operatorWidth;
   }
 }
 
@@ -193,6 +203,7 @@ class TrackTableHeader extends StatelessWidget with PreferredSizeWidget {
           children: [
             const SizedBox(width: 80),
             SizedBox(
+              //歌曲名
               width: _TrackTableConfiguration.of(context).nameWidth - 2,
               child: Text(context.strings.musicName),
             ),
@@ -208,6 +219,7 @@ class TrackTableHeader extends StatelessWidget with PreferredSizeWidget {
               ),
             ),
             SizedBox(
+              //歌手
               width: _TrackTableConfiguration.of(context).artistWidth - 4,
               child: Text(context.strings.artists),
             ),
@@ -223,6 +235,7 @@ class TrackTableHeader extends StatelessWidget with PreferredSizeWidget {
               ),
             ),
             SizedBox(
+              //专辑
               width: _TrackTableConfiguration.of(context).albumWidth - 4,
               child: Text(context.strings.album),
             ),
@@ -238,10 +251,17 @@ class TrackTableHeader extends StatelessWidget with PreferredSizeWidget {
               ),
             ),
             SizedBox(
+              //时长
               width: _TrackTableConfiguration.of(context).durationWidth - 2,
               child: Text(context.strings.duration),
             ),
             const SizedBox(width: 20),
+            SizedBox(
+              //基础操作
+              width: _TrackTableConfiguration.of(context).durationWidth - 2,
+              child: const Text(''),
+            ),
+            const SizedBox(width: 10),
           ],
         ),
       ),
@@ -266,6 +286,17 @@ class TrackTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final configuration = _TrackTableConfiguration.of(context);
+
+    var cloudTracksProviderNotifier = ref.watch(cloudTracksProvider.notifier);
+
+    void addOperator() {
+      cloudTracksProviderNotifier.add(track);
+    }
+
+    void deleteOperator() {
+      cloudTracksProviderNotifier.remove(track);
+    }
+
     return SizedBox(
         height: 36,
         child: Material(
@@ -278,10 +309,10 @@ class TrackTile extends ConsumerWidget {
                 toast(context.strings.trackNoCopyright);
                 return;
               }
-             var r = TrackTileContainer.playTrack(context, track);
-             if(r != PlayResult.success){
-               toast(context.strings.failedToPlayMusic);
-             }
+              var r = TrackTileContainer.playTrack(context, track);
+              if (r != PlayResult.success) {
+                toast(context.strings.failedToPlayMusic);
+              }
             },
             child: DefaultTextStyle(
               style: const TextStyle(),
@@ -381,7 +412,21 @@ class TrackTile extends ConsumerWidget {
                       style: context.textTheme.caption,
                     ),
                   ),
-                  const SizedBox(width: 20),
+                  const SizedBox(width: 10),
+                  Expanded(child: Row(
+                      children: [
+                        IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: addOperator,
+                            icon: const Icon(Icons.add_outlined)),
+                        IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: deleteOperator,
+                            icon: const Icon(Icons.delete_outline))
+                      ],
+                    ),
+                  )
+                  // const SizedBox(width: 10),
                 ],
               ),
             ),
