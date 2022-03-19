@@ -1,7 +1,10 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:quiet/repository.dart';
 
 part 'cloud_tracks_detail.g.dart';
@@ -38,12 +41,16 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
   }
 
   add(Track track) {
-    if (state.tracks.indexWhere((element) => element.id == track.id) == -1) {
-      var tracks = state.tracks;
+    var tracks = state.tracks;
+    final index = tracks.indexWhere((element) => element.id == track.id);
+    if (index == -1) {
       tracks.add(track);
-      _save(tracks, 0, 0, tracks.length);
-      _notify(tracks, 0, 0, tracks.length);
+    } else {
+      //已存在，可能要进行修改操作
+      tracks.setRange(index, index + 1, [track]);
     }
+    _save(tracks, 0, 0, tracks.length);
+    _notify(tracks, 0, 0, tracks.length);
   }
 
   remove(Track track) {
@@ -52,6 +59,34 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
       state.tracks.removeAt(index);
       _save(state.tracks, 0, 0, state.tracks.length);
       _notify(state.tracks, 0, 0, state.tracks.length);
+    }
+  }
+
+  /// 文件下载
+  /// 下载完成后返回更新后的track
+  Future<Track> download(Track track) {
+    Future<Track> down() {
+      return neteaseRepository!.getPlayUrl(track.id).then((value) {
+        /// 下载文件
+        track.mp3Url = value.asValue!.value;
+        return neteaseLocalData.downloadMusic(value.asValue!.value, track);
+      }).then((value) {
+        log('下载之后的结果$value');
+        track.file = value;
+        return Future.value(track);
+      });
+    }
+
+    // 首先获取权限
+    if (Platform.isAndroid) {
+      return Permission.storage
+          .request()
+          .isGranted
+          .then((value) => null)
+          .then((value) => down());
+    } else {
+      /// 非安卓直接下载
+      return down();
     }
   }
 }

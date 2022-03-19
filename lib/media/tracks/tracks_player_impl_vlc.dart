@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/foundation.dart';
@@ -173,17 +174,25 @@ class TracksPlayerImplVlc extends TracksPlayer {
 
   void _playTrack(Track track) {
     scheduleMicrotask(() async {
-      final url = await neteaseRepository!.getPlayUrl(track.id);
-      if (url.isError) {
-        debugPrint('Failed to get play url: ${url.asError!.error}');
-        return;
+      if (track.file != null) {
+        log('从文件播放${track.file}');
+        _player.open(Media.file(File(track.file!)), autoStart: true);
+      } else if (track.mp3Url != null) {
+        log('从url播放${track.mp3Url}');
+        _player.open(Media.network(track.mp3Url), autoStart: true);
+      } else {
+        final url = await neteaseRepository!.getPlayUrl(track.id);
+        if (url.isError) {
+          debugPrint('Failed to get play url: ${url.asError!.error}');
+          return;
+        }
+        if (_current != track) {
+          // skip play. since the track is changed.
+          return;
+        }
+        log('获取uri=${url.asValue!.value}');
+        _player.open(Media.network(url.asValue!.value), autoStart: true);
       }
-      if (_current != track) {
-        // skip play. since the track is changed.
-        return;
-      }
-      log('播放的uri=${url.asValue!.value}');
-      _player.open(Media.network(url.asValue!.value), autoStart: true);
     });
     _current = track;
     notifyPlayStateChanged();

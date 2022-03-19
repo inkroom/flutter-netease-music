@@ -27,14 +27,20 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(value) => "共${value}首";
 
-  static String m3(value) => "播放数: ${value}";
+  static String m3(value) => "${value} 下载失败";
 
-  static String m4(username, title, playlistId, userId, shareUserId) =>
+  static String m4(value) => "${value} 下载完成";
+
+  static String m5(value) => "${value} 开始下载";
+
+  static String m6(value) => "播放数: ${value}";
+
+  static String m7(username, title, playlistId, userId, shareUserId) =>
       "分享${username}创建的歌单「${title}」: http://music.163.com/playlist/${playlistId}/${userId}/?userid=${shareUserId} (来自@网易云音乐)";
 
-  static String m5(value) => "歌曲数: ${value}";
+  static String m8(value) => "歌曲数: ${value}";
 
-  static String m6(value) => "找到 ${value} 首歌曲";
+  static String m9(value) => "找到 ${value} 首歌曲";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -75,6 +81,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "login": MessageLookupByLibrary.simpleMessage("立即登录"),
         "loginWithPhone": MessageLookupByLibrary.simpleMessage("手机号登录"),
         "musicCountFormat": m2,
+        "musicDownloadFail": m3,
+        "musicDownloaded": m4,
+        "musicDownloading": m5,
         "musicName": MessageLookupByLibrary.simpleMessage("歌曲名"),
         "my": MessageLookupByLibrary.simpleMessage("我的"),
         "myDjs": MessageLookupByLibrary.simpleMessage("我的电台"),
@@ -93,9 +102,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "playlist": MessageLookupByLibrary.simpleMessage("歌单"),
         "playlistLoginDescription":
             MessageLookupByLibrary.simpleMessage("登录以加载你的私人播放列表。"),
-        "playlistPlayCount": m3,
-        "playlistShareContent": m4,
-        "playlistTrackCount": m5,
+        "playlistPlayCount": m6,
+        "playlistShareContent": m7,
+        "playlistTrackCount": m8,
         "projectDescription": MessageLookupByLibrary.simpleMessage(
             "开源项目 https://github.com/boyan01/flutter-netease-music"),
         "recommendPlayLists": MessageLookupByLibrary.simpleMessage("推荐歌单"),
@@ -104,7 +113,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "repeatModeOne": MessageLookupByLibrary.simpleMessage("单曲循环"),
         "repeatModeRandom": MessageLookupByLibrary.simpleMessage("随机播放"),
         "search": MessageLookupByLibrary.simpleMessage("搜索"),
-        "searchMusicResultCount": m6,
+        "searchMusicResultCount": m9,
         "searchPlaylistSongs": MessageLookupByLibrary.simpleMessage("搜索歌单歌曲"),
         "selectRegionDiaCode": MessageLookupByLibrary.simpleMessage("选择地区号码"),
         "selectTheArtist": MessageLookupByLibrary.simpleMessage("请选择要查看的歌手"),

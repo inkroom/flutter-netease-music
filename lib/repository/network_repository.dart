@@ -393,6 +393,8 @@ extension _CloudTrackMapper on api.CloudSongItem {
       artists: simpleSong.ar.map(mapArtist).toList(),
       uri: '',
       imageUrl: album.picUri,
+      file: null,
+      mp3Url: null,
     );
   }
 }
@@ -408,6 +410,8 @@ extension _FmTrackMapper on api.FmTrackItem {
         duration: Duration(milliseconds: duration),
         type:
             _trackType(fee: privilege.fee, st: privilege.st, cs: privilege.cs),
+        file: null,
+        mp3Url: null,
       );
 }
 
@@ -469,6 +473,8 @@ extension _TrackMapper on api.TracksItem {
         cs: p?.cs ?? false,
         st: p?.st ?? st,
       ),
+      file: null,
+      mp3Url: null,
     );
   }
 }

@@ -83,5 +83,8 @@
   "repeatModeRandom":"random",
   "repeatModeNext":"circle",
   "repeatModeOne":"single repeat",
-  "repeatModeNone":"stop after finish"
+  "repeatModeNone":"stop after finish",
+  "musicDownloading":"{value} downloaded",
+  "musicDownloaded":"{value} downloading",
+  "musicDownloadFail":"{value} download fail"
 }

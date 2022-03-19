@@ -901,6 +901,36 @@ class S {
       args: [],
     );
   }
+
+  /// `{value} downloaded`
+  String musicDownloading(Object value) {
+    return Intl.message(
+      '$value downloaded',
+      name: 'musicDownloading',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `{value} downloading`
+  String musicDownloaded(Object value) {
+    return Intl.message(
+      '$value downloading',
+      name: 'musicDownloaded',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `{value} download fail`
+  String musicDownloadFail(Object value) {
+    return Intl.message(
+      '$value download fail',
+      name: 'musicDownloadFail',
+      desc: '',
+      args: [value],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -24,6 +24,8 @@ class Track with EquatableMixin {
     required this.imageUrl,
     required this.duration,
     required this.type,
+    this.file,
+    this.mp3Url,
   });
 
   factory Track.fromJson(Map<String, dynamic> json) => _$TrackFromJson(json);
@@ -44,6 +46,12 @@ class Track with EquatableMixin {
 
   final TrackType type;
 
+  /// 本地存储的文件，播放时优先使用该地址
+  String? file;
+
+  /// 可以实际用于播放的音乐文件url
+  String? mp3Url;
+
   String get displaySubtitle {
     final artist = artists.map((artist) => artist.name).join('/');
     return '$artist - ${album?.name ?? ''}';
@@ -59,6 +67,7 @@ class Track with EquatableMixin {
         imageUrl,
         duration,
         type,
+        file,
       ];
 
   Map<String, dynamic> toJson() => _$TrackToJson(this);

@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   dart_vlc
   desktop_drop
+  permission_handler_windows
   system_clock
   url_launcher_windows
   window_manager

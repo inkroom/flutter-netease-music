@@ -32,6 +32,8 @@ extension _Metadata on MusicMetadata {
       imageUrl: extras?['imageUrl'] as String,
       duration: Duration(milliseconds: duration),
       type: TrackType.values.byName(extras?['fee']),
+      file:null,
+      mp3Url: null,
     );
   }
 }
@@ -175,7 +177,6 @@ class TracksPlayerImplMobile extends TracksPlayer {
 
   @override
   Future<void> stop() {
-    // FIXME stop impl
     return _player.transportControls.pause();
   }
 

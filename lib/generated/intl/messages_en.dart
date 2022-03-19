@@ -27,14 +27,20 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(value) => "${value} Music";
 
-  static String m3(value) => "Play Count: ${value}";
+  static String m3(value) => "${value} download fail";
 
-  static String m4(username, title, playlistId, userId, shareUserId) =>
+  static String m4(value) => "${value} downloading";
+
+  static String m5(value) => "${value} downloaded";
+
+  static String m6(value) => "Play Count: ${value}";
+
+  static String m7(username, title, playlistId, userId, shareUserId) =>
       "The PlayList created by ${username}「${title}」: http://music.163.com/playlist/${playlistId}/${userId}/?userid=${shareUserId} (From @NeteaseCouldMusic)";
 
-  static String m5(value) => "Track Count: ${value}";
+  static String m8(value) => "Track Count: ${value}";
 
-  static String m6(value) => "Find ${value} music";
+  static String m9(value) => "Find ${value} music";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -87,6 +93,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "loginWithPhone":
             MessageLookupByLibrary.simpleMessage("login with phone"),
         "musicCountFormat": m2,
+        "musicDownloadFail": m3,
+        "musicDownloaded": m4,
+        "musicDownloading": m5,
         "musicName": MessageLookupByLibrary.simpleMessage("Music Name"),
         "my": MessageLookupByLibrary.simpleMessage("My"),
         "myDjs": MessageLookupByLibrary.simpleMessage("Dj"),
@@ -106,9 +115,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "playlist": MessageLookupByLibrary.simpleMessage("PlayList"),
         "playlistLoginDescription": MessageLookupByLibrary.simpleMessage(
             "Login to discover your playlists."),
-        "playlistPlayCount": m3,
-        "playlistShareContent": m4,
-        "playlistTrackCount": m5,
+        "playlistPlayCount": m6,
+        "playlistShareContent": m7,
+        "playlistTrackCount": m8,
         "projectDescription": MessageLookupByLibrary.simpleMessage(
             "OpenSource project https://github.com/boyan01/flutter-netease-music"),
         "recommendPlayLists":
@@ -119,7 +128,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "repeatModeOne": MessageLookupByLibrary.simpleMessage("single repeat"),
         "repeatModeRandom": MessageLookupByLibrary.simpleMessage("random"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
-        "searchMusicResultCount": m6,
+        "searchMusicResultCount": m9,
         "searchPlaylistSongs":
             MessageLookupByLibrary.simpleMessage("Search Songs"),
         "selectRegionDiaCode":

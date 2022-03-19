@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
+import 'package:quiet/repository/data/track.dart';
 
 import 'data/playlist_detail.dart';
 import 'database.dart';
@@ -86,6 +90,13 @@ class LocalData {
     } catch (e) {
       return null;
     }
+  }
+
+  Future<String?> downloadMusic(String url, Track track) {
+    return getApplicationBin().then((value) {
+      final path = join(value.toString(), track.id.toString() + track.name);
+      return Dio().download(url, path).then((value) => path);
+    });
   }
 
   //TODO 添加分页加载逻辑

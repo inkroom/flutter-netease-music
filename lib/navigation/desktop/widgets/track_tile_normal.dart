@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/navigation/common/buttons.dart';
 import 'package:quiet/navigation/common/like_button.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
 import 'package:quiet/providers/cloud_tracks_provider.dart';
@@ -71,7 +72,7 @@ class _TrackTableContainerState extends State<_TrackTableContainer> {
     super.initState();
     nameWidth = widget.width * .30;
     artistWidth = widget.width * .20;
-    albumWidth = widget.width * .30;
+    albumWidth = widget.width * .25;
     durationWidth = widget.width * .10;
     operatorWidth = widget.width * .15;
   }
@@ -297,6 +298,19 @@ class TrackTile extends ConsumerWidget {
       cloudTracksProviderNotifier.remove(track);
     }
 
+    void downloadOperator() {
+      toast(context.strings.musicDownloading(track.name));
+      cloudTracksProviderNotifier.download(track).then((value) {
+        toast(context.strings.musicDownloaded(value.name));
+
+        /// 加入到歌单中
+        cloudTracksProviderNotifier.add(track);
+      }).catchError((error) {
+        log('下载十八');
+        toast(context.strings.musicDownloadFail(track.name));
+      });
+    }
+
     return SizedBox(
         height: 36,
         child: Material(
@@ -309,10 +323,16 @@ class TrackTile extends ConsumerWidget {
                 toast(context.strings.trackNoCopyright);
                 return;
               }
-              var r = TrackTileContainer.playTrack(context, track);
-              if (r != PlayResult.success) {
+              // TODO 将获取播放url往合适的地方放
+              neteaseRepository!.getPlayUrl(track.id).then((value) {
+                track.mp3Url = value.asValue!.value;
+                var r = TrackTileContainer.playTrack(context, track);
+                if (r != PlayResult.success) {
+                  toast(context.strings.failedToPlayMusic);
+                }
+              }).catchError((error) {
                 toast(context.strings.failedToPlayMusic);
-              }
+              });
             },
             child: DefaultTextStyle(
               style: const TextStyle(),
@@ -413,16 +433,21 @@ class TrackTile extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Expanded(child: Row(
+                  Expanded(
+                    child: Row(
                       children: [
-                        IconButton(
+                        AppIconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: downloadOperator,
+                            icon: Icons.download_outlined),
+                        AppIconButton(
                             padding: EdgeInsets.zero,
                             onPressed: addOperator,
-                            icon: const Icon(Icons.add_outlined)),
-                        IconButton(
+                            icon: Icons.add_outlined),
+                        AppIconButton(
                             padding: EdgeInsets.zero,
                             onPressed: deleteOperator,
-                            icon: const Icon(Icons.delete_outline))
+                            icon: Icons.delete_outline),
                       ],
                     ),
                   )

@@ -10,6 +10,8 @@ Track _$TrackFromJson(Map json) => Track(
       id: json['id'] as int,
       uri: json['uri'] as String?,
       name: json['name'] as String,
+      file: json['file'] as String?,
+      mp3Url: json['mp3Url'] as String?,
       artists: (json['artists'] as List<dynamic>)
           .map((e) => ArtistMini.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
@@ -30,6 +32,8 @@ Map<String, dynamic> _$TrackToJson(Track instance) => <String, dynamic>{
       'imageUrl': instance.imageUrl,
       'duration': instance.duration.inMicroseconds,
       'type': _$TrackTypeEnumMap[instance.type],
+      'file':instance.file,
+      'mp3Url':instance.mp3Url,
     };
 
 const _$TrackTypeEnumMap = {
