@@ -20,15 +20,11 @@ class PageCloudTracks extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final result = ref.watch(cloudTracksProvider);
+
+
     return Material(
       color: context.colorScheme.background,
-      child: result.when(
-        data: (data) => _PageCloudTracksBody(detail: data),
-        error: (error, stacktrace) => Center(
-          child: Text(context.formattedError(error)),
-        ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-      ),
+      child:  _PageCloudTracksBody(detail: result)
     );
   }
 }
@@ -39,7 +35,7 @@ class _PageCloudTracksBody extends ConsumerWidget {
     required this.detail,
   }) : super(key: key);
 
-  final CloudTracksDetail detail;
+  final CloudTracksDetailState detail;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,7 +73,7 @@ class _UserCloudInformation extends StatelessWidget {
     required this.detail,
   }) : super(key: key);
 
-  final CloudTracksDetail detail;
+  final CloudTracksDetailState detail;
 
   @override
   Widget build(BuildContext context) {
