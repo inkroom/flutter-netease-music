@@ -55,7 +55,9 @@ class LocalData {
 
   Future _put(dynamic value, [dynamic key]) async {
     final Database db = await getApplicationDatabase();
-    return StoreRef.main().record(key).put(db, value);
+    final r = StoreRef.main().record(key);
+    r.delete(db);
+    return r.put(db, value);
   }
 
   Future<List<PlaylistDetail>> getUserPlaylist(int? userId) async {
