@@ -15,7 +15,7 @@ import 'user/page_user_detail.dart';
 
 class MobileNavigatorController extends NavigatorController {
   MobileNavigatorController() {
-    _pages.add(NavigationTargetMy());
+    _pages.add(NavigationTargetSearch());
     notifyListeners();
   }
 

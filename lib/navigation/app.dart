@@ -17,7 +17,7 @@ class QuietApp extends ConsumerWidget {
     final platform = ref.watch(debugNavigatorPlatformProvider);
     switch (platform) {
       case NavigationPlatform.desktop:
-        home = const HomeWindow();
+        home = const MobileWindow();
         break;
       case NavigationPlatform.mobile:
         home = const MobileWindow();
