@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/providers/player_provider.dart';
 import 'package:quiet/repository.dart';
 
@@ -173,6 +175,7 @@ class _CenterControllerWidget extends ConsumerWidget {
   }
 }
 
+/// 其他控制按钮
 class _PlayerControlWidget extends StatelessWidget {
   const _PlayerControlWidget({Key? key}) : super(key: key);
 
@@ -184,8 +187,50 @@ class _PlayerControlWidget extends StatelessWidget {
         _VolumeControl(),
         SizedBox(width: 10),
         _PlayingListButton(),
+        SizedBox(width: 10),
+        _RpeatModeControl(),
         SizedBox(width: 36),
       ],
+    );
+  }
+}
+
+/// 播放模式控制器
+class _RpeatModeControl extends ConsumerWidget {
+  const _RpeatModeControl({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = ref.watch(playerStateProvider).mode;
+    final m = ref.read(playerProvider);
+    IconData i = Icons.autorenew;
+    if (mode == RepeatMode.random) {
+      i = Icons.autorenew_outlined;
+    } else if (mode == RepeatMode.next) {
+       i = Icons.arrow_circle_down_outlined;
+    } else if (mode == RepeatMode.one) {
+      i = Icons.density_large_outlined;
+    } else if (mode == RepeatMode.none) {
+      i = Icons.close_outlined;
+    }
+    return AppIconButton(
+      icon: i,
+      size: 24,
+      onPressed: () {
+        if (mode == RepeatMode.random) {
+          m.repeatMode = RepeatMode.next;
+          toast(context.strings.repeatModeNext);
+        } else if (mode == RepeatMode.next) {
+          m.repeatMode = RepeatMode.one;
+          toast(context.strings.repeatModeOne);
+        } else if (mode == RepeatMode.one) {
+          m.repeatMode = RepeatMode.none;
+          toast(context.strings.repeatModeNone);
+        } else if (mode == RepeatMode.none) {
+          m.repeatMode = RepeatMode.random;
+          toast(context.strings.repeatModeRandom);
+        }
+      },
     );
   }
 }

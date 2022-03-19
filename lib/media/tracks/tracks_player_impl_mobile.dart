@@ -83,6 +83,8 @@ class TracksPlayerImplMobile extends TracksPlayer {
 
   final _player = MusicPlayer();
 
+  RepeatMode _mode = RepeatMode.random;
+
   @override
   Duration? get bufferedPosition =>
       Duration(milliseconds: _player.playbackState.bufferedPosition);
@@ -97,26 +99,6 @@ class TracksPlayerImplMobile extends TracksPlayer {
       return null;
     }
     return Duration(milliseconds: d);
-  }
-
-  @override
-  Future<Track?> getNextTrack() async {
-    final current = _player.metadata;
-    if (current == null) {
-      return null;
-    }
-    final next = await _player.getNextMusic(current);
-    return next.toTrack();
-  }
-
-  @override
-  Future<Track?> getPreviousTrack() async {
-    final current = _player.metadata;
-    if (current == null) {
-      return null;
-    }
-    final previous = await _player.getPreviousMusic(current);
-    return previous.toTrack();
   }
 
   @override
@@ -152,9 +134,14 @@ class TracksPlayerImplMobile extends TracksPlayer {
     return Duration(milliseconds: p);
   }
 
-  // TODO
   @override
-  RepeatMode get repeatMode => RepeatMode.all;
+  RepeatMode get repeatMode => _mode;
+
+  @override
+  set repeatMode(RepeatMode mode) {
+    _mode = mode;
+    notifyPlayStateChanged();
+  }
 
   @override
   Future<void> seekTo(Duration position) async {
@@ -164,11 +151,6 @@ class TracksPlayerImplMobile extends TracksPlayer {
   @override
   Future<void> setPlaybackSpeed(double speed) {
     return _player.transportControls.setPlaybackSpeed(speed);
-  }
-
-  @override
-  Future<void> setRepeatMode(RepeatMode repeatMode) async {
-    // TODO
   }
 
   @override

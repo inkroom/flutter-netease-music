@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/foundation.dart';
@@ -34,6 +35,8 @@ class TracksPlayerImplVlc extends TracksPlayer {
 
   Track? _current;
 
+  RepeatMode _mode = RepeatMode.random;
+
   @override
   Duration? get bufferedPosition => _player.bufferingProgress.toDuration();
 
@@ -42,19 +45,6 @@ class TracksPlayerImplVlc extends TracksPlayer {
 
   @override
   Duration? get duration => _player.position.duration;
-
-  @override
-  Future<Track?> getNextTrack() async {
-    final index = _trackList.tracks.cast().indexOf(current);
-    if (index == -1) {
-      return _trackList.tracks.firstOrNull;
-    }
-    final nextIndex = index + 1;
-    if (nextIndex >= _trackList.tracks.length) {
-      return null;
-    }
-    return _trackList.tracks[nextIndex];
-  }
 
   @override
   Future<Track?> getPreviousTrack() async {
@@ -73,7 +63,7 @@ class TracksPlayerImplVlc extends TracksPlayer {
   Future<void> insertToNext(Track track) async {
     final index = _trackList.tracks.cast().indexOf(current);
     // if (index == -1) {
-      // return;
+    // return;
     // }
     final nextIndex = index + 1;
     if (nextIndex >= _trackList.tracks.length) {
@@ -119,7 +109,13 @@ class TracksPlayerImplVlc extends TracksPlayer {
   Duration? get position => _player.position.position;
 
   @override
-  RepeatMode get repeatMode => RepeatMode.all;
+  RepeatMode get repeatMode => _mode;
+
+  @override
+  set repeatMode(RepeatMode mode) {
+    _mode = mode;
+    notifyPlayStateChanged();
+  }
 
   @override
   Future<void> seekTo(Duration position) async {
@@ -129,11 +125,6 @@ class TracksPlayerImplVlc extends TracksPlayer {
   @override
   Future<void> setPlaybackSpeed(double speed) async {
     _player.setRate(speed);
-  }
-
-  @override
-  Future<void> setRepeatMode(RepeatMode repeatMode) async {
-    // TODO
   }
 
   @override
@@ -191,6 +182,7 @@ class TracksPlayerImplVlc extends TracksPlayer {
         // skip play. since the track is changed.
         return;
       }
+      log('播放的uri=${url.asValue!.value}');
       _player.open(Media.network(url.asValue!.value), autoStart: true);
     });
     _current = track;

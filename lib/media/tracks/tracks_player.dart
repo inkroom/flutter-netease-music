@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -18,6 +19,12 @@ enum RepeatMode {
 
   /// Do not repeat any tracks.
   none,
+
+  /// 随机播放
+  random,
+
+  /// 当前的下一首
+  next,
 }
 
 class TracksPlayerState with EquatableMixin {
@@ -28,6 +35,7 @@ class TracksPlayerState with EquatableMixin {
     required this.playingList,
     required this.duration,
     required this.volume,
+    required this.mode,
   });
 
   final bool isBuffering;
@@ -36,6 +44,7 @@ class TracksPlayerState with EquatableMixin {
   final TrackList playingList;
   final Duration? duration;
   final double volume;
+  final RepeatMode mode;
 
   @override
   List<Object?> get props => [
@@ -45,19 +54,20 @@ class TracksPlayerState with EquatableMixin {
         playingList,
         duration,
         volume,
+        mode,
       ];
 }
 
 abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   TracksPlayer()
       : super(TracksPlayerState(
-          isPlaying: false,
-          isBuffering: false,
-          playingTrack: null,
-          playingList: TrackList.empty(),
-          duration: null,
-          volume: 0.0,
-        ));
+            isPlaying: false,
+            isBuffering: false,
+            playingTrack: null,
+            playingList: TrackList.empty(),
+            duration: null,
+            volume: 0.0,
+            mode: RepeatMode.random));
 
   factory TracksPlayer.platform() {
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
@@ -82,15 +92,48 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
 
   Future<void> skipToPrevious();
 
-  Future<void> setRepeatMode(RepeatMode repeatMode);
-
   Future<void> playFromMediaId(int trackId);
 
   void setTrackList(TrackList trackList);
 
-  Future<Track?> getNextTrack();
+  /// 获取要播放的下一首音乐
+  Future<Track?> getNextTrack() {
+    final index = trackList.tracks.cast().indexOf(current);
+    if (repeatMode == RepeatMode.next) {
+      // 直接播放下一首
+      if (index == -1 || index == trackList.tracks.length - 1) {
+        return Future.value(trackList.tracks.first);
+      }
+      return Future.value(trackList.tracks[index + 1]);
+    } else if (repeatMode == RepeatMode.random) {
+      // 随机播放
+      return Future.value(
+          trackList.tracks[Random().nextInt(trackList.tracks.length)]);
+    } else if (repeatMode == RepeatMode.none) {
+      // 单曲循环
+      return Future.value(current);
+    }
+    return Future.value(null);
+  }
 
-  Future<Track?> getPreviousTrack();
+  Future<Track?> getPreviousTrack() {
+    final index = trackList.tracks.cast().indexOf(current);
+    if (repeatMode == RepeatMode.next) {
+      // 直接播放上一首
+      if (index == -1 || index == 0) {
+        return Future.value(trackList.tracks.first);
+      }
+      return Future.value(trackList.tracks[index - 1]);
+    } else if (repeatMode == RepeatMode.random) {
+      // 随机播放
+      return Future.value(
+          trackList.tracks[Random().nextInt(trackList.tracks.length)]);
+    } else if (repeatMode == RepeatMode.none) {
+      // 单曲循环
+      return Future.value(current);
+    }
+    return Future.value(null);
+  }
 
   Future<void> insertToNext(Track track);
 
@@ -99,6 +142,9 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   TrackList get trackList;
 
   RepeatMode get repeatMode;
+
+  /// 设置下一首模式
+  set repeatMode(RepeatMode mode);
 
   bool get isPlaying;
 
@@ -123,6 +169,7 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
       playingList: trackList,
       duration: duration,
       volume: volume,
+      mode: repeatMode,
     );
   }
 }

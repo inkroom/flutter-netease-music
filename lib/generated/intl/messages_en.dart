@@ -50,7 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cloudMusic": MessageLookupByLibrary.simpleMessage("Music List"),
         "cloudMusicFileDropDescription": MessageLookupByLibrary.simpleMessage(
             "Drop your music file to here to upload."),
-        "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("Music Count"),
+        "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("Musci Count"),
         "collectionLike": MessageLookupByLibrary.simpleMessage("Collections"),
         "createdDate": m1,
         "createdSongList":
@@ -113,6 +113,11 @@ class MessageLookup extends MessageLookupByLibrary {
             "OpenSource project https://github.com/boyan01/flutter-netease-music"),
         "recommendPlayLists":
             MessageLookupByLibrary.simpleMessage("Recommend PlayLists"),
+        "repeatModeNext": MessageLookupByLibrary.simpleMessage("circle"),
+        "repeatModeNone":
+            MessageLookupByLibrary.simpleMessage("stop after finish"),
+        "repeatModeOne": MessageLookupByLibrary.simpleMessage("single repeat"),
+        "repeatModeRandom": MessageLookupByLibrary.simpleMessage("random"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "searchMusicResultCount": m6,
         "searchPlaylistSongs":

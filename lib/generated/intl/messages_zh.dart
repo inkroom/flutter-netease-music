@@ -48,7 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cloudMusic": MessageLookupByLibrary.simpleMessage("歌单"),
         "cloudMusicFileDropDescription":
             MessageLookupByLibrary.simpleMessage("将音乐文件拖放到这里进行上传"),
-        "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("歌曲数量"),
+        "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("歌曲数目"),
         "collectionLike": MessageLookupByLibrary.simpleMessage("已购"),
         "createdDate": m1,
         "createdSongList": MessageLookupByLibrary.simpleMessage("创建歌单"),
@@ -99,6 +99,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "projectDescription": MessageLookupByLibrary.simpleMessage(
             "开源项目 https://github.com/boyan01/flutter-netease-music"),
         "recommendPlayLists": MessageLookupByLibrary.simpleMessage("推荐歌单"),
+        "repeatModeNext": MessageLookupByLibrary.simpleMessage("列表循环"),
+        "repeatModeNone": MessageLookupByLibrary.simpleMessage("播放完停止"),
+        "repeatModeOne": MessageLookupByLibrary.simpleMessage("单曲循环"),
+        "repeatModeRandom": MessageLookupByLibrary.simpleMessage("随机播放"),
         "search": MessageLookupByLibrary.simpleMessage("搜索"),
         "searchMusicResultCount": m6,
         "searchPlaylistSongs": MessageLookupByLibrary.simpleMessage("搜索歌单歌曲"),

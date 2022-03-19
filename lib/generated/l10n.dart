@@ -80,10 +80,10 @@ class S {
     );
   }
 
-  /// `Could Space`
+  /// `Music List`
   String get cloudMusic {
     return Intl.message(
-      'Could Space',
+      'Music List',
       name: 'cloudMusic',
       desc: '',
       args: [],
@@ -842,10 +842,10 @@ class S {
     );
   }
 
-  /// `Cloud Usage`
+  /// `Musci Count`
   String get cloudMusicUsage {
     return Intl.message(
-      'Cloud Usage',
+      'Musci Count',
       name: 'cloudMusicUsage',
       desc: '',
       args: [],
@@ -857,6 +857,46 @@ class S {
     return Intl.message(
       'Drop your music file to here to upload.',
       name: 'cloudMusicFileDropDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `random`
+  String get repeatModeRandom {
+    return Intl.message(
+      'random',
+      name: 'repeatModeRandom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `circle`
+  String get repeatModeNext {
+    return Intl.message(
+      'circle',
+      name: 'repeatModeNext',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `single repeat`
+  String get repeatModeOne {
+    return Intl.message(
+      'single repeat',
+      name: 'repeatModeOne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `stop after finish`
+  String get repeatModeNone {
+    return Intl.message(
+      'stop after finish',
+      name: 'repeatModeNone',
       desc: '',
       args: [],
     );

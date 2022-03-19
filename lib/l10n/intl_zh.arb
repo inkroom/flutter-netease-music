@@ -79,5 +79,9 @@
   "searchMusicResultCount": "找到 {value} 首歌曲",
   "songs": "歌曲",
   "cloudMusicUsage": "歌曲数目",
-  "cloudMusicFileDropDescription": "将音乐文件拖放到这里进行上传"
+  "cloudMusicFileDropDescription": "将音乐文件拖放到这里进行上传",
+  "repeatModeRandom":"随机播放",
+  "repeatModeNext":"列表循环",
+  "repeatModeOne":"单曲循环",
+  "repeatModeNone":"播放完停止"
 }

@@ -79,5 +79,9 @@
   "searchMusicResultCount": "Find {value} music",
   "songs": "Songs",
   "cloudMusicUsage": "Musci Count",
-  "cloudMusicFileDropDescription": "Drop your music file to here to upload."
+  "cloudMusicFileDropDescription": "Drop your music file to here to upload.",
+  "repeatModeRandom":"random",
+  "repeatModeNext":"circle",
+  "repeatModeOne":"single repeat",
+  "repeatModeNone":"stop after finish"
 }
