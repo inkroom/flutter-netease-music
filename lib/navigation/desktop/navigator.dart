@@ -14,7 +14,7 @@ import 'playlist/page_album_detail.dart';
 
 class DesktopNavigatorController extends NavigatorController {
   DesktopNavigatorController() {
-    _pages.add(_buildPage(NavigationTarget.discover()));
+    _pages.add(_buildPage(NavigationTarget.cloud()));
     notifyListeners();
   }
 

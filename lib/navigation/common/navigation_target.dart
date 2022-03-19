@@ -12,6 +12,9 @@ abstract class NavigationTarget {
 
   factory NavigationTarget.settings() => NavigationTargetSettings();
 
+  factory NavigationTarget.cloud() => NavigationTargetCloudMusic();
+
+
   factory NavigationTarget.playlist({required int playlistId}) =>
       NavigationTargetPlaylist(playlistId);
 
