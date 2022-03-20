@@ -2,6 +2,7 @@ const kMobileHomeTabs = [
   NavigationTargetDiscover,
   NavigationTargetLibrary,
   NavigationTargetMy,
+  NavigationTargetLocal,
   NavigationTargetSearch,
 ];
 
@@ -13,7 +14,6 @@ abstract class NavigationTarget {
   factory NavigationTarget.settings() => NavigationTargetSettings();
 
   factory NavigationTarget.cloud() => NavigationTargetCloudMusic();
-
 
   factory NavigationTarget.playlist({required int playlistId}) =>
       NavigationTargetPlaylist(playlistId);
@@ -64,6 +64,10 @@ class NavigationTargetMy extends NavigationTarget {
 
 class NavigationTargetSearch extends NavigationTarget {
   NavigationTargetSearch();
+}
+
+class NavigationTargetLocal extends NavigationTarget {
+  NavigationTargetLocal();
 }
 
 class NavigationTargetUser extends NavigationTarget {

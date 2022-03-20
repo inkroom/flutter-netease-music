@@ -298,6 +298,9 @@ class HomeBottomNavigationBar extends ConsumerWidget {
             target = NavigationTargetMy();
             break;
           case 3:
+            target = NavigationTargetLocal();
+            break;
+          case 4:
             target = NavigationTargetSearch();
             break;
           default:
@@ -318,6 +321,10 @@ class HomeBottomNavigationBar extends ConsumerWidget {
         BottomNavigationBarItem(
           icon: const Icon(Icons.person),
           label: context.strings.my,
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.file_copy),
+          label: context.strings.localMusic,
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.search),

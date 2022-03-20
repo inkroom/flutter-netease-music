@@ -15,7 +15,7 @@ import 'user/page_user_detail.dart';
 
 class MobileNavigatorController extends NavigatorController {
   MobileNavigatorController() {
-    _pages.add(NavigationTargetSearch());
+    _pages.add(NavigationTargetLocal());
     notifyListeners();
   }
 
@@ -66,6 +66,7 @@ class MobileNavigatorController extends NavigatorController {
       case NavigationTargetMy:
       case NavigationTargetLibrary:
       case NavigationTargetSearch:
+      case NavigationTargetLocal:
         page = PageHome(selectedTab: target);
         break;
       case NavigationTargetSettings:

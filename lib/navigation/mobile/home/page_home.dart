@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quiet/navigation/mobile/home/local_music_list.dart';
 import 'package:quiet/navigation/mobile/home/main_page_discover.dart';
 import 'package:quiet/navigation/mobile/home/main_page_my.dart';
 import 'package:quiet/navigation/mobile/home/tab_search.dart';
@@ -18,6 +21,7 @@ class PageHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget body;
+    log('当前跳转=${selectedTab.runtimeType}');
     switch (selectedTab.runtimeType) {
       case NavigationTargetDiscover:
         body = const HomeTabDiscover();
@@ -30,6 +34,9 @@ class PageHome extends StatelessWidget {
         break;
       case NavigationTargetSearch:
         body = const HomeTabSearch();
+        break;
+      case NavigationTargetLocal:
+        body = const LocalMusicList();
         break;
       default:
         assert(false, 'unsupported tab: $selectedTab');
