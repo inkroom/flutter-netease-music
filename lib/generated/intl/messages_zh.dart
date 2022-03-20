@@ -45,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about": MessageLookupByLibrary.simpleMessage("关于"),
+        "addToMusicList": MessageLookupByLibrary.simpleMessage("加入歌单"),
         "addToPlaylist": MessageLookupByLibrary.simpleMessage("加入歌单"),
         "addToPlaylistFailed": MessageLookupByLibrary.simpleMessage("加入歌单失败"),
         "album": MessageLookupByLibrary.simpleMessage("专辑"),
@@ -64,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("网易云音乐每日推荐歌曲，每天 6:00 更新。"),
         "delete": MessageLookupByLibrary.simpleMessage("删除"),
         "discover": MessageLookupByLibrary.simpleMessage("发现"),
+        "downloadMusic": MessageLookupByLibrary.simpleMessage("下载歌曲"),
         "duration": MessageLookupByLibrary.simpleMessage("时长"),
         "errorNotLogin": MessageLookupByLibrary.simpleMessage("未登录"),
         "errorToFetchData": MessageLookupByLibrary.simpleMessage("获取数据失败"),
@@ -109,6 +111,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "projectDescription": MessageLookupByLibrary.simpleMessage(
             "开源项目 https://github.com/boyan01/flutter-netease-music"),
         "recommendPlayLists": MessageLookupByLibrary.simpleMessage("推荐歌单"),
+        "removeFromMusicList": MessageLookupByLibrary.simpleMessage("移除歌单"),
         "repeatModeNext": MessageLookupByLibrary.simpleMessage("列表循环"),
         "repeatModeNone": MessageLookupByLibrary.simpleMessage("播放完停止"),
         "repeatModeOne": MessageLookupByLibrary.simpleMessage("单曲循环"),

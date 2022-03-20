@@ -50,6 +50,36 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Add To Music List`
+  String get addToMusicList {
+    return Intl.message(
+      'Add To Music List',
+      name: 'addToMusicList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove From Music List`
+  String get removeFromMusicList {
+    return Intl.message(
+      'Remove From Music List',
+      name: 'removeFromMusicList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download Music`
+  String get downloadMusic {
+    return Intl.message(
+      'Download Music',
+      name: 'downloadMusic',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `My`
   String get my {
     return Intl.message(

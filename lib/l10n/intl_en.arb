@@ -1,4 +1,7 @@
 {
+  "addToMusicList": "Add To Music List",
+  "removeFromMusicList": "Remove From Music List",
+  "downloadMusic": "Download Music",
   "my": "My",
   "discover": "Discover",
   "localMusic": "Local Music",

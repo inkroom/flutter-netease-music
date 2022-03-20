@@ -45,6 +45,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about": MessageLookupByLibrary.simpleMessage("About"),
+        "addToMusicList":
+            MessageLookupByLibrary.simpleMessage("Add To Music List"),
         "addToPlaylist":
             MessageLookupByLibrary.simpleMessage("add to playlist"),
         "addToPlaylistFailed":
@@ -69,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Daily recommend music from Netease cloud music. Refresh every day at 06:00."),
         "delete": MessageLookupByLibrary.simpleMessage("delete"),
         "discover": MessageLookupByLibrary.simpleMessage("Discover"),
+        "downloadMusic": MessageLookupByLibrary.simpleMessage("Download Music"),
         "duration": MessageLookupByLibrary.simpleMessage("Duration"),
         "errorNotLogin":
             MessageLookupByLibrary.simpleMessage("Please login first."),
@@ -123,6 +126,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "OpenSource project https://github.com/boyan01/flutter-netease-music"),
         "recommendPlayLists":
             MessageLookupByLibrary.simpleMessage("Recommend PlayLists"),
+        "removeFromMusicList":
+            MessageLookupByLibrary.simpleMessage("Remove From Music List"),
         "repeatModeNext": MessageLookupByLibrary.simpleMessage("circle"),
         "repeatModeNone":
             MessageLookupByLibrary.simpleMessage("stop after finish"),

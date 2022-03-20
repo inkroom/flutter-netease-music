@@ -1,4 +1,7 @@
 {
+  "addToMusicList": "加入歌单",
+  "removeFromMusicList": "移除歌单",
+  "downloadMusic": "下载歌曲",
   "recommendPlayLists": "推荐歌单",
   "my": "我的",
   "discover": "发现",

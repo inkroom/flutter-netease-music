@@ -398,7 +398,7 @@ class TrackTile extends ConsumerWidget {
                             ),
                           Expanded(
                             child: Text(
-                              '  ' + track.name,
+                              (track.type != TrackType.free ? ' ' : '') + track.name,
                               overflow: TextOverflow.ellipsis,
                               style: context.textTheme.bodyMedium?.copyWith(
                                 fontSize: 14,
