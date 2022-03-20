@@ -25,7 +25,7 @@ class PageSettings extends StatelessWidget {
           ),
           const Divider(height: 20),
           if (!kReleaseMode) const _DebugNavigationPlatformSetting(),
-          const Divider(height: 20),
+          if (!kReleaseMode) const Divider(height: 20),
           SettingGroup(
             children: [
               ListTile(
