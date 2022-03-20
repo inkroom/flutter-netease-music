@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/navigation/desktop/login/login_dialog.dart';
 import 'package:quiet/providers/user_playlists_provider.dart';
 import 'package:quiet/repository.dart';
 
@@ -237,7 +238,7 @@ class _UserPlayListSectionState extends ConsumerState<UserPlayListSection> {
           Text(context.strings.playlistLoginDescription),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(pageLogin);
+              showLoginDialog(context: context);
             },
             child: Text(context.strings.login),
           ),
