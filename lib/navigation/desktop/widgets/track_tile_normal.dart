@@ -73,7 +73,7 @@ class _TrackTableContainerState extends State<_TrackTableContainer> {
     nameWidth = widget.width * .25;
     artistWidth = widget.width * .20;
     albumWidth = widget.width * .25;
-    durationWidth = widget.width * .10;
+    durationWidth = widget.width * .07;
     operatorWidth = widget.width * .15;
   }
 
@@ -299,6 +299,13 @@ class TrackTile extends ConsumerWidget {
     }
 
     void downloadOperator() {
+      if (track.type == TrackType.noCopyright) {
+        toast(context.strings.trackNoCopyright);
+        return;
+      } else if (track.type == TrackType.vip) {
+        toast(context.strings.trackVIP);
+        return;
+      }
       toast(context.strings.musicDownloading(track.name));
       cloudTracksProviderNotifier.download(track).then((value) {
         toast(context.strings.musicDownloaded(value.name));
@@ -306,7 +313,9 @@ class TrackTile extends ConsumerWidget {
         /// 加入到歌单中
         cloudTracksProviderNotifier.add(track);
       }).catchError((error) {
-        log('下载十八');
+        log(
+          '下载失败 $error',
+        );
         toast(context.strings.musicDownloadFail(track.name));
       });
     }
@@ -321,6 +330,9 @@ class TrackTile extends ConsumerWidget {
             onTap: () {
               if (track.type == TrackType.noCopyright) {
                 toast(context.strings.trackNoCopyright);
+                return;
+              } else if (track.type == TrackType.vip) {
+                toast(context.strings.trackVIP);
                 return;
               }
               // TODO 将获取播放url往合适的地方放
@@ -364,15 +376,39 @@ class TrackTile extends ConsumerWidget {
                     width: configuration.nameWidth,
                     child: Align(
                       alignment: AlignmentDirectional.centerStart,
-                      child: Text(
-                        track.name,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.textTheme.bodyMedium?.copyWith(
-                          fontSize: 14,
-                          color: track.type == TrackType.noCopyright
-                              ? context.theme.disabledColor
-                              : null,
-                        ),
+                      child: Row(
+                        children: [
+                          if (track.type == TrackType.noCopyright)
+                            Text(
+                              context.strings.tipNoCopyright,
+                              textAlign: TextAlign.center,
+                              style: context.textTheme.bodyMedium?.copyWith(
+                                  fontSize: 10,
+                                  color: Colors.white,
+                                  background: Paint()..color = Colors.red),
+                            ),
+                          if (track.type == TrackType.vip)
+                            Text(
+                              context.strings.tipVIP,
+                              textAlign: TextAlign.justify,
+                              style: context.textTheme.bodyMedium?.copyWith(
+                                  fontSize: 10,
+                                  color: Colors.white,
+                                  background: Paint()..color = Colors.red),
+                            ),
+                          Expanded(
+                            child: Text(
+                              '  ' + track.name,
+                              overflow: TextOverflow.ellipsis,
+                              style: context.textTheme.bodyMedium?.copyWith(
+                                fontSize: 14,
+                                color: track.type == TrackType.noCopyright
+                                    ? context.theme.disabledColor
+                                    : null,
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -432,14 +468,16 @@ class TrackTile extends ConsumerWidget {
                       style: context.textTheme.caption,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 5),
                   Expanded(
                     child: Row(
                       children: [
                         AppIconButton(
                             padding: EdgeInsets.zero,
                             onPressed: downloadOperator,
-                            icon: Icons.download_outlined),
+                            icon: track.file != null
+                                ? Icons.download_done_outlined
+                                : Icons.download_outlined),
                         AppIconButton(
                             padding: EdgeInsets.zero,
                             onPressed: addOperator,
@@ -450,8 +488,8 @@ class TrackTile extends ConsumerWidget {
                             icon: Icons.delete_outline),
                       ],
                     ),
-                  )
-                  // const SizedBox(width: 10),
+                  ),
+                  const SizedBox(width: 10),
                 ],
               ),
             ),
