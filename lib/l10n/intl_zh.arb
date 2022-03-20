@@ -11,6 +11,8 @@
   "alreadyBuy": "收藏和赞",
   "todo": "TBD",
   "login": "立即登录",
+  "needLogin": "需要登录",
+  "toLoginPage": "前往登录界面",
   "playlistLoginDescription": "登录以加载你的私人播放列表。",
   "createdSongList": "创建歌单",
   "favoriteSongList": "收藏歌单",

@@ -100,6 +100,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "my": MessageLookupByLibrary.simpleMessage("My"),
         "myDjs": MessageLookupByLibrary.simpleMessage("Dj"),
         "myMusic": MessageLookupByLibrary.simpleMessage("My Music"),
+        "needLogin": MessageLookupByLibrary.simpleMessage("Login First"),
         "nextStep": MessageLookupByLibrary.simpleMessage("next step"),
         "noLyric": MessageLookupByLibrary.simpleMessage("No Lyric"),
         "noMusic": MessageLookupByLibrary.simpleMessage("no music"),
@@ -156,6 +157,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tipVIP": MessageLookupByLibrary.simpleMessage("VIP"),
         "tipsAutoRegisterIfUserNotExist": MessageLookupByLibrary.simpleMessage(
             "auto register if phone not exist"),
+        "toLoginPage": MessageLookupByLibrary.simpleMessage("To Login Page"),
         "todo": MessageLookupByLibrary.simpleMessage("TBD"),
         "trackNoCopyright":
             MessageLookupByLibrary.simpleMessage("Track No Copyright"),

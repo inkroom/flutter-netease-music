@@ -160,6 +160,26 @@ class S {
     );
   }
 
+  /// `Login First`
+  String get needLogin {
+    return Intl.message(
+      'Login First',
+      name: 'needLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To Login Page`
+  String get toLoginPage {
+    return Intl.message(
+      'To Login Page',
+      name: 'toLoginPage',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Login to discover your playlists.`
   String get playlistLoginDescription {
     return Intl.message(

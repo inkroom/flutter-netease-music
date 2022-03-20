@@ -13,7 +13,7 @@ Future<bool> showNeedLoginToast(BuildContext context) async {
             child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text("需要登录。"),
+            Text(context.strings.needLogin),
             InkWell(
               onTap: () async {
                 OverlaySupportEntry.of(context)!.dismiss();
@@ -22,7 +22,7 @@ Future<bool> showNeedLoginToast(BuildContext context) async {
                 completer.complete(loginResult == true);
               },
               child: Text(
-                "点击前往登录页面",
+                context.strings.toLoginPage,
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1!

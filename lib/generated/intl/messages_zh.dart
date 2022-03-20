@@ -88,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "my": MessageLookupByLibrary.simpleMessage("我的"),
         "myDjs": MessageLookupByLibrary.simpleMessage("我的电台"),
         "myMusic": MessageLookupByLibrary.simpleMessage("我的音乐"),
+        "needLogin": MessageLookupByLibrary.simpleMessage("需要登录"),
         "nextStep": MessageLookupByLibrary.simpleMessage("下一步"),
         "noLyric": MessageLookupByLibrary.simpleMessage("暂无歌词"),
         "noMusic": MessageLookupByLibrary.simpleMessage("暂无音乐"),
@@ -137,6 +138,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tipVIP": MessageLookupByLibrary.simpleMessage("VIP"),
         "tipsAutoRegisterIfUserNotExist":
             MessageLookupByLibrary.simpleMessage("未注册手机号登陆后将自动创建账号"),
+        "toLoginPage": MessageLookupByLibrary.simpleMessage("前往登录界面"),
         "todo": MessageLookupByLibrary.simpleMessage("TBD"),
         "trackNoCopyright": MessageLookupByLibrary.simpleMessage("此音乐暂无版权"),
         "trackVIP": MessageLookupByLibrary.simpleMessage("此音乐为VIP"),

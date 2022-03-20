@@ -10,6 +10,8 @@
   "alreadyBuy": "Payed",
   "todo": "TBD",
   "login": "Login",
+  "needLogin": "Login First",
+  "toLoginPage": "To Login Page",
   "playlistLoginDescription": "Login to discover your playlists.",
   "createdSongList": "Created Song List",
   "favoriteSongList": "Favorite Song List",
