@@ -94,7 +94,7 @@ class LocalData {
 
   Future<String?> downloadMusic(String url, Track track) {
     return getApplicationBin().then((value) {
-      final path = join(value.toString(), track.id.toString() + track.name);
+      final path = join(value.toString(), track.id.toString() + track.name + '.mp3');
       return Dio().download(url, path).then((value) => path);
     });
   }
