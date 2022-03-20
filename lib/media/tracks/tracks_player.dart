@@ -98,17 +98,23 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
 
   /// 获取要播放的下一首音乐
   Future<Track?> getNextTrack() {
-    final index = trackList.tracks.cast().indexOf(current);
+    List<Track> list = List.empty(growable: true);
+    for (var element in trackList.tracks) {
+      if (element.type == TrackType.free) {
+        list.add(element);
+      }
+    }
+
+    final index = list.cast().indexOf(current);
     if (repeatMode == RepeatMode.next) {
       // 直接播放下一首
-      if (index == -1 || index == trackList.tracks.length - 1) {
-        return Future.value(trackList.tracks.first);
+      if (index == -1 || index == list.length - 1) {
+        return Future.value(list.first);
       }
-      return Future.value(trackList.tracks[index + 1]);
+      return Future.value(list[index + 1]);
     } else if (repeatMode == RepeatMode.random) {
       // 随机播放
-      return Future.value(
-          trackList.tracks[Random().nextInt(trackList.tracks.length)]);
+      return Future.value(list[Random().nextInt(list.length)]);
     } else if (repeatMode == RepeatMode.none) {
       // 单曲循环
       return Future.value(current);
@@ -117,17 +123,23 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   }
 
   Future<Track?> getPreviousTrack() {
-    final index = trackList.tracks.cast().indexOf(current);
+    List<Track> list = List.empty(growable: true);
+    for (var element in trackList.tracks) {
+      if (element.type == TrackType.free) {
+        list.add(element);
+      }
+    }
+
+    final index = list.cast().indexOf(current);
     if (repeatMode == RepeatMode.next) {
       // 直接播放上一首
       if (index == -1 || index == 0) {
-        return Future.value(trackList.tracks.first);
+        return Future.value(list.first);
       }
-      return Future.value(trackList.tracks[index - 1]);
+      return Future.value(list[index - 1]);
     } else if (repeatMode == RepeatMode.random) {
       // 随机播放
-      return Future.value(
-          trackList.tracks[Random().nextInt(trackList.tracks.length)]);
+      return Future.value(list[Random().nextInt(list.length)]);
     } else if (repeatMode == RepeatMode.none) {
       // 单曲循环
       return Future.value(current);
