@@ -10,3 +10,6 @@ class QuietException implements Exception {
 class NotLoginException extends QuietException {
   NotLoginException(String message) : super(message);
 }
+class NetworkException extends QuietException{
+  NetworkException(String message) : super(message);
+}

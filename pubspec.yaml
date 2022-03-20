@@ -53,6 +53,7 @@ dependencies:
   desktop_drop: ^0.3.0
   dotted_border: ^2.0.0+2
   permission_handler: ^9.2.0
+  connectivity_plus: ^2.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

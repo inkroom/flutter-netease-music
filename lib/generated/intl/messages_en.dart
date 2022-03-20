@@ -104,6 +104,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "myDjs": MessageLookupByLibrary.simpleMessage("Dj"),
         "myMusic": MessageLookupByLibrary.simpleMessage("My Music"),
         "needLogin": MessageLookupByLibrary.simpleMessage("Login First"),
+        "networkNotAllow": MessageLookupByLibrary.simpleMessage(
+            "The Network Setting Not Allow"),
         "nextStep": MessageLookupByLibrary.simpleMessage("next step"),
         "noLyric": MessageLookupByLibrary.simpleMessage("No Lyric"),
         "noMusic": MessageLookupByLibrary.simpleMessage("no music"),

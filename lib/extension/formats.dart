@@ -8,6 +8,8 @@ extension ErrorFormat on BuildContext {
   String formattedError(dynamic error) {
     if (error is NotLoginException) {
       return strings.errorNotLogin;
+    }else if(error is NetworkException){
+      return strings.networkNotAllow;
     }
     return '$error';
   }

@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 const String _prefix = 'quiet:settings:';
 
@@ -107,7 +110,7 @@ class Settings extends StateNotifier<SettingState> {
     state = state.copyWith(themeMode: themeMode);
   }
 
-  void setNetworkMode(NetworkMode networkMode){
+  void setNetworkMode(NetworkMode networkMode) {
     _preferences.setInt(_keyNetworkMode, networkMode.index);
     state = state.copyWith(networkMode: networkMode);
   }
@@ -120,5 +123,62 @@ class Settings extends StateNotifier<SettingState> {
   void setSkipAccompaniment({required bool skip}) {
     _preferences.setBool('$_prefix:skipAccompaniment', skip);
     state = state.copyWith(skipAccompaniment: skip);
+  }
+}
+
+/// 用于实现网络控制的单例模式
+class NetworkSingleton {
+  // 工厂模式
+  factory NetworkSingleton() => _getInstance();
+
+  static NetworkSingleton get instance => _getInstance();
+  static NetworkSingleton _instance = NetworkSingleton._internal();
+
+  NetworkMode _mode = NetworkMode.NONE;
+
+  setMode(NetworkMode mode) {
+    _mode = mode;
+  }
+
+  NetworkMode mode() => _mode;
+  ConnectivityResult? _now;
+
+  NetworkSingleton._internal() {
+    ProviderContainer().listen<SettingState>(settingStateProvider,
+        (previous, next) {
+      log('网络设置变化$next');
+      NetworkSingleton().setMode(next.networkMode);
+    });
+
+    final f = Connectivity();
+    f.checkConnectivity().then((value) {
+      _now = value;
+    }).catchError((onError) {
+      log('网络状态error,$onError');
+    });
+    f.onConnectivityChanged.listen((event) {
+      log('网络变化=$event');
+      _now = event;
+    });
+    // 初始化
+    _mode = NetworkMode.NONE;
+  }
+
+  static NetworkSingleton _getInstance() {
+    return _instance;
+  }
+
+  /// 判断是否运行联网
+  bool allowNetwork() {
+    log('当前网络=$_now 设置=$_mode');
+    if (_mode == NetworkMode.NONE) {
+      return false;
+    } else if (_mode == NetworkMode.MOBILE) {
+      return _now == ConnectivityResult.mobile ||
+          _now == ConnectivityResult.ethernet;
+    } else if (_mode == NetworkMode.WIFI) {
+      return _now == ConnectivityResult.wifi;
+    }
+    return true;
   }
 }

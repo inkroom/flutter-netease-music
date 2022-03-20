@@ -6,8 +6,11 @@ import 'package:netease_api/netease_api.dart' as api;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:quiet/component/cache/cache.dart';
+import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository.dart';
 import 'package:quiet/repository/data/search_result.dart';
+
+import '../component/exceptions.dart';
 
 export 'package:netease_api/netease_api.dart'
     show
@@ -42,6 +45,9 @@ class NetworkRepository {
 
   /// Fetch lyric by track id
   Future<String?> lyric(int id) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final key = CacheKey.fromString(id.toString());
     final lyric = await _lyricCache.get(key);
     if (lyric != null) {
@@ -54,7 +60,10 @@ class NetworkRepository {
     return lyricString;
   }
 
-  Future<Result<List<String>>> searchHotWords() {
+  Future<Result<List<String>>> searchHotWords() async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     return _repository.searchHotWords();
   }
 
@@ -64,14 +73,21 @@ class NetworkRepository {
     api.SearchType type, {
     int limit = 20,
     int offset = 0,
-  }) =>
-      _repository.search(keyword, type, limit: limit, offset: offset);
+  }) {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.search(keyword, type, limit: limit, offset: offset);
+  }
 
   Future<SearchResult<List<Track>>> searchMusics(
     String keyword, {
     int limit = 20,
     int offset = 0,
   }) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.searchSongs(
       keyword,
       limit: limit,
@@ -85,8 +101,12 @@ class NetworkRepository {
     ));
   }
 
-  Future<Result<List<String>>> searchSuggest(String? keyword) =>
-      _repository.searchSuggest(keyword);
+  Future<Result<List<String>>> searchSuggest(String? keyword) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.searchSuggest(keyword);
+  }
 
   ///edit playlist tracks
   ///true : succeed
@@ -94,51 +114,83 @@ class NetworkRepository {
     api.PlaylistOperation operation,
     int playlistId,
     List<int?> musicIds,
-  ) =>
-      _repository.playlistTracksEdit(
-        operation,
-        playlistId,
-        musicIds,
-      );
+  ) {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.playlistTracksEdit(
+      operation,
+      playlistId,
+      musicIds,
+    );
+  }
 
-  Future<bool> playlistSubscribe(int? id, {required bool subscribe}) =>
-      _repository.playlistSubscribe(id, subscribe: subscribe);
+  Future<bool> playlistSubscribe(int? id, {required bool subscribe}) {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.playlistSubscribe(id, subscribe: subscribe);
+  }
 
   Future<Result<Map>> getComments(
     api.CommentThreadId commentThread, {
     int limit = 20,
     int offset = 0,
-  }) =>
-      _repository.getComments(
-        commentThread,
-        limit: limit,
-        offset: offset,
-      );
+  }) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.getComments(
+      commentThread,
+      limit: limit,
+      offset: offset,
+    );
+  }
 
   // like track.
-  Future<bool> like(int? musicId, {required bool like}) =>
-      _repository.like(musicId, like: like);
+  Future<bool> like(int? musicId, {required bool like}) {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.like(musicId, like: like);
+  }
 
   // get user licked tracks.
-  Future<Result<List<int>>> likedList(int? userId) =>
-      _repository.likedList(userId);
+  Future<Result<List<int>>> likedList(int? userId) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.likedList(userId);
+  }
 
-  Future<Result<api.MusicCount>> subCount() => _repository.subCount();
+  Future<Result<api.MusicCount>> subCount() async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.subCount();
+  }
 
   Future<Result<api.CellphoneExistenceCheck>> checkPhoneExist(
     String phone,
     String countryCode,
-  ) =>
-      _repository.checkPhoneExist(
-        phone,
-        countryCode,
-      );
+  ) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.checkPhoneExist(
+      phone,
+      countryCode,
+    );
+  }
 
   Future<Result<List<PlaylistDetail>>> userPlaylist(
     int? userId, {
     int offset = 0,
     int limit = 1000,
   }) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.userPlaylist(
       userId,
       offset: offset,
@@ -157,6 +209,9 @@ class NetworkRepository {
     int id, {
     int s = 5,
   }) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.playlistDetail(id, s: s);
     if (ret.isError) {
       return ret.asError!;
@@ -166,6 +221,9 @@ class NetworkRepository {
   }
 
   Future<Result<AlbumDetail>> albumDetail(int id) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.albumDetail(id);
     if (ret.isError) {
       return ret.asError!;
@@ -177,10 +235,17 @@ class NetworkRepository {
     ));
   }
 
-  Future<Result<api.MusicVideoDetailResult>> mvDetail(int mvId) =>
-      _repository.mvDetail(mvId);
+  Future<Result<api.MusicVideoDetailResult>> mvDetail(int mvId) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.mvDetail(mvId);
+  }
 
   Future<Result<ArtistDetail>> artistDetail(int id) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.artistDetail(id);
     if (ret.isError) {
       return ret.asError!;
@@ -195,31 +260,46 @@ class NetworkRepository {
 
   // FIXME
   Future<Result<Map>> artistAlbums(int artistId,
-          {int limit = 10, int offset = 0}) =>
-      _repository.artistAlbums(
-        artistId,
-        limit: limit,
-        offset: offset,
-      );
+      {int limit = 10, int offset = 0}) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.artistAlbums(
+      artistId,
+      limit: limit,
+      offset: offset,
+    );
+  }
 
   // FIXME
   Future<Result<Map>> artistMvs(int artistId,
-          {int limit = 20, int offset = 0}) =>
-      _repository.artistMvs(
-        artistId,
-        limit: limit,
-        offset: offset,
-      );
+      {int limit = 20, int offset = 0}) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.artistMvs(
+      artistId,
+      limit: limit,
+      offset: offset,
+    );
+  }
 
   // FIXME
-  Future<Result<Map>> artistDesc(int artistId) =>
-      _repository.artistDesc(artistId);
+  Future<Result<Map>> artistDesc(int artistId) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.artistDesc(artistId);
+  }
 
   // FIXME
   Future<Result<Map>> topListDetail() async => Result.error('not implement');
 
   Future<Result<List<PlayRecord>>> getRecord(
       int userId, api.PlayRecordType type) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final records = await _repository.getRecord(userId, type);
     if (records.isError) {
       return records.asError!;
@@ -235,12 +315,20 @@ class NetworkRepository {
   }
 
   // FIXME
-  Future<Result<List<Map>>> djSubList() => _repository.djSubList();
+  Future<Result<List<Map>>> djSubList() async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.djSubList();
+  }
 
   Future<Result<List<Map>>> userDj(int? userId) async =>
       Result.error('not implement');
 
   Future<Result<List<Track>>> personalizedNewSong() async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.personalizedNewSong();
     if (ret.isError) {
       return ret.asError!;
@@ -255,6 +343,9 @@ class NetworkRepository {
     int limit = 30,
     int offset = 0,
   }) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.personalizedPlaylist(
       limit: limit,
       offset: offset,
@@ -279,6 +370,9 @@ class NetworkRepository {
   }
 
   Future<Result<List<Track>>> songDetails(List<int> ids) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.songDetails(ids);
     if (ret.isError) {
       return ret.asError!;
@@ -289,18 +383,39 @@ class NetworkRepository {
     );
   }
 
-  Future<bool> mvSubscribe(int? mvId, {required bool subscribe}) =>
-      _repository.mvSubscribe(mvId, subscribe: subscribe);
+  Future<bool> mvSubscribe(int? mvId, {required bool subscribe}) {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.mvSubscribe(mvId, subscribe: subscribe);
+  }
 
-  Future<bool> refreshLogin() => _repository.refreshLogin();
+  Future<bool> refreshLogin() {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.refreshLogin();
+  }
 
-  Future<void> logout() => _repository.logout();
+  Future<void> logout() {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.logout();
+  }
 
   // FIXME
-  Future<Result<Map>> login(String? phone, String password) =>
-      _repository.login(phone, password);
+  Future<Result<Map>> login(String? phone, String password) {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+   return _repository.login(phone, password);
+  }
 
   Future<Result<User>> getUserDetail(int uid) async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.getUserDetail(uid);
     if (ret.isError) {
       return ret.asError!;
@@ -310,6 +425,9 @@ class NetworkRepository {
   }
 
   Future<Result<List<Track>>> recommendSongs() async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.recommendSongs();
     if (ret.isError) {
       return ret.asError!;
@@ -320,10 +438,17 @@ class NetworkRepository {
     );
   }
 
-  Future<Result<String>> getPlayUrl(int id, [int br = 320000]) =>
-      _repository.getPlayUrl(id, br);
+  Future<Result<String>> getPlayUrl(int id, [int br = 320000]) {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
+    return _repository.getPlayUrl(id, br);
+  }
 
   Future<Result<List<Track>>> getPersonalFmMusics() async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.getPersonalFmMusics();
     if (ret.isError) {
       return ret.asError!;
@@ -333,6 +458,9 @@ class NetworkRepository {
   }
 
   Future<CloudTracksDetail> getUserCloudTracks() async {
+    if (!NetworkSingleton().allowNetwork()) {
+      return Future.error(NetworkException('网络设置不允许'));
+    }
     final ret = await _repository.getUserCloudMusic();
     final value = await ret.asFuture;
     return CloudTracksDetail(

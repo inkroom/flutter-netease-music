@@ -90,6 +90,16 @@ class S {
     );
   }
 
+  /// `The Network Setting Not Allow`
+  String get networkNotAllow {
+    return Intl.message(
+      'The Network Setting Not Allow',
+      name: 'networkNotAllow',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Add To Music List`
   String get addToMusicList {
     return Intl.message(

@@ -91,6 +91,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "myDjs": MessageLookupByLibrary.simpleMessage("我的电台"),
         "myMusic": MessageLookupByLibrary.simpleMessage("我的音乐"),
         "needLogin": MessageLookupByLibrary.simpleMessage("需要登录"),
+        "networkNotAllow": MessageLookupByLibrary.simpleMessage("当前网络设置不允许"),
         "nextStep": MessageLookupByLibrary.simpleMessage("下一步"),
         "noLyric": MessageLookupByLibrary.simpleMessage("暂无歌词"),
         "noMusic": MessageLookupByLibrary.simpleMessage("暂无音乐"),
