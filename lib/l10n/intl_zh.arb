@@ -1,4 +1,8 @@
 {
+  "settingItemGroupNetwork": "网络",
+  "settingItemOnlyWIFI": "仅使用WIFI网络",
+  "settingItemOnlyMobile": "可使用流量网络",
+  "settingItemNoNetwork": "不可联网",
   "addToMusicList": "加入歌单",
   "removeFromMusicList": "移除歌单",
   "downloadMusic": "下载歌曲",

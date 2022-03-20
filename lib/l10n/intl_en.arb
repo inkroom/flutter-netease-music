@@ -1,4 +1,8 @@
 {
+  "settingItemGroupNetwork": "Network",
+  "settingItemOnlyWIFI": "Only WIFI",
+  "settingItemOnlyMobile": "use 3/4/5G",
+  "settingItemNoNetwork": "No Network",
   "addToMusicList": "Add To Music List",
   "removeFromMusicList": "Remove From Music List",
   "downloadMusic": "Download Music",

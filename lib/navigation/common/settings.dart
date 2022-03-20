@@ -86,3 +86,37 @@ class SkipAccompanimentCheckBox extends ConsumerWidget {
     );
   }
 }
+/// 切换网络设置
+class NetworkSwitchRadios extends ConsumerWidget{
+  const NetworkSwitchRadios({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final networkMode = ref.watch(
+      settingStateProvider.select((value) => value.networkMode),
+    );
+    final notifier = ref.read(settingStateProvider.notifier);
+    return Column(
+      children: [
+        RadioListTile<NetworkMode>(
+          onChanged: (mode) => notifier.setNetworkMode(mode!),
+          groupValue: networkMode,
+          value: NetworkMode.WIFI,
+          title: Text(context.strings.settingItemOnlyWIFI),
+        ),
+        RadioListTile<NetworkMode>(
+          onChanged: (mode) => notifier.setNetworkMode(mode!),
+          groupValue: networkMode,
+          value: NetworkMode.MOBILE,
+          title: Text(context.strings.settingItemOnlyMobile),
+        ),
+        RadioListTile<NetworkMode>(
+          onChanged: (mode) => notifier.setNetworkMode(mode!),
+          groupValue: networkMode,
+          value: NetworkMode.NONE,
+          title: Text(context.strings.settingItemNoNetwork),
+        )
+      ],
+    );
+  }
+}

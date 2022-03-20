@@ -121,6 +121,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "searchPlaylistSongs": MessageLookupByLibrary.simpleMessage("搜索歌单歌曲"),
         "selectRegionDiaCode": MessageLookupByLibrary.simpleMessage("选择地区号码"),
         "selectTheArtist": MessageLookupByLibrary.simpleMessage("请选择要查看的歌手"),
+        "settingItemGroupNetwork": MessageLookupByLibrary.simpleMessage("网络"),
+        "settingItemNoNetwork": MessageLookupByLibrary.simpleMessage("不可联网"),
+        "settingItemOnlyMobile":
+            MessageLookupByLibrary.simpleMessage("可使用流量网络"),
+        "settingItemOnlyWIFI":
+            MessageLookupByLibrary.simpleMessage("仅使用WIFI网络"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
         "share": MessageLookupByLibrary.simpleMessage("分享"),
         "shareContentCopied":

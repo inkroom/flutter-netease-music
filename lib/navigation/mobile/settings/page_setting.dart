@@ -9,7 +9,7 @@ class PageSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('设置'),
+        title: Text(context.strings.settings),
         titleSpacing: 0,
       ),
       body: ListView(
@@ -17,6 +17,11 @@ class PageSettings extends StatelessWidget {
           SettingGroup(
             title: context.strings.theme,
             children: const [ThemeSwitchRadios()],
+          ),
+          const Divider(height: 20),
+          SettingGroup(
+            title: context.strings.settingItemNoNetwork,
+            children: const [NetworkSwitchRadios()],
           ),
           const Divider(height: 20),
           if (!kReleaseMode) const _DebugNavigationPlatformSetting(),

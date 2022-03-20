@@ -50,6 +50,46 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Network`
+  String get settingItemGroupNetwork {
+    return Intl.message(
+      'Network',
+      name: 'settingItemGroupNetwork',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only WIFI`
+  String get settingItemOnlyWIFI {
+    return Intl.message(
+      'Only WIFI',
+      name: 'settingItemOnlyWIFI',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `use 3/4/5G`
+  String get settingItemOnlyMobile {
+    return Intl.message(
+      'use 3/4/5G',
+      name: 'settingItemOnlyMobile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Network`
+  String get settingItemNoNetwork {
+    return Intl.message(
+      'No Network',
+      name: 'settingItemNoNetwork',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Add To Music List`
   String get addToMusicList {
     return Intl.message(
