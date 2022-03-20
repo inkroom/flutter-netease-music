@@ -152,11 +152,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "themeAuto": MessageLookupByLibrary.simpleMessage("Follow System"),
         "themeDark": MessageLookupByLibrary.simpleMessage("Dark"),
         "themeLight": MessageLookupByLibrary.simpleMessage("Light"),
-        "tipsAutoRegisterIfUserNotExist":
-            MessageLookupByLibrary.simpleMessage("未注册手机号登陆后将自动创建账号"),
+        "tipNoCopyright": MessageLookupByLibrary.simpleMessage("noCopyright"),
+        "tipVIP": MessageLookupByLibrary.simpleMessage("VIP"),
+        "tipsAutoRegisterIfUserNotExist": MessageLookupByLibrary.simpleMessage(
+            "auto register if phone not exist"),
         "todo": MessageLookupByLibrary.simpleMessage("TBD"),
         "trackNoCopyright":
             MessageLookupByLibrary.simpleMessage("Track No Copyright"),
+        "trackVIP": MessageLookupByLibrary.simpleMessage("Track only for VIP"),
         "volumeDown": MessageLookupByLibrary.simpleMessage("Volume Down"),
         "volumeUp": MessageLookupByLibrary.simpleMessage("Volume Up")
       };

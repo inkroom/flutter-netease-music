@@ -252,10 +252,10 @@ class S {
     );
   }
 
-  /// `未注册手机号登陆后将自动创建账号`
+  /// `auto register if phone not exist`
   String get tipsAutoRegisterIfUserNotExist {
     return Intl.message(
-      '未注册手机号登陆后将自动创建账号',
+      'auto register if phone not exist',
       name: 'tipsAutoRegisterIfUserNotExist',
       desc: '',
       args: [],
@@ -567,6 +567,36 @@ class S {
     return Intl.message(
       'Track No Copyright',
       name: 'trackNoCopyright',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Track only for VIP`
+  String get trackVIP {
+    return Intl.message(
+      'Track only for VIP',
+      name: 'trackVIP',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `noCopyright`
+  String get tipNoCopyright {
+    return Intl.message(
+      'noCopyright',
+      name: 'tipNoCopyright',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `VIP`
+  String get tipVIP {
+    return Intl.message(
+      'VIP',
+      name: 'tipVIP',
       desc: '',
       args: [],
     );

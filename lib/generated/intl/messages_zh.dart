@@ -133,10 +133,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "themeAuto": MessageLookupByLibrary.simpleMessage("跟随系统"),
         "themeDark": MessageLookupByLibrary.simpleMessage("深色主题"),
         "themeLight": MessageLookupByLibrary.simpleMessage("浅色主题"),
+        "tipNoCopyright": MessageLookupByLibrary.simpleMessage("无版权"),
+        "tipVIP": MessageLookupByLibrary.simpleMessage("VIP"),
         "tipsAutoRegisterIfUserNotExist":
             MessageLookupByLibrary.simpleMessage("未注册手机号登陆后将自动创建账号"),
         "todo": MessageLookupByLibrary.simpleMessage("TBD"),
         "trackNoCopyright": MessageLookupByLibrary.simpleMessage("此音乐暂无版权"),
+        "trackVIP": MessageLookupByLibrary.simpleMessage("此音乐为VIP"),
         "volumeDown": MessageLookupByLibrary.simpleMessage("音量-"),
         "volumeUp": MessageLookupByLibrary.simpleMessage("音量+")
       };
