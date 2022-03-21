@@ -11,8 +11,8 @@ part 'cloud_tracks_detail.g.dart';
 
 class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
   CloudTrackDetailNotifier()
-      : super(const CloudTracksDetailState(
-            tracks: [], size: 0, maxSize: 0, trackCount: 0)) {
+      : super(CloudTracksDetailState(
+            tracks:List.empty(growable: true), size: 0, maxSize: 0, trackCount: 0)) {
     _load();
   }
   final _kCacheKey = 'user_cloud_tracks_detail';
