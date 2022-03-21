@@ -10,7 +10,7 @@ final allPlayRecordsProvider = FutureProvider<List<PlayRecord>>((ref) async {
   if (userId == null) {
     throw NotLoginException('not login');
   }
-  final records = await neteaseRepository!.getRecord(
+  final records = await networkRepository!.getRecord(
     userId,
     PlayRecordType.allData,
   );

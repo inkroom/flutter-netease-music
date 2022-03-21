@@ -20,22 +20,18 @@ final mobileSearchMusicProvider = StateNotifierProvider.family<
 class _MobileSearchNotify extends SearchResultStateNotify<Track> {
   _MobileSearchNotify() : super();
 
-  String? _query;
-
   @override
   int get pageSize => 100;
 
-  @override
-  String get query => _query!;
-
   void search(query) {
-    _query = query;
+    super.query = query;
     super._loadQuery(1);
   }
 
   @override
   Future<SearchResult<List<Track>>> load(int page, int size) =>
-      neteaseRepository!.searchMusics(query, page: page, size: size);
+      networkRepository!
+          .searchMusics(query, page: page, size: size, origin: _origin);
 }
 
 class SearchResultState<T> with EquatableMixin {
@@ -45,6 +41,7 @@ class SearchResultState<T> with EquatableMixin {
     required this.page,
     required this.totalPageCount,
     required this.totalItemCount,
+    this.origin = 1,
   });
 
   final AsyncValue<List<T>> value;
@@ -52,6 +49,7 @@ class SearchResultState<T> with EquatableMixin {
   final int page;
   final int totalPageCount;
   final int totalItemCount;
+  int origin;
 
   @override
   List<Object?> get props => [value, query, totalPageCount, totalItemCount];
@@ -67,8 +65,6 @@ abstract class SearchResultStateNotify<T>
             totalItemCount: 0,
             query: ''));
 
-  String get query;
-
   int get pageSize;
 
   bool _loading = false;
@@ -76,8 +72,24 @@ abstract class SearchResultStateNotify<T>
   int? _totalItemCount;
   int _page = 1;
 
+  int _origin = 1;
+
+  String query = '';
+
+  set origin(int origin) {
+    if (_origin != origin) {
+      //切换来源，自动搜索
+      _origin = origin;
+      _loadQuery(_page);
+    } else {
+      _origin = origin;
+      notifyListener(const AsyncValue.data([]));
+    }
+  }
+
   void _loadQuery(int page) async {
     log('查询=$query');
+    if (query.isEmpty) return;
     if (_loading) {
       return;
     }
@@ -105,23 +117,21 @@ abstract class SearchResultStateNotify<T>
           _totalItemCount == null ? -1 : (_totalItemCount! / pageSize).round(),
       totalItemCount: _totalItemCount ?? -1,
       page: _page,
+      origin: _origin,
     );
   }
 }
 
 class _TrackResultStateNotify extends SearchResultStateNotify<Track> {
-  _TrackResultStateNotify(this._query) : super() {
+  _TrackResultStateNotify(String query) : super() {
+    super.query = query;
     _loadQuery(1);
   }
 
-  final String _query;
-
-  @override
-  String get query => _query;
-
   @override
   Future<SearchResult<List<Track>>> load(int page, int size) =>
-      neteaseRepository!.searchMusics(query, page: page, size: size);
+      networkRepository!
+          .searchMusics(query, page: page, size: size, origin: _origin);
 
   @override
   int get pageSize => 100;

@@ -43,32 +43,44 @@ class KuApi extends MusicApi {
             {},
             {},
             'get')
-        .then((value) => value.cast().transform(utf8.decoder).join())
+        .then((value) => value.transform(utf8.decoder).join())
         .then((value) => json.decode(value))
         .then((value) {
+      log('value=$value');
       final total = value['data']['total'];
       List<Track> list = List.empty(growable: true);
       final s = value['data']['lists'] as List;
-
+      log('s=${s}');
       for (var e in s) {
-        final art = e['Grp']['Singers'] as List;
+        log('e=$e');
+        final art = e['Singers'] as List;
+
+        log('art=$art');
 
         List<ArtistMini> a = List.empty(growable: true);
         for (var e in art) {
-          a.add(ArtistMini(id: e.id, name: e.name, imageUrl: ''));
+          a.add(ArtistMini(id: e['id'], name: e['name'], imageUrl: ''));
         }
 
+        log('albumId=${e['AlbumID'] as String}');
+        log('albumId=${e['AlbumName'] as String}');
+
         list.add(Track(
-            id: e.Audioid,
+            id: e['Audioid'],
             uri: '',
-            name: e.SongName,
+            name: e['SongName'],
             artists: a,
-            album: AlbumMini(id: e.AlbumID, name: e.AlbumName, picUri: ""),
+            album: (e['AlbumID'] != null && e['AlbumID'] != '')
+                ? AlbumMini(
+                    id: int.parse(e['AlbumID']),
+                    name: e['AlbumName'],
+                    picUri: "")
+                : null,
             imageUrl: '',
-            duration: Duration(seconds: e.Duration),
+            duration: Duration(seconds: e['Duration']),
             type: TrackType.free,
             origin: origin,
-            extra: e.FileHash));
+            extra: e['FileHash']));
       }
 
       return PageResult(data: list, total: total);
@@ -77,6 +89,9 @@ class KuApi extends MusicApi {
 
   @override
   int get origin => 2;
+
+  @override
+  String get name => "酷狗";
 }
 
 Future<HttpClientResponse> _doRequest(

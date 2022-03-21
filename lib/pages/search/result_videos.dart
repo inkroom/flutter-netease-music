@@ -19,7 +19,7 @@ class _VideosResultSectionState extends State<VideosResultSection>
   Widget build(BuildContext context) {
     super.build(context);
     return AutoLoadMoreList(loadMore: (offset) async {
-      final result = await neteaseRepository!
+      final result = await networkRepository!
           .search(widget.query, SearchType.video, offset: offset);
       if (result.isError) {
         return result.asError!;

@@ -33,7 +33,7 @@ final dailyPlaylistProvider = StreamProvider<DailyPlaylist>(
     }
 
     Future<void> refresh() async {
-      final ret = await neteaseRepository!.recommendSongs();
+      final ret = await networkRepository!.recommendSongs();
       final songs = await ret.asFuture;
       final playlist = DailyPlaylist(date: DateTime.now(), tracks: songs);
       streamController.add(playlist);

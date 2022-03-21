@@ -18,7 +18,7 @@ final userDetailProvider = StreamProvider.family<User, int>(
       neteaseLocalData[cacheKey] = null;
     }
 
-    final result = await neteaseRepository!.getUserDetail(userId);
+    final result = await networkRepository!.getUserDetail(userId);
     final user = await result.asFuture;
     yield user;
     neteaseLocalData[cacheKey] = user.toJson();

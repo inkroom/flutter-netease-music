@@ -22,7 +22,7 @@ class _AlbumsResultSectionState extends State<AlbumsResultSection>
   Widget build(BuildContext context) {
     super.build(context);
     return AutoLoadMoreList<Map>(loadMore: (offset) async {
-      final result = await neteaseRepository!
+      final result = await networkRepository!
           .search(widget.query, SearchType.album, offset: offset);
       if (result.isError) {
         return result.asError!;

@@ -78,7 +78,7 @@ class _PhoneInputLayout extends HookConsumerWidget {
 
       final result = await showLoaderOverlay(
         context,
-        neteaseRepository!.checkPhoneExist(
+        networkRepository!.checkPhoneExist(
           text,
           selectedRegion.value.dialCode!
               .replaceAll("+", "")

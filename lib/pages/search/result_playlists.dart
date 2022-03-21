@@ -20,7 +20,7 @@ class _PlaylistResultSectionState extends State<PlaylistResultSection>
   Widget build(BuildContext context) {
     super.build(context);
     return AutoLoadMoreList(loadMore: (offset) async {
-      final result = await neteaseRepository!
+      final result = await networkRepository!
           .search(widget.query, SearchType.playlist, offset: offset);
       if (result.isValue) {
         return LoadMoreResult(result.asValue!.value["result"]["playlists"]);

@@ -66,7 +66,7 @@ class FmPlaylistNotifier extends StateNotifier<List<Track>> {
     }
     debugPrint("ensureHasEnoughTracks: $freshTrackIndex ${state.length}");
     _loading = true;
-    final tracks = await neteaseRepository!.getPersonalFmMusics();
+    final tracks = await networkRepository!.getPersonalFmMusics();
     _loading = false;
     if (tracks.isError) {
       debugPrint(

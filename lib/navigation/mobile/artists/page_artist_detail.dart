@@ -21,7 +21,7 @@ class ArtistDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Loader<ArtistDetail>(
-      loadTask: () => neteaseRepository!.artistDetail(artistId),
+      loadTask: () => networkRepository!.artistDetail(artistId),
       loadingBuilder: (context) {
         return Scaffold(
           appBar: AppBar(title: const Text("歌手")),
@@ -169,7 +169,7 @@ class _PageAlbumsState extends State<_PageAlbums>
     with AutomaticKeepAliveClientMixin {
   Future<Result<List<Map>>> _delegate(offset) async {
     final result =
-        await neteaseRepository!.artistAlbums(widget.artistId, offset: offset);
+        await networkRepository!.artistAlbums(widget.artistId, offset: offset);
     return ValueResult((result.asValue!.value["hotAlbums"] as List).cast());
   }
 
@@ -205,7 +205,7 @@ class _PageMVs extends StatefulWidget {
 class _PageMVsState extends State<_PageMVs> with AutomaticKeepAliveClientMixin {
   Future<Result<List<Map>>> _loadMv(int offset) async {
     final result =
-        await neteaseRepository!.artistMvs(widget.artistId, offset: offset);
+        await networkRepository!.artistMvs(widget.artistId, offset: offset);
     return ValueResult((result.asValue!.value["mvs"] as List).cast());
   }
 
@@ -382,7 +382,7 @@ class _PageArtistIntroductionState extends State<_PageArtistIntroduction>
   Widget build(BuildContext context) {
     super.build(context);
     return Loader<Map>(
-      loadTask: () => neteaseRepository!.artistDesc(widget.artistId),
+      loadTask: () => networkRepository!.artistDesc(widget.artistId),
       builder: (context, result) {
         final widgets = <Widget>[];
         widgets.addAll(_buildIntroduction(context, result));

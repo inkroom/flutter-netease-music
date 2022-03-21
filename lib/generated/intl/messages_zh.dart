@@ -151,7 +151,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "toLoginPage": MessageLookupByLibrary.simpleMessage("前往登录界面"),
         "todo": MessageLookupByLibrary.simpleMessage("TBD"),
         "trackNoCopyright": MessageLookupByLibrary.simpleMessage("此音乐暂无版权"),
-        "trackVIP": MessageLookupByLibrary.simpleMessage("此音乐为VIP"),
         "volumeDown": MessageLookupByLibrary.simpleMessage("音量-"),
         "volumeUp": MessageLookupByLibrary.simpleMessage("音量+")
       };

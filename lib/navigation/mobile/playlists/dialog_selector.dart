@@ -30,7 +30,7 @@ class PlaylistSelectorDialog extends ConsumerWidget {
       return null;
     }
     try {
-      return await neteaseRepository!
+      return await networkRepository!
           .playlistTracksEdit(PlaylistOperation.add, playlistId, ids);
     } catch (e) {
       return false;
@@ -147,7 +147,7 @@ class PlaylistSelectorDialog extends ConsumerWidget {
     final userId = ref.watch(userProvider)!.userId;
     return Loader<List<PlaylistDetail?>>(
       loadTask: () =>
-          neteaseRepository!.userPlaylist(userId).then((value) => value),
+          networkRepository!.userPlaylist(userId).then((value) => value),
       errorBuilder: (context, result) {
         return _buildDialog(
             context,

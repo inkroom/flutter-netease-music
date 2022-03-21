@@ -102,7 +102,7 @@ class _SectionSubscribed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Loader<List<Map>>(
-      loadTask: () => neteaseRepository!.djSubList(),
+      loadTask: () => networkRepository!.djSubList(),
       builder: (context, result) {
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -119,7 +119,7 @@ class _SectionMyCreated extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (ref.watch(isLoginProvider)) {
       return Loader<List<Map>>(
-          loadTask: () => neteaseRepository!.userDj(ref.read(userIdProvider)),
+          loadTask: () => networkRepository!.userDj(ref.read(userIdProvider)),
           loadingBuilder: (context) {
             return Loader.buildSimpleLoadingWidget(context);
           },

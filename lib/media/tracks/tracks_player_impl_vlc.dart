@@ -182,7 +182,7 @@ class TracksPlayerImplVlc extends TracksPlayer {
           // skip play. since the track is changed.
           return;
         }
-        final url = neteaseRepository!.getPlayUrl(track);
+        final url = networkRepository!.getPlayUrl(track);
 
         url.catchError((onError) {
           debugPrint('Failed to get play url: ${onError?.toString()}');

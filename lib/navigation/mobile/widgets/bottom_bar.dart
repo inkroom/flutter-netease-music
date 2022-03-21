@@ -153,6 +153,13 @@ class BottomPlayerBar extends ConsumerWidget {
     if (music == null) {
       return const SizedBox(height: kBottomPlayerBarHeight);
     }
+    ImageProvider image;
+    if (music.imageUrl == null || music.imageUrl!.isEmpty) {
+      image = const AssetImage("assets/playing_page_disc.png");
+    } else {
+      image = CachedImage(music.imageUrl.toString());
+    }
+
     return Material(
       elevation: 8,
       child: InkWell(
@@ -168,7 +175,7 @@ class BottomPlayerBar extends ConsumerWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(4)),
                 child: Image(
                   fit: BoxFit.cover,
-                  image: CachedImage(music.imageUrl!),
+                  image: image,
                   width: 48,
                   height: 48,
                 ),

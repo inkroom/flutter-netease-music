@@ -66,7 +66,7 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
   /// 下载完成后返回更新后的track
   Future<Track> download(Track track) {
     Future<Track> down() {
-      return neteaseRepository!.getPlayUrl(track).then((value) {
+      return networkRepository!.getPlayUrl(track).then((value) {
         /// 下载文件
         track.mp3Url = value;
         return neteaseLocalData.downloadMusic(value, track);

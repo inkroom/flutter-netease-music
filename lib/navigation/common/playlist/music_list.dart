@@ -551,7 +551,7 @@ class _IconMore extends ConsumerWidget {
               return const PlaylistSelectorDialog();
             });
         if (id != null) {
-          final bool succeed = await neteaseRepository!
+          final bool succeed = await networkRepository!
               .playlistTracksEdit(PlaylistOperation.add, id, [music.id]);
           final scaffold = Scaffold.maybeOf(context);
           if (scaffold == null) {

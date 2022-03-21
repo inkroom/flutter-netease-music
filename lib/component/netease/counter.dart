@@ -25,7 +25,7 @@ class MusicCountNotifier extends CacheableStateNotifier<MusicCount> {
     if (!login) {
       return null;
     }
-    final state = await neteaseRepository!.subCount();
+    final state = await networkRepository!.subCount();
     if (state.isValue) {
       return state.asValue!.value;
     }

@@ -3,7 +3,7 @@ import 'package:quiet/repository.dart';
 
 final userPlaylistsProvider = FutureProvider.family<List<PlaylistDetail>, int>(
   (ref, userId) async {
-    final result = await neteaseRepository!.userPlaylist(userId);
+    final result = await networkRepository!.userPlaylist(userId);
     return result.asFuture;
   },
 );

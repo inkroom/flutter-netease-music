@@ -481,6 +481,9 @@ class Repository extends MusicApi {
 
   @override
   int get origin => _Origin_;
+
+  @override
+  String get name => "网易云";
 }
 
 // https://github.com/Binaryify/NeteaseCloudMusicApi/issues/899#issuecomment-680002883

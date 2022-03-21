@@ -163,7 +163,7 @@ class _SuggestionOverflowState extends State<SuggestionOverflow> {
               ),
               Loader<List<String>>(
                   key: Key("suggest_$_query"),
-                  loadTask: () => neteaseRepository!.searchSuggest(_query),
+                  loadTask: () => networkRepository!.searchSuggest(_query),
                   loadingBuilder: (context) {
                     return Container();
                   },

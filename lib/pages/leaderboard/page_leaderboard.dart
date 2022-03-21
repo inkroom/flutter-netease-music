@@ -13,7 +13,7 @@ class LeaderboardPage extends StatelessWidget {
         title: const Text("排行榜"),
       ),
       body: Loader<Map>(
-        loadTask: () => neteaseRepository!.topListDetail(),
+        loadTask: () => networkRepository!.topListDetail(),
         builder: (context, result) {
           return _Leaderboard((result['list'] as List).cast());
         },

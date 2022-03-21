@@ -7,13 +7,13 @@ final playlistDetailProvider = StreamProvider.family<PlaylistDetail, int>(
     if (local != null) {
       yield local;
     }
-    final ret = await neteaseRepository!.playlistDetail(playlistId);
+    final ret = await networkRepository!.playlistDetail(playlistId);
     var detail = await ret.asFuture;
 
     if (local != null && detail.trackUpdateTime == local.trackUpdateTime) {
       detail = detail.copyWith(tracks: local.tracks);
     } else if (detail.tracks.length != detail.trackCount) {
-      final musics = await neteaseRepository!.songDetails(detail.trackIds);
+      final musics = await networkRepository!.songDetails(detail.trackIds);
       if (musics.isValue) {
         detail = detail.copyWith(tracks: musics.asValue!.value);
       }

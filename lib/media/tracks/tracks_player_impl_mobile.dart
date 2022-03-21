@@ -214,7 +214,7 @@ Track _convertCallToTrack(MethodCall call) {
 // 获取播放地址
 Future<String> _playUriInterceptor(MethodCall? methodCall) {
   Track t = _convertCallToTrack(methodCall!);
-  return neteaseRepository!
+  return networkRepository!
       .getPlayUrl(t)
       .then((value) => value.replaceFirst("http://", "https://"));
 }
@@ -244,7 +244,7 @@ class _PlayQueueInterceptor extends PlayQueueInterceptor {
   Future<List<MusicMetadata>> fetchMoreMusic(
       BackgroundPlayQueue queue, PlayMode playMode) async {
     if (queue.queueId == kFmPlayQueueId) {
-      final musics = await neteaseRepository!.getPersonalFmMusics();
+      final musics = await networkRepository!.getPersonalFmMusics();
       if (musics.isError) {
         return [];
       }

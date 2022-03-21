@@ -28,12 +28,12 @@ class UserAccount extends StateNotifier<User?> {
   static const _persistenceKey = 'neteaseLoginUser';
 
   Future<Result<Map>> login(String? phone, String password) async {
-    final result = await neteaseRepository!.login(phone, password);
+    final result = await networkRepository!.login(phone, password);
     if (result.isValue) {
       final json = result.asValue!.value;
       final userId = json["account"]["id"] as int;
 
-      final userDetailResult = await neteaseRepository!.getUserDetail(userId);
+      final userDetailResult = await networkRepository!.getUserDetail(userId);
       if (userDetailResult.isError) {
         final error = userDetailResult.asError!;
         debugPrint('error : ${error.error} ${error.stackTrace}');
@@ -48,7 +48,7 @@ class UserAccount extends StateNotifier<User?> {
   void logout() {
     state = null;
     neteaseLocalData[_persistenceKey] = null;
-    neteaseRepository!.logout();
+    networkRepository!.logout();
   }
 
   Future<void> initialize() async {
@@ -61,12 +61,12 @@ class UserAccount extends StateNotifier<User?> {
         neteaseLocalData["neteaseLocalData"] = null;
       }
       //访问api，刷新登陆状态
-      neteaseRepository!.refreshLogin().then((login) async {
+      networkRepository!.refreshLogin().then((login) async {
         if (!login || state == null) {
           logout();
         } else {
           // refresh user
-          final result = await neteaseRepository!.getUserDetail(userId!);
+          final result = await networkRepository!.getUserDetail(userId!);
           if (result.isValue) {
             state = result.asValue!.value;
             neteaseLocalData[_persistenceKey] = state!.toJson();

@@ -28,7 +28,7 @@ class SongsResultSectionState extends State<SongsResultSection>
       },
       child: AutoLoadMoreList(
         loadMore: (count) async {
-          final result = await neteaseRepository!
+          final result = await networkRepository!
               .search(widget.query, SearchType.song, offset: count);
           if (result.isValue) {
             return LoadMoreResult(

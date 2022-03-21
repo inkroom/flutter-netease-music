@@ -5,7 +5,7 @@ import '../navigation/common/player/lyric.dart';
 
 final lyricProvider =
     FutureProvider.family<LyricContent?, int>((ref, id) async {
-  final lyric = await neteaseRepository!.lyric(id);
+  final lyric = await networkRepository!.lyric(id);
   if (lyric == null) {
     return null;
   }

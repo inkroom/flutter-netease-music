@@ -30,6 +30,8 @@ abstract class MusicApi {
 
   /// 获取唯一标志
   int get origin;
+  /// 获取源name
+  String get name;
 }
 
 /// 负责管理api
@@ -66,4 +68,6 @@ class MusicApiContainer {
     }
     return null;
   }
+
+  List<MusicApi> get list => _plugins;
 }

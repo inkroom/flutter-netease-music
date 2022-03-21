@@ -14,7 +14,7 @@ class DailyPlaylistPage extends StatelessWidget {
     return PageNeedLogin(
       builder: (context) => Scaffold(
         body: Loader<List<Track>>(
-            loadTask: () => neteaseRepository!.recommendSongs(),
+            loadTask: () => networkRepository!.recommendSongs(),
             builder: (context, list) {
               return MusicTileConfiguration(
                   token: 'playlist_daily_recommend',

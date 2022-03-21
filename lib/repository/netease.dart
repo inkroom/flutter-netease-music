@@ -1,3 +1,3 @@
 import 'network_repository.dart';
 
-NetworkRepository? neteaseRepository;
+NetworkRepository? networkRepository;

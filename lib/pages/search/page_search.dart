@@ -241,7 +241,7 @@ class _EmptyQuerySuggestionSection extends StatelessWidget {
     return ListView(
       children: <Widget>[
         Loader<List<String>>(
-            loadTask: () => neteaseRepository!.searchHotWords(),
+            loadTask: () => networkRepository!.searchHotWords(),
             //hide when failed load hot words
             errorBuilder: (context, result) => Container(),
             loadingBuilder: (context) {
