@@ -1,4 +1,4 @@
-name: netease_api
+name: track_music_api
 description: the api wrapper of netease cloud music
 version: 0.0.1
 homepage: https://github.com/boyan01/flutter-netease-music
@@ -13,13 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
   dio_cookie_manager: 2.0.0
-  netease_music_api:
-    git:
-      url: https://gitee.com/inkroom/t3.git
-      ref: 8bdb36f3efda3cefa57efc8e2190c188d9a05a86
   json_annotation: ^4.3.0
-  track_music_api:
-    path: ../track_music_api
+  equatable: ^2.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

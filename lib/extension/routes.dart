@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiet/providers/navigator_provider.dart';
-import 'package:quiet/repository.dart';
+import 'package:track_music_api/track_music_api.dart';
 
 import '../navigation/common/navigation_target.dart';
 import '../navigation/mobile/artists/artists_selector.dart';

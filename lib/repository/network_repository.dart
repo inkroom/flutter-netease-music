@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:netease_api/netease_api.dart' as api;
+import 'package:kugou_api/ku_api.dart';
+import 'package:netease_api/netease_api.dart' as neteaseApi;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:quiet/component/cache/cache.dart';
@@ -23,9 +24,8 @@ export 'package:netease_api/netease_api.dart'
         PlayRecordType;
 
 class NetworkRepository {
-  NetworkRepository(String cookiePath, this.cachePath)
-      : _repository = api.Repository(cookiePath),
-        _lyricCache = _LyricCache(p.join(cachePath, 'lyrics'));
+  NetworkRepository(this.cachePath)
+      : _lyricCache = _LyricCache(p.join(cachePath, 'lyrics'));
 
   static Future<void> initialize() async {
     var documentDir = (await getApplicationDocumentsDirectory()).path;
@@ -34,10 +34,13 @@ class NetworkRepository {
     }
     final cookiePath = p.join(documentDir, 'cookie');
     final cachePath = p.join(documentDir, 'cache');
-    neteaseRepository = NetworkRepository(cookiePath, cachePath);
-  }
 
-  final api.Repository _repository;
+    /// 注册api
+    MusicApiContainer.instance.regiester(KuApi());
+    MusicApiContainer.instance.regiester(neteaseApi.Repository(cookiePath));
+
+    neteaseRepository = NetworkRepository(cachePath);
+  }
 
   final String cachePath;
 
@@ -53,7 +56,7 @@ class NetworkRepository {
     if (lyric != null) {
       return lyric;
     }
-    final lyricString = await _repository.lyric(id);
+    final lyricString = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).lyric(id);
     if (lyricString != null) {
       await _lyricCache.update(key, lyricString);
     }
@@ -64,40 +67,37 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.searchHotWords();
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).searchHotWords();
   }
 
   ///search by keyword
   Future<Result<Map>> search(
     String? keyword,
-    api.SearchType type, {
+    neteaseApi.SearchType type, {
     int limit = 20,
     int offset = 0,
   }) {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.search(keyword, type, limit: limit, offset: offset);
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).searchByType(keyword, type,
+        limit: limit, offset: offset);
   }
 
   Future<SearchResult<List<Track>>> searchMusics(
     String keyword, {
-    int limit = 20,
-    int offset = 0,
+    int page = 1,
+    int size = 20,
   }) async {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.searchSongs(
-      keyword,
-      limit: limit,
-      offset: offset,
-    );
-    final result = await ret.asFuture;
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).search(keyword, page, size);
+    final result = ret;
     return (SearchResult<List<Track>>(
-      result: result.songs.map((e) => e.toTrack(e.privilege)).toList(),
+      result: result.data,
       hasMore: result.hasMore,
-      totalCount: result.songCount,
+      totalCount: result.total,
     ));
   }
 
@@ -105,20 +105,20 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.searchSuggest(keyword);
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).searchSuggest(keyword);
   }
 
   ///edit playlist tracks
   ///true : succeed
   Future<bool> playlistTracksEdit(
-    api.PlaylistOperation operation,
+    neteaseApi.PlaylistOperation operation,
     int playlistId,
     List<int?> musicIds,
   ) {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.playlistTracksEdit(
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).playlistTracksEdit(
       operation,
       playlistId,
       musicIds,
@@ -129,18 +129,18 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.playlistSubscribe(id, subscribe: subscribe);
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).playlistSubscribe(id, subscribe: subscribe);
   }
 
   Future<Result<Map>> getComments(
-    api.CommentThreadId commentThread, {
+    neteaseApi.CommentThreadId commentThread, {
     int limit = 20,
     int offset = 0,
   }) async {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.getComments(
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).getComments(
       commentThread,
       limit: limit,
       offset: offset,
@@ -152,7 +152,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.like(musicId, like: like);
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).like(musicId, like: like);
   }
 
   // get user licked tracks.
@@ -160,24 +160,24 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.likedList(userId);
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).likedList(userId);
   }
 
-  Future<Result<api.MusicCount>> subCount() async {
+  Future<Result<neteaseApi.MusicCount>> subCount() async {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.subCount();
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).subCount();
   }
 
-  Future<Result<api.CellphoneExistenceCheck>> checkPhoneExist(
+  Future<Result<neteaseApi.CellphoneExistenceCheck>> checkPhoneExist(
     String phone,
     String countryCode,
   ) async {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.checkPhoneExist(
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).checkPhoneExist(
       phone,
       countryCode,
     );
@@ -191,7 +191,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.userPlaylist(
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).userPlaylist(
       userId,
       offset: offset,
       limit: limit,
@@ -212,7 +212,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.playlistDetail(id, s: s);
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).playlistDetail(id, s: s);
     if (ret.isError) {
       return ret.asError!;
     }
@@ -224,7 +224,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.albumDetail(id);
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).albumDetail(id);
     if (ret.isError) {
       return ret.asError!;
     }
@@ -235,18 +235,18 @@ class NetworkRepository {
     ));
   }
 
-  Future<Result<api.MusicVideoDetailResult>> mvDetail(int mvId) async {
+  Future<Result<neteaseApi.MusicVideoDetailResult>> mvDetail(int mvId) async {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.mvDetail(mvId);
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).mvDetail(mvId);
   }
 
   Future<Result<ArtistDetail>> artistDetail(int id) async {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.artistDetail(id);
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).artistDetail(id);
     if (ret.isError) {
       return ret.asError!;
     }
@@ -264,7 +264,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.artistAlbums(
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).artistAlbums(
       artistId,
       limit: limit,
       offset: offset,
@@ -277,7 +277,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.artistMvs(
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).artistMvs(
       artistId,
       limit: limit,
       offset: offset,
@@ -289,18 +289,18 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.artistDesc(artistId);
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).artistDesc(artistId);
   }
 
   // FIXME
   Future<Result<Map>> topListDetail() async => Result.error('not implement');
 
   Future<Result<List<PlayRecord>>> getRecord(
-      int userId, api.PlayRecordType type) async {
+      int userId, neteaseApi.PlayRecordType type) async {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final records = await _repository.getRecord(userId, type);
+    final records = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).getRecord(userId, type);
     if (records.isError) {
       return records.asError!;
     }
@@ -319,7 +319,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.djSubList();
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).djSubList();
   }
 
   Future<Result<List<Map>>> userDj(int? userId) async =>
@@ -329,7 +329,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.personalizedNewSong();
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).personalizedNewSong();
     if (ret.isError) {
       return ret.asError!;
     }
@@ -346,7 +346,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.personalizedPlaylist(
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).personalizedPlaylist(
       limit: limit,
       offset: offset,
     );
@@ -373,7 +373,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.songDetails(ids);
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).songDetails(ids);
     if (ret.isError) {
       return ret.asError!;
     }
@@ -387,21 +387,21 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.mvSubscribe(mvId, subscribe: subscribe);
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).mvSubscribe(mvId, subscribe: subscribe);
   }
 
   Future<bool> refreshLogin() {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.refreshLogin();
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).refreshLogin();
   }
 
   Future<void> logout() {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.logout();
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).logout();
   }
 
   // FIXME
@@ -409,14 +409,14 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-   return _repository.login(phone, password);
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).login(phone, password);
   }
 
   Future<Result<User>> getUserDetail(int uid) async {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.getUserDetail(uid);
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).getUserDetail(uid);
     if (ret.isError) {
       return ret.asError!;
     }
@@ -428,7 +428,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.recommendSongs();
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).recommendSongs();
     if (ret.isError) {
       return ret.asError!;
     }
@@ -438,18 +438,20 @@ class NetworkRepository {
     );
   }
 
-  Future<Result<String>> getPlayUrl(int id, [int br = 320000]) {
+  Future<String> getPlayUrl(Track track, [int br = 320000]) {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    return _repository.getPlayUrl(id, br);
+    return (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository)
+        .playUrl(track)
+        .then((value) => Future.value(value.mp3Url));
   }
 
   Future<Result<List<Track>>> getPersonalFmMusics() async {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.getPersonalFmMusics();
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).getPersonalFmMusics();
     if (ret.isError) {
       return ret.asError!;
     }
@@ -461,7 +463,7 @@ class NetworkRepository {
     if (!NetworkSingleton().allowNetwork()) {
       return Future.error(NetworkException('网络设置不允许'));
     }
-    final ret = await _repository.getUserCloudMusic();
+    final ret = await (MusicApiContainer.instance.getApi(1) as neteaseApi.Repository).getUserCloudMusic();
     final value = await ret.asFuture;
     return CloudTracksDetail(
       maxSize: int.tryParse(value.maxSize) ?? 0,
@@ -497,14 +499,14 @@ TrackType _trackType({
   return TrackType.free;
 }
 
-extension _CloudTrackMapper on api.CloudSongItem {
+extension _CloudTrackMapper on neteaseApi.CloudSongItem {
   Track toTrack() {
     final album = AlbumMini(
       id: simpleSong.al.id,
       picUri: simpleSong.al.picUrl,
       name: simpleSong.al.name is String ? simpleSong.al.name : '',
     );
-    ArtistMini mapArtist(api.SimpleSongArtistItem item) {
+    ArtistMini mapArtist(neteaseApi.SimpleSongArtistItem item) {
       return ArtistMini(
         id: item.id,
         name: item.name is String ? item.name : '',
@@ -527,8 +529,8 @@ extension _CloudTrackMapper on api.CloudSongItem {
   }
 }
 
-extension _FmTrackMapper on api.FmTrackItem {
-  Track toTrack(api.Privilege privilege) => Track(
+extension _FmTrackMapper on neteaseApi.FmTrackItem {
+  Track toTrack(neteaseApi.Privilege privilege) => Track(
         id: id,
         name: name,
         artists: artists.map((e) => e.toArtist()).toList(),
@@ -543,7 +545,7 @@ extension _FmTrackMapper on api.FmTrackItem {
       );
 }
 
-extension _FmArtistMapper on api.FmArtist {
+extension _FmArtistMapper on neteaseApi.FmArtist {
   ArtistMini toArtist() => ArtistMini(
         id: id,
         name: name,
@@ -551,7 +553,7 @@ extension _FmArtistMapper on api.FmArtist {
       );
 }
 
-extension _FmAlbumMapper on api.FmAlbum {
+extension _FmAlbumMapper on neteaseApi.FmAlbum {
   AlbumMini toAlbum() => AlbumMini(
         id: id,
         name: name,
@@ -559,10 +561,10 @@ extension _FmAlbumMapper on api.FmAlbum {
       );
 }
 
-extension _PlayListMapper on api.Playlist {
-  PlaylistDetail toPlaylistDetail(List<api.PrivilegesItem> privileges) {
+extension _PlayListMapper on neteaseApi.Playlist {
+  PlaylistDetail toPlaylistDetail(List<neteaseApi.PrivilegesItem> privileges) {
     assert(coverImgUrl.isNotEmpty, 'coverImgUrl is empty');
-    final privilegesMap = Map<int, api.PrivilegesItem>.fromEntries(
+    final privilegesMap = Map<int, neteaseApi.PrivilegesItem>.fromEntries(
       privileges.map((e) => MapEntry(e.id, e)),
     );
     return PlaylistDetail(
@@ -585,8 +587,8 @@ extension _PlayListMapper on api.Playlist {
   }
 }
 
-extension _TrackMapper on api.TracksItem {
-  Track toTrack(api.PrivilegesItem? privilege) {
+extension _TrackMapper on neteaseApi.TracksItem {
+  Track toTrack(neteaseApi.PrivilegesItem? privilege) {
     final p = privilege ?? this.privilege;
     return Track(
       id: id,
@@ -607,7 +609,7 @@ extension _TrackMapper on api.TracksItem {
   }
 }
 
-extension _ArtistItemMapper on api.ArtistItem {
+extension _ArtistItemMapper on neteaseApi.ArtistItem {
   ArtistMini toArtist() {
     return ArtistMini(
       id: id,
@@ -617,7 +619,7 @@ extension _ArtistItemMapper on api.ArtistItem {
   }
 }
 
-extension _ArtistMapper on api.Artist {
+extension _ArtistMapper on neteaseApi.Artist {
   Artist toArtist() {
     return Artist(
       id: id,
@@ -635,7 +637,7 @@ extension _ArtistMapper on api.Artist {
   }
 }
 
-extension _AlbumItemMapper on api.AlbumItem {
+extension _AlbumItemMapper on neteaseApi.AlbumItem {
   AlbumMini toAlbum() {
     return AlbumMini(
       id: id,
@@ -645,7 +647,7 @@ extension _AlbumItemMapper on api.AlbumItem {
   }
 }
 
-extension _AlbumMapper on api.Album {
+extension _AlbumMapper on neteaseApi.Album {
   Album toAlbum() {
     return Album(
       id: id,
@@ -671,7 +673,7 @@ extension _AlbumMapper on api.Album {
   }
 }
 
-extension _UserMapper on api.Creator {
+extension _UserMapper on neteaseApi.Creator {
   User toUser() {
     return User(
       userId: userId,
@@ -694,7 +696,7 @@ extension _UserMapper on api.Creator {
   }
 }
 
-extension _UserDetailMapper on api.UserDetail {
+extension _UserDetailMapper on neteaseApi.UserDetail {
   User toUser() {
     return User(
       userId: profile.userId,

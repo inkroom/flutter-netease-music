@@ -31,13 +31,15 @@ dependencies:
   music_player:
     git:
       url: https://gitee.com/inkroom/t2.git
-      ref: 7ba0513153853f769e3789b37f9ef630c85740f6
+      ref: 8a622b605c07bc58f0f7d96c36b0238d0dc5d460
   scrollable_positioned_list: ^0.2.0-nullsafety.0
   hive: ^2.0.4
   flutter_hooks: ^0.18.0
   equatable: ^2.0.3
   netease_api:
     path: netease_api/
+  kugou_api:
+    path: ku_api/
   path: ^1.8.0
   async: ^2.8.0
   riverpod: ^1.0.3

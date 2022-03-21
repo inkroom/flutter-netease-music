@@ -173,25 +173,23 @@ class TracksPlayerImplVlc extends TracksPlayer {
   double get volume => _player.general.volume;
 
   void _playTrack(Track track) {
-    scheduleMicrotask(() async {
+    scheduleMicrotask(() {
       if (track.file != null) {
         log('从文件播放${track.file}');
         _player.open(Media.file(File(track.file!)), autoStart: true);
-      } else if (track.mp3Url != null) {
-        log('从url播放${track.mp3Url}');
-        _player.open(Media.network(track.mp3Url), autoStart: true);
       } else {
-        final url = await neteaseRepository!.getPlayUrl(track.id);
-        if (url.isError) {
-          debugPrint('Failed to get play url: ${url.asError!.error}');
-          return;
-        }
         if (_current != track) {
           // skip play. since the track is changed.
           return;
         }
-        log('获取uri=${url.asValue!.value}');
-        _player.open(Media.network(url.asValue!.value), autoStart: true);
+        final url = neteaseRepository!.getPlayUrl(track);
+
+        url.catchError((onError) {
+          debugPrint('Failed to get play url: ${onError?.toString()}');
+        }).then((value) {
+          log('获取uri=${value.toString()}');
+          _player.open(Media.network(value), autoStart: true);
+        });
       }
     });
     _current = track;

@@ -34,8 +34,8 @@ class _MobileSearchNotify extends SearchResultStateNotify<Track> {
   }
 
   @override
-  Future<SearchResult<List<Track>>> load(int offset, int count) =>
-      neteaseRepository!.searchMusics(query, offset: offset, limit: count);
+  Future<SearchResult<List<Track>>> load(int page, int size) =>
+      neteaseRepository!.searchMusics(query, page: page, size: size);
 }
 
 class SearchResultState<T> with EquatableMixin {
@@ -85,7 +85,7 @@ abstract class SearchResultStateNotify<T>
     _page = page;
     notifyListener(const AsyncValue.loading());
     try {
-      final result = await load((page - 1) * pageSize, pageSize);
+      final result = await load(page, pageSize);
       _totalItemCount = result.totalCount;
       notifyListener(AsyncValue.data(result.result));
     } catch (error, stacktrace) {
@@ -95,7 +95,7 @@ abstract class SearchResultStateNotify<T>
     }
   }
 
-  Future<SearchResult<List<T>>> load(int offset, int count);
+  Future<SearchResult<List<T>>> load(int page, int size);
 
   void notifyListener(AsyncValue<List<T>> value) {
     state = SearchResultState<T>(
@@ -120,8 +120,8 @@ class _TrackResultStateNotify extends SearchResultStateNotify<Track> {
   String get query => _query;
 
   @override
-  Future<SearchResult<List<Track>>> load(int offset, int count) =>
-      neteaseRepository!.searchMusics(query, offset: offset, limit: count);
+  Future<SearchResult<List<Track>>> load(int page, int size) =>
+      neteaseRepository!.searchMusics(query, page: page, size: size);
 
   @override
   int get pageSize => 100;

@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/providers/player_provider.dart';
 import 'package:quiet/repository/cached_image.dart';
-import 'package:quiet/repository/data/track.dart';
+import 'package:track_music_api/track_music_api.dart';
 
 ///播放页面歌曲封面
 class AlbumCover extends ConsumerStatefulWidget {

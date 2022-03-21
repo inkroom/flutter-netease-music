@@ -6,7 +6,7 @@ export 'repository/data/daily_playlist.dart';
 export 'repository/data/play_record.dart';
 export 'repository/data/playlist_detail.dart';
 export 'repository/data/recommended_playlist.dart';
-export 'repository/data/track.dart';
+export 'package:track_music_api/track_music_api.dart';
 export 'repository/data/user.dart';
 export 'repository/local_cache_data.dart';
 export 'repository/netease.dart';

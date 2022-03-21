@@ -41,10 +41,12 @@ class TrackTile extends ConsumerWidget {
           children: [
             Container(
               padding: const EdgeInsets.only(left: 8, right: 8),
-              child: const Image(
+              child: Image(
                   width: 18,
                   height: 18,
-                  image: AssetImage('assets/icons/netease.ico')),
+                  image: AssetImage(track.origin == 1
+                      ? 'assets/icons/netease.ico'
+                      : 'assets/icons/kugou.ico')),
             ),
             SizedBox(
               width: 32,

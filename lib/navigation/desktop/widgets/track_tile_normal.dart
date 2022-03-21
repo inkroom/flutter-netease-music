@@ -306,7 +306,7 @@ class TrackTile extends ConsumerWidget {
               }
               // TODO 将获取播放url往合适的地方放
               neteaseRepository!.getPlayUrl(track).then((value) {
-                track.mp3Url = value.asValue!.value;
+                track.mp3Url = value;
                 var r = TrackTileContainer.playTrack(context, track);
                 if (r != PlayResult.success) {
                   toast(context.strings.failedToPlayMusic);

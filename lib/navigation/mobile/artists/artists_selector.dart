@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiet/extension.dart';
-import 'package:quiet/repository/data/track.dart';
+import 'package:track_music_api/track_music_api.dart';
 
 ///歌手选择弹窗
 ///返回 [ArtistMini]

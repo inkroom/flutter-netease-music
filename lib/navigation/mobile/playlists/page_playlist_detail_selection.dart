@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/component.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
-import 'package:quiet/repository/data/track.dart';
+import 'package:track_music_api/track_music_api.dart';
 
 import '../../../material/dialogs.dart';
 import 'dialog_selector.dart';

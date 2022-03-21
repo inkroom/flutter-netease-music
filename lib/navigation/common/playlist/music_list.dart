@@ -152,7 +152,7 @@ class TrackTileContainer extends StatelessWidget {
         if (skipAccompaniment) {
           tracks = playlist.tracks
               .whereNot((value) => value.name.contains('伴奏'))
-              .toList();
+              .toList().cast();
         } else {
           tracks = playlist.tracks;
         }

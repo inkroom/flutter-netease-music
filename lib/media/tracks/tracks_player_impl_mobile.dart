@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:music_player/music_player.dart';
 
@@ -32,7 +33,7 @@ extension _Metadata on MusicMetadata {
       imageUrl: extras?['imageUrl'] as String,
       duration: Duration(milliseconds: duration),
       type: TrackType.values.byName(extras?['fee']),
-      file:null,
+      file: null,
       mp3Url: null,
     );
   }
@@ -198,15 +199,24 @@ void runMobileBackgroundService() {
   );
 }
 
-// 获取播放地址
-Future<String> _playUriInterceptor(String? mediaId, String? fallbackUri) async {
-  final result = await neteaseRepository!.getPlayUrl(int.parse(mediaId!));
-  if (result.isError) {
-    return fallbackUri ?? '';
-  }
+Track _convertCallToTrack(MethodCall call) {
+  return Track(
+      id: call.arguments['id'],
+      uri: call.arguments['uri'],
+      name: call.arguments['name'],
+      artists: call.arguments['artists'],
+      album: call.arguments['album'],
+      imageUrl: call.arguments['imageUrl'],
+      duration: call.arguments['duration'],
+      type: call.arguments['type']);
+}
 
-  /// some devices do not support http request.
-  return result.asValue!.value.replaceFirst("http://", "https://");
+// 获取播放地址
+Future<String> _playUriInterceptor(MethodCall? methodCall) {
+  Track t = _convertCallToTrack(methodCall!);
+  return neteaseRepository!
+      .getPlayUrl(t)
+      .then((value) => value.replaceFirst("http://", "https://"));
 }
 
 Future<Uint8List> _loadImageInterceptor(MusicMetadata metadata) async {

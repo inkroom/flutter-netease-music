@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
-import 'package:quiet/repository/data/track.dart';
+import 'package:track_music_api/track_music_api.dart';
 
 import 'data/playlist_detail.dart';
 import 'database.dart';

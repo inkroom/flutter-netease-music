@@ -5,10 +5,13 @@ import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:netease_music_api/netease_cloud_music.dart' as api;
+import 'package:track_music_api/track_music_api.dart';
 
 import '../netease_api.dart';
 
 export 'package:async/async.dart' show Result, ValueResult, ErrorResult;
+
+const int _Origin_ = 1;
 
 ///enum for [NeteaseRepository.search] param type
 class SearchType {
@@ -69,7 +72,7 @@ extension _FutureMapExtension<T> on Future<Result<T>> {
   }
 }
 
-class Repository {
+class Repository extends MusicApi {
   Repository(String cookiePath) {
     api.debugPrint = debugPrint;
     scheduleMicrotask(() async {
@@ -208,7 +211,7 @@ class Repository {
   }
 
   ///search by keyword
-  Future<Result<Map>> search(String? keyword, SearchType type,
+  Future<Result<Map>> searchByType(String? keyword, SearchType type,
       {int limit = 20, int offset = 0}) {
     return doRequest("/search/cloud", {
       "keywords": keyword,
@@ -218,12 +221,23 @@ class Repository {
     });
   }
 
-  Future<Result<SearchResultSongs>> searchSongs(String keyword,
-      {int limit = 20, int offset = 0}) async {
-    final result =
-        await search(keyword, SearchType.song, limit: limit, offset: offset);
-    return result.map((t) => SearchResultSongs.fromJson(t['result']));
+
+  @override
+  Future<PageResult<Track>> search(String keyword, int page, int size) async {
+    final result = await searchByType(keyword, SearchType.song,
+        limit: size, offset: (page - 1) * size);
+    final r = result.map((t) => SearchResultSongs.fromJson(t['result']));
+
+    if (r.isError) {
+      return Future.error(r.asError!.error);
+    }
+
+    return Future.value(PageResult(
+        data:
+            r.asValue!.value.songs.map((e) => e.toTrack(e.privilege)).toList(),
+        hasMore: r.asValue!.value.hasMore));
   }
+
 
   ///搜索建议
   ///返回搜索建议列表，结果一定不会为null
@@ -253,21 +267,6 @@ class Repository {
         "https://music.163.com/weapi/song/enhance/player/url",
         {"ids": "[$id]", "br": 999000});
     return result.isValue && result.asValue!.value["data"][0]["code"] == 200;
-  }
-
-  Future<Result<String>> getPlayUrl(int id, [int br = 320000]) async {
-    final result = await doRequest("/song/url", {"id": id, "br": br});
-    return _map(result, (dynamic result) {
-      final data = result['data'] as List;
-      if (data.isEmpty) {
-        throw "we can not get realtime play url: data is empty";
-      }
-      final url = data.first['url'] as String;
-      if (url.isEmpty) {
-        throw "we can not get realtime play url: URL is null";
-      }
-      return url;
-    });
   }
 
   Future<Result<SongDetail>> songDetails(List<int> ids) async {
@@ -468,5 +467,86 @@ class Repository {
       return Result.error(map['msg'] ?? '请求失败了~');
     }
     return Result.value(map as Map<String, dynamic>);
+  }
+
+  @override
+  Future<Track> playUrl(track) async {
+    final result = await doRequest("/song/url", {"id": track.id});
+    if (result.isError) return Future.error(result.asError!.error);
+
+    final l = result.asValue!.value['data'] as List;
+    track.mp3Url = l.first['url'] as String;
+    return Future.value(track);
+  }
+
+  @override
+  int get origin => _Origin_;
+}
+
+// https://github.com/Binaryify/NeteaseCloudMusicApi/issues/899#issuecomment-680002883
+TrackType _trackType({
+  required int fee,
+  required bool cs,
+  required int st,
+}) {
+  if (st == -200) {
+    return TrackType.noCopyright;
+  }
+  if (cs) {
+    return TrackType.cloud;
+  }
+  switch (fee) {
+    case 0:
+    case 8:
+      return TrackType.free;
+    case 4:
+      return TrackType.payAlbum;
+    case 1:
+      return TrackType.vip;
+  }
+  debugPrint('unknown fee: $fee');
+  return TrackType.free;
+}
+
+extension _TrackMapper on TracksItem {
+  Track toTrack(PrivilegesItem? privilege) {
+    final p = privilege ?? this.privilege;
+    return Track(
+      id: id,
+      name: name,
+      artists: ar.map((e) => e.toArtist()).toList(),
+      album: al.toAlbum(),
+      imageUrl: al.picUrl,
+      uri: 'http://music.163.com/song/media/outer/url?id=$id.mp3',
+      duration: Duration(milliseconds: dt),
+      type: _trackType(
+        fee: p?.fee ?? fee,
+        cs: p?.cs ?? false,
+        st: p?.st ?? st,
+      ),
+      file: null,
+      mp3Url: null,
+      origin: _Origin_,
+    );
+  }
+}
+
+extension _ArtistItemMapper on ArtistItem {
+  ArtistMini toArtist() {
+    return ArtistMini(
+      id: id,
+      name: name,
+      imageUrl: null,
+    );
+  }
+}
+
+extension _AlbumItemMapper on AlbumItem {
+  AlbumMini toAlbum() {
+    return AlbumMini(
+      id: id,
+      name: name,
+      picUri: picUrl,
+    );
   }
 }
