@@ -205,11 +205,11 @@ class _RpeatModeControl extends ConsumerWidget {
     final m = ref.read(playerProvider);
     IconData i = Icons.autorenew;
     if (mode == RepeatMode.random) {
-      i = Icons.autorenew_outlined;
+      i = Icons.shuffle;
     } else if (mode == RepeatMode.next) {
-       i = Icons.arrow_circle_down_outlined;
+       i = Icons.next_plan;
     } else if (mode == RepeatMode.one) {
-      i = Icons.density_large_outlined;
+      i = Icons.repeat_one;
     } else if (mode == RepeatMode.none) {
       i = Icons.close_outlined;
     }

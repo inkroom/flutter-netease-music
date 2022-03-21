@@ -13,11 +13,7 @@ class QuietApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // FIXME 网络变化监听还是有问题，搜索页面总是跟随设置，但是发现、音乐库、我的页面状态有问题，但是还没有确定复现步骤
-    final networkMode = ref.watch(
-      settingStateProvider.select((value) => value.networkMode),
-    );
-    NetworkSingleton().setMode(networkMode);
+    NetworkSingleton().setMode(ref.read(settingStateProvider).networkMode);
     final Widget home;
     final platform = ref.watch(debugNavigatorPlatformProvider);
     switch (platform) {

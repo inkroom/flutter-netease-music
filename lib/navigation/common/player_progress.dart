@@ -15,9 +15,6 @@ class DurationProgressBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final player = ref.read(playerProvider);
-    final theme = Theme.of(context).primaryTextTheme;
-
     return SliderTheme(
       data: const SliderThemeData(
         thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
@@ -26,17 +23,13 @@ class DurationProgressBar extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: PlayerProgressSlider(builder: (context, widget) {
-          final positionText = player.position?.timeStamp;
-          final durationText = player.duration?.timeStamp;
           return Row(
             children: <Widget>[
-              // Text(positionText ?? "00:00", style: theme.bodyText2),
               const Padding(padding: EdgeInsets.only(left: 4)),
               Expanded(
                 child: widget,
               ),
               const Padding(padding: EdgeInsets.only(left: 4)),
-              Text(positionText ?? "00:00", style: theme.bodyText2),
             ],
           );
         }),
@@ -91,7 +84,7 @@ class _PlayerProgressSliderSnapshot extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Text(positionText ?? '00:00'),
+          child: Text(positionText ?? '00:00',style: context.primaryTextTheme.bodyMedium,),
         ),
         Expanded(
             child: Slider(
@@ -112,7 +105,7 @@ class _PlayerProgressSliderSnapshot extends StatelessWidget {
         )),
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Text(durationText ?? '00:00'),
+          child: Text(durationText ?? '00:00',style: context.primaryTextTheme.bodyMedium),
         ),
       ],
     );
