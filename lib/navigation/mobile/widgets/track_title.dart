@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/repository.dart';
+import 'package:windows_taskbar/windows_taskbar.dart';
 
 import '../../../providers/cloud_tracks_provider.dart';
 import '../../../providers/player_provider.dart';
@@ -21,34 +22,7 @@ class TrackTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var cloudTracksProviderNotifier = ref.watch(cloudTracksProvider.notifier);
-
-    void addOperator() {
-      cloudTracksProviderNotifier.add(track);
-    }
-
-    void deleteOperator() {
-      cloudTracksProviderNotifier.remove(track);
-    }
-
-    void downloadOperator() {
-      if (track.type == TrackType.noCopyright) {
-        toast(context.strings.trackNoCopyright);
-        return;
-      } else if (track.type == TrackType.vip) {
-        toast(context.strings.trackVIP);
-        return;
-      }
-      toast(context.strings.musicDownloading(track.name));
-      cloudTracksProviderNotifier.download(track).then((value) {
-        toast(context.strings.musicDownloaded(value.name));
-
-        /// 加入到歌单中
-        cloudTracksProviderNotifier.add(track);
-      }).catchError((error) {
-        toast(context.strings.musicDownloadFail(track.name));
-      });
-    }
+    final operator = TrackOperator(context: context, ref: ref);
 
     return InkWell(
       onTap: () {
@@ -65,14 +39,19 @@ class TrackTile extends ConsumerWidget {
         height: 64,
         child: Row(
           children: [
-            const SizedBox(width: 12),
+            Container(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: const Image(
+                  width: 18,
+                  height: 18,
+                  image: AssetImage('assets/icons/netease.ico')),
+            ),
             SizedBox(
               width: 32,
-              child:
-                  Center(child: _IndexOrPlayIcon(track: track, index: index)),
+              child: _IndexOrPlayIcon(track: track, index: index),
+              // Center(child: _IndexOrPlayIcon(track: track, index: index)),
             ),
             const SizedBox(width: 8),
-
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -98,7 +77,8 @@ class TrackTile extends ConsumerWidget {
                               color: Colors.white,
                               background: Paint()..color = Colors.red),
                         ),
-                      Text(
+                      Expanded(
+                          child: Text(
                         (track.type != TrackType.free ? ' ' : '') + track.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -106,7 +86,7 @@ class TrackTile extends ConsumerWidget {
                             color: track.type == TrackType.noCopyright
                                 ? context.theme.disabledColor
                                 : null),
-                      ),
+                      )),
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -138,11 +118,11 @@ class TrackTile extends ConsumerWidget {
               icon: const Icon(Icons.more_vert),
               onSelected: (value) {
                 if (value == 1) {
-                  addOperator();
+                  operator.addOperator(track);
                 } else if (value == 2) {
-                  deleteOperator();
+                  operator.deleteOperator(track);
                 } else if (value == 3) {
-                  downloadOperator();
+                  operator.downloadOperator(track);
                 }
                 debugPrint('v=$value');
               },

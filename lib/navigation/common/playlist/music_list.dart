@@ -5,11 +5,51 @@ import 'package:quiet/extension.dart';
 import 'package:quiet/media/tracks/track_list.dart';
 import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/navigation/common/navigation_target.dart';
+import 'package:quiet/providers/cloud_tracks_provider.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 import 'package:quiet/providers/player_provider.dart';
+import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository.dart';
 
 import '../../mobile/playlists/dialog_selector.dart';
+
+class TrackOperator {
+  const TrackOperator({required this.context, required this.ref});
+
+  final BuildContext context;
+  final WidgetRef ref;
+
+  void addOperator(Track track) {
+    ref.read(cloudTracksProvider.notifier).add(track);
+  }
+
+  void deleteOperator(Track track) {
+    ref.read(cloudTracksProvider.notifier).remove(track);
+  }
+
+  void downloadOperator(Track track) {
+    if (track.type == TrackType.noCopyright) {
+      toast(context.strings.trackNoCopyright);
+      return;
+    } else if (track.type == TrackType.vip) {
+      toast(context.strings.trackVIP);
+      return;
+    }
+    if (!NetworkSingleton().allowNetwork()) {
+      toast(context.strings.networkNotAllow);
+      return;
+    }
+    toast(context.strings.musicDownloading(track.name));
+    ref.read(cloudTracksProvider.notifier).download(track).then((value) {
+      toast(context.strings.musicDownloaded(value.name));
+
+      /// 加入到歌单中
+      ref.read(cloudTracksProvider.notifier).add(track);
+    }).catchError((error) {
+      toast(context.strings.musicDownloadFail(track.name));
+    });
+  }
+}
 
 enum PlayResult {
   success,

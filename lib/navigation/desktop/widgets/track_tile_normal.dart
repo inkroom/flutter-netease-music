@@ -288,38 +288,7 @@ class TrackTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final configuration = _TrackTableConfiguration.of(context);
 
-    var cloudTracksProviderNotifier = ref.watch(cloudTracksProvider.notifier);
-
-    void addOperator() {
-      cloudTracksProviderNotifier.add(track);
-    }
-
-    void deleteOperator() {
-      cloudTracksProviderNotifier.remove(track);
-    }
-
-    void downloadOperator() {
-      if (track.type == TrackType.noCopyright) {
-        toast(context.strings.trackNoCopyright);
-        return;
-      } else if (track.type == TrackType.vip) {
-        toast(context.strings.trackVIP);
-        return;
-      }
-      toast(context.strings.musicDownloading(track.name));
-      cloudTracksProviderNotifier.download(track).then((value) {
-        toast(context.strings.musicDownloaded(value.name));
-
-        /// 加入到歌单中
-        cloudTracksProviderNotifier.add(track);
-      }).catchError((error) {
-        log(
-          '下载失败 $error',
-        );
-        toast(context.strings.musicDownloadFail(track.name));
-      });
-    }
-
+    final operator = TrackOperator(context: context, ref: ref);
     return SizedBox(
         height: 36,
         child: Material(
@@ -336,7 +305,7 @@ class TrackTile extends ConsumerWidget {
                 return;
               }
               // TODO 将获取播放url往合适的地方放
-              neteaseRepository!.getPlayUrl(track.id).then((value) {
+              neteaseRepository!.getPlayUrl(track).then((value) {
                 track.mp3Url = value.asValue!.value;
                 var r = TrackTileContainer.playTrack(context, track);
                 if (r != PlayResult.success) {
@@ -398,7 +367,8 @@ class TrackTile extends ConsumerWidget {
                             ),
                           Expanded(
                             child: Text(
-                              (track.type != TrackType.free ? ' ' : '') + track.name,
+                              (track.type != TrackType.free ? ' ' : '') +
+                                  track.name,
                               overflow: TextOverflow.ellipsis,
                               style: context.textTheme.bodyMedium?.copyWith(
                                 fontSize: 14,
@@ -474,17 +444,17 @@ class TrackTile extends ConsumerWidget {
                       children: [
                         AppIconButton(
                             padding: EdgeInsets.zero,
-                            onPressed: downloadOperator,
+                            onPressed: () => operator.downloadOperator(track),
                             icon: track.file != null
                                 ? Icons.download_done_outlined
                                 : Icons.download_outlined),
                         AppIconButton(
                             padding: EdgeInsets.zero,
-                            onPressed: addOperator,
+                            onPressed: () => operator.addOperator(track),
                             icon: Icons.add_outlined),
                         AppIconButton(
                             padding: EdgeInsets.zero,
-                            onPressed: deleteOperator,
+                            onPressed: () => operator.deleteOperator(track),
                             icon: Icons.delete_outline),
                       ],
                     ),

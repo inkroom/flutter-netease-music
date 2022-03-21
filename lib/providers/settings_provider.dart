@@ -111,6 +111,7 @@ class Settings extends StateNotifier<SettingState> {
   }
 
   void setNetworkMode(NetworkMode networkMode) {
+    NetworkSingleton().setMode(networkMode);
     _preferences.setInt(_keyNetworkMode, networkMode.index);
     state = state.copyWith(networkMode: networkMode);
   }
@@ -174,10 +175,10 @@ class NetworkSingleton {
     if (_mode == NetworkMode.NONE) {
       return false;
     } else if (_mode == NetworkMode.MOBILE) {
-      return _now == ConnectivityResult.mobile ||
-          _now == ConnectivityResult.ethernet;
+      return _now == ConnectivityResult.mobile;
     } else if (_mode == NetworkMode.WIFI) {
-      return _now == ConnectivityResult.wifi;
+      return _now == ConnectivityResult.wifi ||
+          _now == ConnectivityResult.ethernet;
     }
     return true;
   }
