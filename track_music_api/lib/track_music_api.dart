@@ -33,6 +33,11 @@ abstract class MusicApi {
 
   /// 获取源name
   String get name;
+
+  /// 获取包名，用于获取icon
+  String get package;
+//// icon 位置
+  String get icon;
 }
 
 /// 负责管理api
@@ -70,6 +75,13 @@ class MusicApiContainer {
     return Future.error(UnsupportOriginException);
   }
 
+  MusicApi? getApiSync(int origin) {
+    for (var s in _plugins) {
+      if (s.origin == origin) return s;
+    }
+    return null;
+  }
+
   List<MusicApi> get list => _plugins;
 }
 
@@ -87,8 +99,8 @@ class MusicException implements Exception {
   String toString() => 'MusicException: $message';
 }
 
-class UnsupportOriginException extends MusicException{
-    UnsupportOriginException(String message) : super(message);
+class UnsupportOriginException extends MusicException {
+  UnsupportOriginException(String message) : super(message);
 }
 
 class RegiesterException extends MusicException {

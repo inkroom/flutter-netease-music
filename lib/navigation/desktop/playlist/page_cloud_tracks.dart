@@ -20,11 +20,9 @@ class PageCloudTracks extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final result = ref.watch(cloudTracksProvider);
 
-
     return Material(
-      color: context.colorScheme.background,
-      child:  _PageCloudTracksBody(detail: result)
-    );
+        color: context.colorScheme.background,
+        child: _PageCloudTracksBody(detail: result));
   }
 }
 
@@ -38,8 +36,9 @@ class _PageCloudTracksBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final t = detail.tracks.reversed.toList();
     return TrackTileContainer.cloudTracks(
-      tracks: detail.tracks,
+      tracks: t,
       player: ref.read(playerProvider),
       child: TrackTableContainer(
         child: Column(
@@ -51,10 +50,9 @@ class _PageCloudTracksBody extends ConsumerWidget {
             Expanded(
               child: _DropUploadArea(
                 child: ListView.builder(
-                  itemCount: detail.tracks.length,
+                  itemCount: t.length,
                   itemBuilder: (context, index) {
-                    final track = detail.tracks[index];
-                    return TrackTile(track: track, index: index + 1);
+                    return TrackTile(track: t[index], index: index + 1);
                   },
                 ),
               ),

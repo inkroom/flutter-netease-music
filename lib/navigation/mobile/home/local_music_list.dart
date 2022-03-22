@@ -6,23 +6,24 @@ import 'package:quiet/navigation/mobile/widgets/track_title.dart';
 import 'package:quiet/providers/cloud_tracks_provider.dart';
 import 'package:quiet/providers/player_provider.dart';
 
-/// 本地音乐名单
+/// 本地音乐歌单
 class LocalMusicList extends ConsumerWidget {
   const LocalMusicList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final r = ref.watch(cloudTracksProvider);
+    // 显示的时候倒序，存储依然正序
+    final r = ref.watch(cloudTracksProvider).tracks.reversed.toList();
 
     return TrackTileContainer.cloudTracks(
-        tracks: r.tracks,
+        tracks: r,
         child: ListView.builder(
           shrinkWrap: true,
           itemBuilder: (context, index) => TrackTile(
-            track: r.tracks[index],
+            track: r[index],
             index: index + 1,
           ),
-          itemCount: r.tracks.length,
+          itemCount: r.length,
         ),
         player: ref.read(playerProvider));
   }

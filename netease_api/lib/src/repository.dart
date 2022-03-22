@@ -86,6 +86,12 @@ class Repository extends MusicApi {
     });
   }
 
+  @override
+  String get package => "netease_api";
+
+  @override
+  String get icon => "assets/icon.ico";
+
   final Completer<PersistCookieJar> _cookieJar = Completer();
 
   Future<List<Cookie>> _loadCookies() async {
@@ -221,7 +227,6 @@ class Repository extends MusicApi {
     });
   }
 
-
   @override
   Future<PageResult<Track>> search(String keyword, int page, int size) async {
     final result = await searchByType(keyword, SearchType.song,
@@ -237,7 +242,6 @@ class Repository extends MusicApi {
             r.asValue!.value.songs.map((e) => e.toTrack(e.privilege)).toList(),
         hasMore: r.asValue!.value.hasMore));
   }
-
 
   ///搜索建议
   ///返回搜索建议列表，结果一定不会为null

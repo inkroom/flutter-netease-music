@@ -202,6 +202,7 @@ void runMobileBackgroundService() {
 Track _convertCallToTrack(MethodCall call) {
   return Track(
       id: call.arguments['id'],
+      file: call.arguments['file'],
       uri: call.arguments['uri'],
       name: call.arguments['name'],
       artists: call.arguments['artists'],
@@ -214,6 +215,11 @@ Track _convertCallToTrack(MethodCall call) {
 // 获取播放地址
 Future<String> _playUriInterceptor(MethodCall? methodCall) {
   Track t = _convertCallToTrack(methodCall!);
+
+  if (t.file != null) {
+    return Future.value(t.file);
+  }
+
   return networkRepository!.getPlayUrl(t).then((value) {
     if (value.mp3Url == null || value.mp3Url!.isEmpty) {
       return Future.error(PlayDetailException);

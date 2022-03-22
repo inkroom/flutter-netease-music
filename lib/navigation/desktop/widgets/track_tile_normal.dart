@@ -12,6 +12,7 @@ import 'package:quiet/providers/navigator_provider.dart';
 import 'package:quiet/providers/player_provider.dart';
 import 'package:quiet/repository.dart';
 
+import '../../common/track_title.dart';
 import '../../common/navigation_target.dart';
 import 'highlight_clickable_text.dart';
 
@@ -308,7 +309,12 @@ class TrackTile extends ConsumerWidget {
                     width: 40,
                     child: Align(
                       alignment: AlignmentDirectional.centerEnd,
-                      child: _IndexOrPlayIcon(index: index, track: track),
+                      child: Row(
+                        children: [
+                          icon(track),
+                          IndexOrPlayIcon(index: index, track: track)
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -329,24 +335,24 @@ class TrackTile extends ConsumerWidget {
                       alignment: AlignmentDirectional.centerStart,
                       child: Row(
                         children: [
-                          if (track.type == TrackType.noCopyright)
-                            Text(
-                              context.strings.tipNoCopyright,
-                              textAlign: TextAlign.center,
-                              style: context.textTheme.bodyMedium?.copyWith(
-                                  fontSize: 10,
-                                  color: Colors.white,
-                                  background: Paint()..color = Colors.red),
+                          // if (track.type == TrackType.noCopyright)
+                          trackLabel(Text(
+                            context.strings.tipNoCopyright,
+                            textAlign: TextAlign.center,
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              fontSize: 10,
+                              color: Colors.white,
                             ),
+                          )),
                           if (track.type == TrackType.vip)
-                            Text(
+                            trackLabel(Text(
                               context.strings.tipVIP,
                               textAlign: TextAlign.justify,
                               style: context.textTheme.bodyMedium?.copyWith(
-                                  fontSize: 10,
-                                  color: Colors.white,
-                                  background: Paint()..color = Colors.red),
-                            ),
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
+                            )),
                           Expanded(
                             child: Text(
                               (track.type != TrackType.free ? ' ' : '') +

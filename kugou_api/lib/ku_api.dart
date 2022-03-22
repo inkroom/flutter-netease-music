@@ -117,6 +117,12 @@ class KuApi extends MusicApi {
 
   @override
   String get name => "酷狗";
+
+  @override
+  String get package => "kugou_api";
+
+  @override
+  String get icon => "assets/icon.ico";
 }
 
 Future<HttpClientResponse> _doRequest(
