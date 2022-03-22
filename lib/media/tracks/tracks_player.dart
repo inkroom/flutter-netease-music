@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:track_music_api/track_music_api.dart';
 import 'track_list.dart';
 import 'tracks_player_impl_mobile.dart';
@@ -98,12 +97,9 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
 
   /// 获取要播放的下一首音乐
   Future<Track?> getNextTrack() {
-    List<Track> list = List.empty(growable: true);
-    for (var element in trackList.tracks) {
-      if (element.type == TrackType.free) {
-        list.add(element);
-      }
-    }
+    List<Track> list = trackList.tracks
+        .where((element) => element.type == TrackType.free)
+        .toList();
 
     final index = list.cast().indexOf(current);
     if (repeatMode == RepeatMode.next) {
@@ -123,12 +119,9 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   }
 
   Future<Track?> getPreviousTrack() {
-    List<Track> list = List.empty(growable: true);
-    for (var element in trackList.tracks) {
-      if (element.type == TrackType.free) {
-        list.add(element);
-      }
-    }
+    List<Track> list = trackList.tracks
+        .where((element) => element.type == TrackType.free)
+        .toList();
 
     final index = list.cast().indexOf(current);
     if (repeatMode == RepeatMode.next) {
