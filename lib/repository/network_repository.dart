@@ -13,6 +13,8 @@ import 'package:quiet/repository/data/search_result.dart';
 
 import '../component/exceptions.dart';
 
+import './database.dart';
+
 export 'package:netease_api/netease_api.dart'
     show
         SearchType,
@@ -28,12 +30,8 @@ class NetworkRepository {
       : _lyricCache = _LyricCache(p.join(cachePath, 'lyrics'));
 
   static Future<void> initialize() async {
-    var documentDir = (await getApplicationDocumentsDirectory()).path;
-    if (Platform.isWindows || Platform.isLinux) {
-      documentDir = p.join(documentDir, 'quiet');
-    }
-    final cookiePath = p.join(documentDir, 'cookie');
-    final cachePath = p.join(documentDir, 'cache');
+    final cookiePath = await getCookieDirectory();
+    final cachePath = await getCacheDirectory();
 
     /// 注册api
     MusicApiContainer.instance.regiester(KuApi(cookiePath));

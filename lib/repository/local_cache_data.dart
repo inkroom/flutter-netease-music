@@ -14,6 +14,8 @@ LocalData neteaseLocalData = LocalData._();
 class LocalData {
   LocalData._();
 
+  final Dio dio = Dio();
+
   ///netData 类型必须是可以放入 [store] 中的类型
   static Stream<T> withData<T>(
     String key,
@@ -43,7 +45,9 @@ class LocalData {
   }
 
   void operator []=(dynamic key, dynamic value) {
-    _put(value, key);
+    _put(value, key).catchError((onError, stacktrace) {
+      log('数据保存失败=$key $value  $onError $stacktrace');
+    });
   }
 
   Future<T?> get<T>(dynamic key) async {
@@ -61,6 +65,7 @@ class LocalData {
     final Database db = await getApplicationDatabase();
     final r = StoreRef.main().record(key);
     r.delete(db);
+    log('保存数据$key $value');
     return r.put(db, value);
   }
 
@@ -93,10 +98,56 @@ class LocalData {
   }
 
   Future<String?> downloadMusic(String url, Track track) {
+    final name = _resolveName(track);
+    log('文件下载，url=$url 文件名=$name');
     return getApplicationBin().then((value) {
-      final path = join(value.toString(), track.id.toString() + track.name + '.mp3');
-      return Dio().download(url, path).then((value) => path);
+      final path = join(value.toString(), name);
+      return dio.download(url, path).then((value) => path);
     });
+  }
+
+  /// 获取文件名
+  ///
+  /// windows限制为
+  /// 1.1) 以下字符不能出现在文件和文件夹名称中：（引号之内）
+  /// '/'  '?'  '*'  ':'  '|'  '\'  '<'  '>'
+  /// 1.2) 以下字符不能命名为文件或文件夹的名称：（引号之内）
+  /// "con","aux","nul","prn","com0","com1","com2","com3","com4","com5","com6","com7"
+  /// "com8","com9","lpt0","lpt1","lpt2","lpt3","lpt4","lpt5","lpt6","lpt7","lpt8","lpt9"
+  /// 1.3) 另外，由于Windows对全文件名的字符长度作出258个字符以内的限制。全文件名长度指的是包括了文件路径的全部长度（一个汉字也按一个字符计算）。
+  ///
+  ///  Linux限制为
+  /// 2.1) 除了 / 之外，所有的字符都合法。
+  /// 2.2) 有些字符最好不用，如空格符、制表符、退格符和字符 @ # $ & ( ) - 等。
+  /// 2.3) 避免使用加减号或 . 作为普通文件名的第一个字符。
+  /// 2.4) 大小写敏感。
+  /// 2.5) Linux 系统下的文件名长度最多可到256个字符。
+  ///
+  /// Uninx限制为
+  /// 3.1）最多 255 个字符，除了字符 / 及空格其余均可。
+  ///
+  ///
+  /// Android限制为
+  ///
+  /// 任何字节除了值0-31,127（DEL）和：“* /：<>？\ | +，。; = []（低位az存储为AZ）。使用VFAT LFN除NUL之外的任何Unicode
+  ///
+  String _resolveName(Track track) {
+    /// 最好文件名要能全平台通用，
+
+    return "${track.id.toString()}${track.extra}${track.name}.mp3"
+        .replaceAll("/", "")
+        .replaceAll("\\", "")
+        .replaceAll("*", "")
+        .replaceAll(">", "")
+        .replaceAll("<", "")
+        .replaceAll(":", "")
+        .replaceAll("|", "")
+        .replaceAll("?", "")
+        .replaceAll("+", "")
+        .replaceAll("=", "")
+        .replaceAll("[", "")
+        .replaceAll("]", "")
+        .replaceAll('"', "");
   }
 
   //TODO 添加分页加载逻辑

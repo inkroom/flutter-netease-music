@@ -23,10 +23,11 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
   _load() {
     final data = neteaseLocalData.get<Map<String, dynamic>>(_kCacheKey);
     data.then((value) {
-      var c = CloudTracksDetail.fromJson(value as Map<String, dynamic>);
-
-      _notify(c.tracks, c.size, c.maxSize, c.trackCount);
-    });
+      if (value != null) {
+        var c = CloudTracksDetail.fromJson(value as Map<String, dynamic>);
+        _notify(c.tracks, c.size, c.maxSize, c.trackCount);
+      }
+    }).catchError((onError) => log('读取数据失败=$onError'));
   }
 
   _notify(List<Track> tracks, int size, int maxSize, int trackCount) {
@@ -40,6 +41,7 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
   _save(List<Track> tracks, int size, int maxSize, int trackCount) {
     var d = CloudTracksDetail(
         tracks: tracks, size: size, maxSize: maxSize, trackCount: trackCount);
+    log('要保存的数据=${d.toJson()}');
     neteaseLocalData[_kCacheKey] = d.toJson();
   }
 

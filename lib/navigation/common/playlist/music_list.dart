@@ -22,6 +22,18 @@ class TrackOperator {
   final WidgetRef ref;
 
   void addOperator(Track track) {
+    if (track.type == TrackType.noCopyright) {
+      toast(context.strings.trackNoCopyright);
+      return;
+    } else if (track.type == TrackType.vip) {
+      toast(context.strings.trackVIP);
+      return;
+    }
+    if (!NetworkSingleton().allowNetwork()) {
+      toast(context.strings.networkNotAllow);
+      return;
+    }
+
     ref.read(cloudTracksProvider.notifier).add(track);
   }
 
@@ -44,10 +56,10 @@ class TrackOperator {
     toast(context.strings.musicDownloading(track.name));
     ref.read(cloudTracksProvider.notifier).download(track).then((value) {
       toast(context.strings.musicDownloaded(value.name));
-
       /// 加入到歌单中
       ref.read(cloudTracksProvider.notifier).add(track);
     }).catchError((error) {
+      log('歌曲下载失败= $track $error');
       toast(context.strings.musicDownloadFail(track.name));
     });
   }
@@ -60,11 +72,11 @@ class TrackOperator {
       toast(context.strings.trackVIP);
       return;
     }
-        var r = TrackTileContainer.playTrack(context, track);
-        if (r != PlayResult.success) {
-          toast(context.strings.failedToPlayMusic);
-        }
-      // networkRepository!.getPlayUrl(track).then((value) {
+    var r = TrackTileContainer.playTrack(context, track);
+    if (r != PlayResult.success) {
+      toast(context.strings.failedToPlayMusic);
+    }
+    // networkRepository!.getPlayUrl(track).then((value) {
     //   if (value.mp3Url == null || value.mp3Url!.isEmpty) {
     //     toast(context.strings.failedToPlayMusic);
     //     return;
