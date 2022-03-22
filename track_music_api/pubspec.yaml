@@ -13,12 +13,12 @@ dependencies:
   flutter:
     sdk: flutter
   dio_cookie_manager: 2.0.0
-  json_annotation: ^4.3.0
+  json_annotation: ^4.4.0
   equatable: ^2.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.4
   build_runner: ^2.1.5
-  json_serializable: ^6.0.1
+  json_serializable: ^6.1.5
 
