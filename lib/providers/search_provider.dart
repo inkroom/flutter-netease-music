@@ -80,6 +80,7 @@ abstract class SearchResultStateNotify<T>
     if (_origin != origin) {
       //切换来源，自动搜索
       _origin = origin;
+      notifyListener(const AsyncValue.data([]));
       _loadQuery(_page);
     } else {
       _origin = origin;
@@ -101,6 +102,7 @@ abstract class SearchResultStateNotify<T>
       _totalItemCount = result.totalCount;
       notifyListener(AsyncValue.data(result.result));
     } catch (error, stacktrace) {
+      log('歌曲搜索 error $error');
       notifyListener(AsyncValue.error(error, stackTrace: stacktrace));
     } finally {
       _loading = false;
