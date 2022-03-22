@@ -69,6 +69,8 @@ class _SearchTextField extends ConsumerWidget implements PreferredSizeWidget {
 
     final origin = ref.watch(mobileSearchMusicProvider('')).origin;
 
+    log('来源origin = $origin');
+
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(

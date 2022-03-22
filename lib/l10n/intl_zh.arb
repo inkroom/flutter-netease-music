@@ -1,4 +1,5 @@
 {
+  "getPlayDetailFail": "获取歌曲详情失败",
   "settingItemGroupNetwork": "网络",
   "settingItemOnlyWIFI": "仅使用WIFI网络",
   "settingItemOnlyMobile": "可使用流量网络",
@@ -61,7 +62,7 @@
   "settings": "设置",
   "about": "关于",
   "trackNoCopyright": "此音乐暂无版权",
-  "trackVip": "此音乐为VIP",
+  "trackVIP": "此音乐为VIP",
   "tipNoCopyright": "无版权",
   "tipVIP": "VIP",
   "noLyric": "暂无歌词",

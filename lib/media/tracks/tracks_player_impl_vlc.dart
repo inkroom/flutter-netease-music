@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/repository.dart';
 
@@ -173,25 +175,35 @@ class TracksPlayerImplVlc extends TracksPlayer {
   double get volume => _player.general.volume;
 
   void _playTrack(Track track) {
-    scheduleMicrotask(() {
-      if (track.file != null) {
-        log('从文件播放${track.file}');
-        _player.open(Media.file(File(track.file!)), autoStart: true);
-      } else {
-        if (_current != track) {
-          // skip play. since the track is changed.
-          return;
-        }
+    // scheduleMicrotask(() {
+    if (track.file != null) {
+      log('从文件播放${track.file}');
+      _player.open(Media.file(File(track.file!)), autoStart: true);
+    } else {
+      if (_current == track) {
+        // skip play. since the track is changed.
+        return;
+      }
+      scheduleMicrotask(() {
         final url = networkRepository!.getPlayUrl(track);
 
-        url.catchError((onError) {
+        url.then((value) {
+          log('获取的播放uri=${value.toString()}');
+          if (value.mp3Url != null && value.mp3Url!.isNotEmpty) {
+            log('url=${value.mp3Url}');
+            _player.open(Media.network(value.mp3Url), autoStart: true);
+            return value;
+          }
+          toast(Intl.message('getPlayDetailFail'));
+
+          return Future.error(PlayDetailException);
+        }).catchError((onError) {
           debugPrint('Failed to get play url: ${onError?.toString()}');
-        }).then((value) {
-          log('获取uri=${value.toString()}');
-          _player.open(Media.network(value), autoStart: true);
+          toast(Intl.message('getPlayDetailFail'));
         });
-      }
-    });
+      });
+    }
+
     _current = track;
     notifyPlayStateChanged();
   }

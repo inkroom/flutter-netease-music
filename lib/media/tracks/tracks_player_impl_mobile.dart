@@ -214,9 +214,12 @@ Track _convertCallToTrack(MethodCall call) {
 // 获取播放地址
 Future<String> _playUriInterceptor(MethodCall? methodCall) {
   Track t = _convertCallToTrack(methodCall!);
-  return networkRepository!
-      .getPlayUrl(t)
-      .then((value) => value.replaceFirst("http://", "https://"));
+  return networkRepository!.getPlayUrl(t).then((value) {
+    if (value.mp3Url == null || value.mp3Url!.isEmpty) {
+      return Future.error(PlayDetailException);
+    }
+    return value.mp3Url!.replaceFirst("http://", "https://");
+  });
 }
 
 Future<Uint8List> _loadImageInterceptor(MusicMetadata metadata) async {

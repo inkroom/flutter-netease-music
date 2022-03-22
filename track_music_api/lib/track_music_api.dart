@@ -30,6 +30,7 @@ abstract class MusicApi {
 
   /// 获取唯一标志
   int get origin;
+
   /// 获取源name
   String get name;
 }
@@ -52,7 +53,7 @@ class MusicApiContainer {
   regiester(MusicApi api) {
     for (var s in _plugins) {
       if (s.origin == api.origin) {
-        throw Exception('$api 注册失败');
+        throw RegiesterException('$api 注册失败');
       }
     }
 
@@ -62,12 +63,42 @@ class MusicApiContainer {
     _plugins.add(api);
   }
 
-  MusicApi? getApi(int origin) {
+  Future<MusicApi> getApi(int origin) {
     for (var s in _plugins) {
-      if (s.origin == origin) return s;
+      if (s.origin == origin) return Future.value(s);
     }
-    return null;
+    return Future.error(UnsupportOriginException);
   }
 
   List<MusicApi> get list => _plugins;
+}
+
+/// 定义一些错误异常来使用
+///
+///
+///
+
+class MusicException implements Exception {
+  const MusicException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => 'MusicException: $message';
+}
+
+class UnsupportOriginException extends MusicException{
+    UnsupportOriginException(String message) : super(message);
+}
+
+class RegiesterException extends MusicException {
+  RegiesterException(String message) : super(message);
+}
+
+class PlayDetailException extends MusicException {
+  PlayDetailException(String message) : super(message);
+}
+
+class SearchException extends MusicException {
+  SearchException(String message) : super(message);
 }

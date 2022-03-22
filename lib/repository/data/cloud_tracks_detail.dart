@@ -12,7 +12,10 @@ part 'cloud_tracks_detail.g.dart';
 class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
   CloudTrackDetailNotifier()
       : super(CloudTracksDetailState(
-            tracks:List.empty(growable: true), size: 0, maxSize: 0, trackCount: 0)) {
+            tracks: List.empty(growable: true),
+            size: 0,
+            maxSize: 0,
+            trackCount: 0)) {
     _load();
   }
   final _kCacheKey = 'user_cloud_tracks_detail';
@@ -67,9 +70,13 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
   Future<Track> download(Track track) {
     Future<Track> down() {
       return networkRepository!.getPlayUrl(track).then((value) {
+        if (value.mp3Url == null || value.mp3Url!.isEmpty) {
+          return Future.error(PlayDetailException);
+        }
+
         /// 下载文件
-        track.mp3Url = value;
-        return neteaseLocalData.downloadMusic(value, track);
+        track.mp3Url = value.mp3Url;
+        return neteaseLocalData.downloadMusic(value.mp3Url!, track);
       }).then((value) {
         log('下载之后的结果$value');
         track.file = value;

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -48,6 +50,33 @@ class TrackOperator {
     }).catchError((error) {
       toast(context.strings.musicDownloadFail(track.name));
     });
+  }
+
+  void playTrack(BuildContext context, Track track) {
+    if (track.type == TrackType.noCopyright) {
+      toast(context.strings.trackNoCopyright);
+      return;
+    } else if (track.type == TrackType.vip) {
+      toast(context.strings.trackVIP);
+      return;
+    }
+        var r = TrackTileContainer.playTrack(context, track);
+        if (r != PlayResult.success) {
+          toast(context.strings.failedToPlayMusic);
+        }
+      // networkRepository!.getPlayUrl(track).then((value) {
+    //   if (value.mp3Url == null || value.mp3Url!.isEmpty) {
+    //     toast(context.strings.failedToPlayMusic);
+    //     return;
+    //   }
+    //   track.mp3Url = value.mp3Url;
+    //   var r = TrackTileContainer.playTrack(context, track);
+    //   if (r != PlayResult.success) {
+    //     toast(context.strings.failedToPlayMusic);
+    //   }
+    // }).catchError((error) {
+    //   toast(context.strings.failedToPlayMusic);
+    // });
   }
 }
 
@@ -152,7 +181,8 @@ class TrackTileContainer extends StatelessWidget {
         if (skipAccompaniment) {
           tracks = playlist.tracks
               .whereNot((value) => value.name.contains('伴奏'))
-              .toList().cast();
+              .toList()
+              .cast();
         } else {
           tracks = playlist.tracks;
         }

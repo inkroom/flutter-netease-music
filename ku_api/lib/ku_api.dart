@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:track_music_api/track_music_api.dart';
 
 /// 基础接口
 class KuApi extends MusicApi {
+  KuApi(String dir);
+
   /// 转码
   String _escape2Html(String str) {
     return str
@@ -17,18 +20,40 @@ class KuApi extends MusicApi {
 
   @override
   Future<Track> playUrl(Track track) {
-    return _doRequest('https://wwwapi.kugou.com/yy/index.php', {},
-            {'r': 'play/getdata', 'hash': track.extra}, 'get')
-        .then((value) => value.cast().transform(utf8.decoder).join())
+    log('hash=${track.extra}');
+
+    // final d = Dio();
+    // d.interceptors.add(LogInterceptor());
+    // d.interceptors.add(CookieManager(PersistCookieJar(ignoreExpires: true)));
+    // d.get('https://wwwapi.kugou.com/yy/index.php', queryParameters: {
+    //   'r': 'play/getdata',
+    //   'hash': track.extra
+    // }).then((res) => {log('dio=$res')});
+    return _doRequest(
+            'https://wwwapi.kugou.com/yy/index.php?r=play%2Fgetdata&hash=${track.extra}',
+            {
+              'Cookie':
+                  'kg_mid=c64d12df8bef9907d2c2b636167d10a8; kg_dfid=1tyJiN22XC5K3SD5Xz0ojfVx; kg_dfid_collect=d41d8cd98f00b204e9800998ecf8427e'
+            },
+            {},
+            'get')
+        .then((value) => value.transform(utf8.decoder).join())
         .then((value) => json.decode(value))
         .then((e) {
+      log('歌曲详情=$e');
+      if (e['status'] != 1) {
+        return Future.error(PlayDetailException('获取歌曲详情失败'));
+      }
+      log('playUrl=${e['data']['play_url']}');
+      log('img=${e['data']['img']}');
       return Track(
           id: track.id,
-          uri: e['data']['play_url'],
+          uri: track.uri,
+          mp3Url: e['data']['play_url'] ?? '',
           name: track.name,
           artists: track.artists,
           album: track.album,
-          imageUrl: e['data']['img'],
+          imageUrl: e['data']['img'] ?? ' ',
           duration: track.duration,
           type: track.type,
           extra: track.extra,
@@ -46,6 +71,9 @@ class KuApi extends MusicApi {
         .then((value) => value.transform(utf8.decoder).join())
         .then((value) => json.decode(value))
         .then((value) {
+      if (value['status'] != 1) {
+        return Future.error(SearchException('搜索失败'));
+      }
       log('value=$value');
       final total = value['data']['total'];
       List<Track> list = List.empty(growable: true);
@@ -62,13 +90,10 @@ class KuApi extends MusicApi {
           a.add(ArtistMini(id: e['id'], name: e['name'], imageUrl: ''));
         }
 
-        log('albumId=${e['AlbumID'] as String}');
-        log('albumId=${e['AlbumName'] as String}');
-
         list.add(Track(
             id: e['Audioid'],
             uri: '',
-            name: e['SongName'],
+            name: _escape2Html(e['SongName']),
             artists: a,
             album: (e['AlbumID'] != null && e['AlbumID'] != '')
                 ? AlbumMini(
@@ -98,6 +123,7 @@ Future<HttpClientResponse> _doRequest(
     String url, Map<String, String> headers, Map data, String method) {
   return HttpClient().openUrl(method, Uri.parse(url)).then((request) {
     headers.forEach(request.headers.add);
+    log('query=${Uri(queryParameters: data.cast()).query}');
     request.write(Uri(queryParameters: data.cast()).query);
     return request.close();
   });

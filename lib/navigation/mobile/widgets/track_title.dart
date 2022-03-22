@@ -25,16 +25,7 @@ class TrackTile extends ConsumerWidget {
     final operator = TrackOperator(context: context, ref: ref);
 
     return InkWell(
-      onTap: () {
-        if (track.type == TrackType.noCopyright) {
-          toast(context.strings.trackNoCopyright);
-          return;
-        } else if (track.type == TrackType.vip) {
-          toast(context.strings.trackVIP);
-          return;
-        }
-        TrackTileContainer.playTrack(context, track);
-      },
+      onTap: () => operator.playTrack(context, track),
       child: SizedBox(
         height: 64,
         child: Row(

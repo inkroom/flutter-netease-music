@@ -1,4 +1,5 @@
 {
+  "getPlayDetailFail": "Fetch Music Failed",
   "settingItemGroupNetwork": "Network",
   "settingItemOnlyWIFI": "Only WIFI",
   "settingItemOnlyMobile": "use 3/4/5G",

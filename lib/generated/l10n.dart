@@ -50,6 +50,16 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Fetch Music Failed`
+  String get getPlayDetailFail {
+    return Intl.message(
+      'Fetch Music Failed',
+      name: 'getPlayDetailFail',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Network`
   String get settingItemGroupNetwork {
     return Intl.message(

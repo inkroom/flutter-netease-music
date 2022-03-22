@@ -296,25 +296,7 @@ class TrackTile extends ConsumerWidget {
               ? context.colorScheme.background
               : context.colorScheme.primary.withOpacity(0.04),
           child: InkWell(
-            onTap: () {
-              if (track.type == TrackType.noCopyright) {
-                toast(context.strings.trackNoCopyright);
-                return;
-              } else if (track.type == TrackType.vip) {
-                toast(context.strings.trackVIP);
-                return;
-              }
-              // TODO 将获取播放url往合适的地方放
-              networkRepository!.getPlayUrl(track).then((value) {
-                track.mp3Url = value;
-                var r = TrackTileContainer.playTrack(context, track);
-                if (r != PlayResult.success) {
-                  toast(context.strings.failedToPlayMusic);
-                }
-              }).catchError((error) {
-                toast(context.strings.failedToPlayMusic);
-              });
-            },
+            onTap: () => operator.playTrack(context, track),
             child: DefaultTextStyle(
               style: const TextStyle(),
               maxLines: 1,

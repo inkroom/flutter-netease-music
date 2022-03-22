@@ -75,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "favoriteSongList": MessageLookupByLibrary.simpleMessage("收藏歌单"),
         "friends": MessageLookupByLibrary.simpleMessage("我的好友"),
         "functionDescription": MessageLookupByLibrary.simpleMessage("功能描述"),
+        "getPlayDetailFail": MessageLookupByLibrary.simpleMessage("获取歌曲详情失败"),
         "keySpace": MessageLookupByLibrary.simpleMessage("空格"),
         "latestPlayHistory": MessageLookupByLibrary.simpleMessage("最近播放"),
         "library": MessageLookupByLibrary.simpleMessage("音乐库"),
@@ -151,6 +152,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "toLoginPage": MessageLookupByLibrary.simpleMessage("前往登录界面"),
         "todo": MessageLookupByLibrary.simpleMessage("TBD"),
         "trackNoCopyright": MessageLookupByLibrary.simpleMessage("此音乐暂无版权"),
+        "trackVIP": MessageLookupByLibrary.simpleMessage("此音乐为VIP"),
         "volumeDown": MessageLookupByLibrary.simpleMessage("音量-"),
         "volumeUp": MessageLookupByLibrary.simpleMessage("音量+")
       };

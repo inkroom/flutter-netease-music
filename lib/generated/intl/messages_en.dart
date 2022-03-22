@@ -86,6 +86,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "friends": MessageLookupByLibrary.simpleMessage("Friends"),
         "functionDescription":
             MessageLookupByLibrary.simpleMessage("Description"),
+        "getPlayDetailFail":
+            MessageLookupByLibrary.simpleMessage("Fetch Music Failed"),
         "keySpace": MessageLookupByLibrary.simpleMessage("Space"),
         "latestPlayHistory":
             MessageLookupByLibrary.simpleMessage("Play History"),
