@@ -22,31 +22,38 @@ Future<String> getApplicationBin() {
   if (Platform.isAndroid) {
     return getExternalStorageDirectory()
         .then((value) => join(value!.path, 'quiet', 'binary'))
-        .then((value) => _checkDir(value));
+        .then(_checkDir);
   } else {
     return getApplicationDocumentsDirectory()
         .then((value) => join(value.path, 'quiet', 'binary'))
-        .then((value) => _checkDir(value));
+        .then(_checkDir);
   }
 }
 
 Future<String> getCookieDirectory() {
   return getApplicationDocumentsDirectory()
       .then((value) => join(value.path, 'quiet', 'cookie'))
-      .then((value) => _checkDir(value));
+      .then(_checkDir);
 }
 
 Future<String> getCacheDirectory() {
   return getApplicationDocumentsDirectory()
       .then((value) => join(value.path, 'quiet', 'cache'))
-      .then((value) => _checkDir(value));
+      .then(_checkDir);
 }
 
 /// 图片缓存路径
 Future<String> getThumbDirectory() {
   return getTemporaryDirectory()
       .then((value) => join(value.path, 'quiet', 'images'))
-      .then((value) => _checkDir(value));
+      .then(_checkDir);
+}
+
+/// 歌词文件缓存位置
+Future<String> getLyricDirectory() {
+  return getTemporaryDirectory()
+      .then((value) => join(value.path, 'quiet', 'lyrics'))
+      .then(_checkDir);
 }
 
 /// 校验并创建目录

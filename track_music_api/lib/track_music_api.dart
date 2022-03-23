@@ -28,6 +28,9 @@ abstract class MusicApi {
   /// 获取音乐播放url的接口
   Future<Track> playUrl(Track track);
 
+  /// 获取歌词
+  Future<String?> lyric(Track track);
+
   /// 获取唯一标志
   int get origin;
 
@@ -36,6 +39,7 @@ abstract class MusicApi {
 
   /// 获取包名，用于获取icon
   String get package;
+
 //// icon 位置
   String get icon;
 }
@@ -48,6 +52,7 @@ class MusicApiContainer {
 
   static MusicApiContainer get instance => _getInstance();
   static MusicApiContainer _instance = MusicApiContainer._internal();
+
   static MusicApiContainer _getInstance() {
     return _instance;
   }

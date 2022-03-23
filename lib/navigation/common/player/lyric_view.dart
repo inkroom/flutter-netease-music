@@ -61,7 +61,7 @@ class _LyricViewLoader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playingLyric = ref.watch(lyricProvider(music.id));
+    final playingLyric = ref.watch(lyricProvider(music));
     return playingLyric.when(
       data: (lyric) {
         if (lyric == null) {

@@ -22,34 +22,27 @@ class KuApi extends MusicApi {
   Future<Track> playUrl(Track track) {
     log('hash=${track.extra}');
 
-    // final d = Dio();
-    // d.interceptors.add(LogInterceptor());
-    // d.interceptors.add(CookieManager(PersistCookieJar(ignoreExpires: true)));
-    // d.get('https://wwwapi.kugou.com/yy/index.php', queryParameters: {
-    //   'r': 'play/getdata',
-    //   'hash': track.extra
-    // }).then((res) => {log('dio=$res')});
     return _doRequest(
-            'https://wwwapi.kugou.com/yy/index.php?r=play%2Fgetdata&hash=${track.extra}',
-            {
-              'Cookie':
-                  'kg_mid=c64d12df8bef9907d2c2b636167d10a8; kg_dfid=1tyJiN22XC5K3SD5Xz0ojfVx; kg_dfid_collect=d41d8cd98f00b204e9800998ecf8427e'
-            },
-            {},
-            'get')
+        'https://wwwapi.kugou.com/yy/index.php?r=play%2Fgetdata&hash=${track.extra}&appid=1014&platid=4&album_id=${track.album?.id}',
+        {
+          'Cookie':
+          'kg_mid=c64d12df8bef9907d2c2b636167d10a8; kg_dfid=1tyJiN22XC5K3SD5Xz0ojfVx; kg_dfid_collect=d41d8cd98f00b204e9800998ecf8427e'
+        },
+        {},
+        'get')
         .then((value) => value.transform(utf8.decoder).join())
         .then((value) => json.decode(value))
         .then((e) {
       log('歌曲详情=$e');
-      if (e['status'] != 1) {
+      if (e['err_code'] != 0) {
         return Future.error(PlayDetailException('获取歌曲详情失败'));
       }
-      log('playUrl=${e['data']['play_url']}');
+      log('playUrl=${e['data']['play_url']} play_backup_url=${e['data']['play_backup_url']}');
       log('img=${e['data']['img']}');
       return Track(
           id: track.id,
           uri: track.uri,
-          mp3Url: e['data']['play_url'] ?? '',
+          mp3Url: e['data']['play_url'] ?? e['data']['play_backup_url'],
           name: track.name,
           artists: track.artists,
           album: track.album,
@@ -64,10 +57,10 @@ class KuApi extends MusicApi {
   @override
   Future<PageResult<Track>> search(String keyword, int page, int size) {
     return _doRequest(
-            "https://songsearch.kugou.com/song_search_v2?pagesize=$size&keyword=$keyword&page=$page",
-            {},
-            {},
-            'get')
+        "https://songsearch.kugou.com/song_search_v2?pagesize=$size&keyword=$keyword&page=$page",
+        {},
+        {},
+        'get')
         .then((value) => value.transform(utf8.decoder).join())
         .then((value) => json.decode(value))
         .then((value) {
@@ -97,9 +90,9 @@ class KuApi extends MusicApi {
             artists: a,
             album: (e['AlbumID'] != null && e['AlbumID'] != '')
                 ? AlbumMini(
-                    id: int.parse(e['AlbumID']),
-                    name: e['AlbumName'],
-                    picUri: "")
+                id: int.parse(e['AlbumID']),
+                name: e['AlbumName'],
+                picUri: "")
                 : null,
             imageUrl: '',
             duration: Duration(seconds: e['Duration']),
@@ -123,6 +116,29 @@ class KuApi extends MusicApi {
 
   @override
   String get icon => "assets/icon.ico";
+
+  @override
+  Future<String?> lyric(Track track) {
+
+    return _doRequest(
+        'https://wwwapi.kugou.com/yy/index.php?r=play%2Fgetdata&hash=${track.extra}&appid=1014&platid=4&album_id=${track.album?.id}',
+        {
+          'Cookie':
+          'kg_mid=c64d12df8bef9907d2c2b636167d10a8; kg_dfid=1tyJiN22XC5K3SD5Xz0ojfVx; kg_dfid_collect=d41d8cd98f00b204e9800998ecf8427e'
+        },
+        {},
+        'get')
+        .then((value) => value.transform(utf8.decoder).join())
+        .then((value) => json.decode(value))
+        .then((e) {
+      log('歌词详情==$e');
+      if (e['err_code'] != 0) {
+        return Future.error(PlayDetailException('获取歌词失败'));
+      }
+      log('歌词=${e['data']['lyrics']}');
+      return Future.value(e['data']['lyrics']);
+    });
+  }
 }
 
 Future<HttpClientResponse> _doRequest(

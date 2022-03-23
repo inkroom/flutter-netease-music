@@ -55,9 +55,8 @@ class FileCacheProvider {
   File _cacheFileForKey(CacheKey key) => File('$directory/${key.getKey()}');
 
   void touchFile(File file) {
-    file.setLastModified(DateTime.now()).catchError((e) {
-      debugPrint('setLastModified for ${file.path} failed. $e');
-    });
+    file.setLastModified(DateTime.now()).catchError(
+        (e) => {debugPrint('setLastModified for ${file.path} failed. $e')});
   }
 
   void checkSize() {

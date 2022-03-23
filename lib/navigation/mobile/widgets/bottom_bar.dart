@@ -236,7 +236,7 @@ class _SubTitleOrLyric extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final music = ref.watch(playingTrackProvider);
-    final playingLyric = ref.watch(lyricProvider(music!.id).stateOrNull());
+    final playingLyric = ref.watch(lyricProvider(music!).stateOrNull());
     if (playingLyric == null) {
       return Text(subtitle);
     }

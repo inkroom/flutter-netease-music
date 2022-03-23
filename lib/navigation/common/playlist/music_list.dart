@@ -8,6 +8,7 @@ import 'package:quiet/media/tracks/track_list.dart';
 import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/navigation/common/navigation_target.dart';
 import 'package:quiet/providers/cloud_tracks_provider.dart';
+import 'package:quiet/providers/lyric_provider.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 import 'package:quiet/providers/player_provider.dart';
 import 'package:quiet/providers/settings_provider.dart';
@@ -58,6 +59,9 @@ class TrackOperator {
       toast(context.strings.musicDownloaded(value.name));
       /// 加入到歌单中
       ref.read(cloudTracksProvider.notifier).add(track);
+      /// 缓存歌词
+      ref.read(lyricProvider(track));
+
     }).catchError((error) {
       log('歌曲下载失败= $track $error');
       toast(context.strings.musicDownloadFail(track.name));

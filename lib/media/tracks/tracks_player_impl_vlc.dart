@@ -6,6 +6,7 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:quiet/component/exceptions.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/repository.dart';
 
@@ -198,8 +199,13 @@ class TracksPlayerImplVlc extends TracksPlayer {
 
           return Future.error(PlayDetailException);
         }).catchError((onError) {
+          if (onError is NetworkException) {
+            toast(Intl.message('networkNotAllow'));
+            return Future.error(onError);
+          }
           debugPrint('Failed to get play url: ${onError?.toString()}');
           toast(Intl.message('getPlayDetailFail'));
+          return Future.error(onError);
         });
       });
     }

@@ -43,9 +43,9 @@ const _kCodeNeedLogin = 301;
 
 ///map a result to any other
 Result<R> _map<R>(
-  Result<Map<String, dynamic>> source,
-  R Function(Map<String, dynamic> t) f,
-) {
+    Result<Map<String, dynamic>> source,
+    R Function(Map<String, dynamic> t) f,
+    ) {
   if (source.isError) return source.asError!;
   try {
     return Result.value(f(source.asValue!.value));
@@ -127,10 +127,10 @@ class Repository extends MusicApi {
 
   ///PlayListDetail 中的 tracks 都是空数据
   Future<Result<UserPlayList>> userPlaylist(
-    int? userId, {
-    int offset = 0,
-    int limit = 1000,
-  }) async {
+      int? userId, {
+        int offset = 0,
+        int limit = 1000,
+      }) async {
     final response = await doRequest(
         "/user/playlist", {"offset": offset, "uid": userId, "limit": limit});
     return _map(response, (result) => UserPlayList.fromJson(result));
@@ -193,16 +193,15 @@ class Repository extends MusicApi {
   }
 
   ///根据音乐id获取歌词
-  Future<String?> lyric(int id) async {
-    final result = await doRequest('/lyric', {"id": id});
-    if (result.isError) {
-      return Future.error(result.asError!.error);
-    }
-    final Map? lyc = result.asValue!.value["lrc"];
-    if (lyc == null) {
-      return null;
-    }
-    return lyc["lyric"];
+  @override
+  Future<String?> lyric(Track id) {
+    return doRequest('/lyric', {"id": id.id}).then((value) {
+      final Map? lyc = value.asValue?.value["lrc"];
+      if (lyc == null) {
+        return null;
+      }
+      return lyc["lyric"];
+    });
   }
 
   ///获取搜索热词
@@ -239,7 +238,7 @@ class Repository extends MusicApi {
 
     return Future.value(PageResult(
         data:
-            r.asValue!.value.songs.map((e) => e.toTrack(e.privilege)).toList(),
+        r.asValue!.value.songs.map((e) => e.toTrack(e.privilege)).toList(),
         hasMore: r.asValue!.value.hasMore));
   }
 
@@ -257,7 +256,7 @@ class Repository extends MusicApi {
     }
     return _map(response, (dynamic t) {
       final List<Map>? match =
-          (response.asValue!.value["result"]["allMatch"] as List?)?.cast();
+      (response.asValue!.value["result"]["allMatch"] as List?)?.cast();
       if (match == null) {
         return [];
       }
@@ -281,10 +280,10 @@ class Repository extends MusicApi {
   ///edit playlist tracks
   ///true : succeed
   Future<bool> playlistTracksEdit(
-    PlaylistOperation operation,
-    int playlistId,
-    List<int?> musicIds,
-  ) async {
+      PlaylistOperation operation,
+      int playlistId,
+      List<int?> musicIds,
+      ) async {
     assert(musicIds.isNotEmpty);
 
     final result = await doRequest(
@@ -370,7 +369,7 @@ class Repository extends MusicApi {
   ///获取用户创建的电台
   Future<Result<List<Map>>?> userDj(int? userId) async {
     final response =
-        await doRequest('/user/dj', {'uid': userId, 'limit': 30, 'offset': 0});
+    await doRequest('/user/dj', {'uid': userId, 'limit': 30, 'offset': 0});
     return _map(response, (dynamic t) {
       return (t['programs'] as List).cast();
     });
@@ -392,7 +391,7 @@ class Repository extends MusicApi {
   ///调用此接口,可收藏 MV
   Future<bool> mvSubscribe(int? mvId, {required bool subscribe}) async {
     final result =
-        await doRequest('/mv/sub', {'id': mvId, 't': subscribe ? '1' : '0'});
+    await doRequest('/mv/sub', {'id': mvId, 't': subscribe ? '1' : '0'});
     return result.isValue;
   }
 
@@ -400,7 +399,7 @@ class Repository extends MusicApi {
   Future<Result<List<PlayRecord>>> getRecord(
       int? uid, PlayRecordType type) async {
     final result =
-        await doRequest('/user/record', {'uid': uid, 'type': type.index});
+    await doRequest('/user/record', {'uid': uid, 'type': type.index});
     return result.map((value) {
       final records = (value[type.name] as List).cast<Map<String, dynamic>>();
       return records.map((json) => PlayRecord.fromJson(json)).toList();
@@ -448,7 +447,7 @@ class Repository extends MusicApi {
     try {
       // convert all params to string
       final Map<String, String> convertedParams =
-          param.map((k, v) => MapEntry(k.toString(), v.toString()));
+      param.map((k, v) => MapEntry(k.toString(), v.toString()));
       result = await api.cloudMusicApi(path,
           parameter: convertedParams, cookie: await _loadCookies());
     } catch (e, stacktrace) {
