@@ -1,4 +1,5 @@
 {
+  "emptyList": "The Music List Is Empty",
   "getPlayDetailFail": "Fetch Music Failed",
   "settingItemGroupNetwork": "Network",
   "settingItemOnlyWIFI": "Only WIFI",

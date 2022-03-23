@@ -50,6 +50,16 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `The Music List Is Empty`
+  String get emptyList {
+    return Intl.message(
+      'The Music List Is Empty',
+      name: 'emptyList',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Fetch Music Failed`
   String get getPlayDetailFail {
     return Intl.message(

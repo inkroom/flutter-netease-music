@@ -1,4 +1,5 @@
 {
+  "emptyList": "歌曲列表为空",
   "getPlayDetailFail": "获取歌曲详情失败",
   "settingItemGroupNetwork": "网络",
   "settingItemOnlyWIFI": "仅使用WIFI网络",

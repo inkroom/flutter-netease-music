@@ -73,6 +73,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "discover": MessageLookupByLibrary.simpleMessage("Discover"),
         "downloadMusic": MessageLookupByLibrary.simpleMessage("Download Music"),
         "duration": MessageLookupByLibrary.simpleMessage("Duration"),
+        "emptyList":
+            MessageLookupByLibrary.simpleMessage("The Music List Is Empty"),
         "errorNotLogin":
             MessageLookupByLibrary.simpleMessage("Please login first."),
         "errorToFetchData":
