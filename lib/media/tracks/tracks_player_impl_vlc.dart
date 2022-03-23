@@ -207,4 +207,7 @@ class TracksPlayerImplVlc extends TracksPlayer {
     _current = track;
     notifyPlayStateChanged();
   }
+
+  @override
+  bool get error => false;
 }

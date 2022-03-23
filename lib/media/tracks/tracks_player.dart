@@ -35,6 +35,8 @@ class TracksPlayerState with EquatableMixin {
     required this.duration,
     required this.volume,
     required this.mode,
+    required this.error,
+    this.position
   });
 
   final bool isBuffering;
@@ -42,8 +44,12 @@ class TracksPlayerState with EquatableMixin {
   final Track? playingTrack;
   final TrackList playingList;
   final Duration? duration;
+  final Duration? position;
   final double volume;
   final RepeatMode mode;
+
+  /// 标志是否播放出错
+  final bool error;
 
   @override
   List<Object?> get props => [
@@ -66,6 +72,7 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
             playingList: TrackList.empty(),
             duration: null,
             volume: 0.0,
+            error: false,
             mode: RepeatMode.random));
 
   factory TracksPlayer.platform() {
@@ -154,9 +161,10 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   bool get isPlaying;
 
   bool get isBuffering;
-
+  /// 当前播放位置
   Duration? get position;
 
+  /// 总时长
   Duration? get duration;
 
   Duration? get bufferedPosition;
@@ -164,6 +172,9 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   double get volume;
 
   double get playbackSpeed;
+
+  /// 标志是否播放出错
+  bool get error;
 
   @protected
   void notifyPlayStateChanged() {
@@ -175,6 +186,8 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
       duration: duration,
       volume: volume,
       mode: repeatMode,
+      error: error,
+      position: position,
     );
   }
 }

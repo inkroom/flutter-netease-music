@@ -69,13 +69,13 @@ void _initialDesktop() async {
 
 /// The entry of dart background service
 /// NOTE: this method will be invoked by native (Android/iOS)
-@pragma('vm:entry-point') // avoid Tree Shaking
-void playerBackgroundService() {
-  WidgetsFlutterBinding.ensureInitialized();
-  // 获取播放地址需要使用云音乐 API, 所以需要为此 isolate 初始化一个 repository.
-  NetworkRepository.initialize();
-  runMobileBackgroundService();
-}
+// @pragma('vm:entry-point') // avoid Tree Shaking
+// void playerBackgroundService() {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   // 获取播放地址需要使用云音乐 API, 所以需要为此 isolate 初始化一个 repository.
+//   NetworkRepository.initialize();
+//   runMobileBackgroundService();
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key, this.player}) : super(key: key);

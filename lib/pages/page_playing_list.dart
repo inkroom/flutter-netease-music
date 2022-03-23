@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:music_player/music_player.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/mobile/playlists/dialog_selector.dart';
@@ -123,19 +122,19 @@ class _Header extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO add play mode.
-    const playMode = PlayMode.shuffle;
+    // const playMode = PlayMode.shuffle;
     final tracks = ref.watch(playingListProvider).tracks;
     return SizedBox(
       height: 48,
       child: Row(
         children: <Widget>[
-          TextButton.icon(
-              onPressed: () {
-                // FIXME
-                // context.player.setPlayMode(playMode.next);
-              },
-              icon: Icon(playMode.icon),
-              label: Text("${playMode.name}(${tracks.length})")),
+          // TextButton.icon(
+          //     onPressed: () {
+          //       // FIXME
+          //       // context.player.setPlayMode(playMode.next);
+          //     },
+          //     icon: Icon(playMode.icon),
+          //     label: Text("${playMode.name}(${tracks.length})")),
           const Spacer(),
           TextButton.icon(
               onPressed: () async {

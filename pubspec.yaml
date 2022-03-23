@@ -28,10 +28,6 @@ dependencies:
       ref: e1ef2d9957bc8615c7f19f989d4fcfc142e20e93
   encrypt: ^5.0.0
   overlay_support: ^1.2.1
-  music_player:
-    git:
-      url: https://gitee.com/inkroom/t2.git
-      ref: 8a622b605c07bc58f0f7d96c36b0238d0dc5d460
   scrollable_positioned_list: ^0.2.0-nullsafety.0
   hive: ^2.0.4
   flutter_hooks: ^0.18.0
@@ -56,6 +52,8 @@ dependencies:
   dotted_border: ^2.0.0+2
   permission_handler: ^9.2.0
   connectivity_plus: ^2.2.1
+  music:
+    path: mobile_player/
 dev_dependencies:
   flutter_test:
     sdk: flutter

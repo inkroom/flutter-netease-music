@@ -121,6 +121,10 @@ class _CenterControllerWidget extends ConsumerWidget {
     final playingFm = ref.watch(
       playerStateProvider.select((value) => value.playingList.isFM),
     );
+    if(ref.watch(playerStateProvider).error == true){
+      toast(context.strings.failedToPlayMusic);
+    }
+
     final hasTrack = ref.watch(playingTrackProvider) != null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

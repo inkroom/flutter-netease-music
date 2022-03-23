@@ -1,141 +1,161 @@
 import 'dart:async';
-import 'dart:convert';
+import 'dart:developer';
+import 'dart:ffi';
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:music_player/music_player.dart';
+import 'package:quiet/component/exceptions.dart';
+import 'package:quiet/providers/settings_provider.dart';
 
-import '../../component.dart';
 import '../../repository.dart';
 import 'track_list.dart';
 import 'tracks_player.dart';
-
-extension _Metadata on MusicMetadata {
-  Track toTrack() {
-    final List<Map<String, dynamic>> artists;
-    final Map<String, dynamic>? album;
-
-    if (extras != null) {
-      artists = (jsonDecode(extras!['artists']) as List).cast();
-      album = jsonDecode(extras!['album']) as Map<String, dynamic>?;
-    } else {
-      artists = const [];
-      album = null;
-    }
-    return Track(
-      id: int.parse(mediaId),
-      name: title ?? "",
-      uri: mediaUri,
-      artists: artists.map((artist) => ArtistMini.fromJson(artist)).toList(),
-      album: album == null ? null : AlbumMini.fromJson(album),
-      imageUrl: extras?['imageUrl'] as String,
-      duration: Duration(milliseconds: duration),
-      type: TrackType.values.byName(extras?['fee']),
-      file: null,
-      mp3Url: null,
-    );
-  }
-}
+import 'package:music/music.dart' as player;
+import 'package:quiet/extension.dart';
 
 extension _Track on Track {
-  MusicMetadata toMetadata() {
-    return MusicMetadata(
-      mediaId: id.toString(),
-      title: name,
-      mediaUri: uri,
-      subtitle: '$name - ${artists.map((e) => e.name).join('/')}',
-      extras: {
-        'album': jsonEncode(album?.toJson()),
-        'artists': jsonEncode(artists.map((e) => e.toJson()).toList()),
-        'imageUrl': imageUrl,
-        'fee': type.name,
-      },
-    );
-  }
-}
-
-extension _TrackList on TrackList {
-  PlayQueue toPlayQueue() {
-    return PlayQueue(
-      queueId: id,
-      queueTitle: 'play_list',
-      queue: tracks.map((e) => e.toMetadata()).toList(),
-    );
-  }
-}
-
-extension _PlayQueue on PlayQueue {
-  TrackList toTrackList() {
-    if (queueId == kFmTrackListId) {
-      return TrackList.fm(tracks: queue.map((e) => e.toTrack()).toList());
-    }
-    return TrackList(
-      id: queueId,
-      tracks: queue.map((e) => e.toTrack()).toList(),
-    );
+  player.Music toMusic() {
+    return player.Music(
+        url: file ?? (uri ?? ''),
+        artist: '',
+        title: name,
+        image: NetworkSingleton.instance.allowNetwork() ? (imageUrl) : null);
   }
 }
 
 class TracksPlayerImplMobile extends TracksPlayer {
   TracksPlayerImplMobile() {
-    _player.metadataListenable.addListener(notifyPlayStateChanged);
-    _player.playbackStateListenable.addListener(notifyPlayStateChanged);
+    // _player.metadataListenable.addListener(notifyPlayStateChanged);
+    // _player.playbackStateListenable.addListener(notifyPlayStateChanged);
+    _player = player.MusicPlayer(
+        onCompleted: () {
+          _isPlaying = false;
+          notifyPlayStateChanged();
+        },
+        onDuration: (duration) {
+          _isBuffing = false;
+          _duration = duration;
+          notifyPlayStateChanged();
+        },
+        onLoading: () {
+          _isBuffing = true;
+          notifyPlayStateChanged();
+        },
+        onPlaying: () {
+          _isPlaying = true;
+          _isBuffing = false;
+          notifyPlayStateChanged();
+        },
+        onPlayNext: () => skipToNext(),
+        onError: (e) {
+          _error = true;
+          notifyPlayStateChanged();
+        },
+        onPaused: () {
+          _isPlaying = false;
+          notifyPlayStateChanged();
+        },
+        onPlayPrevious: () => skipToPrevious(),
+        onPosition: (p) {
+          _position = p;
+          notifyPlayStateChanged();
+        },
+        onStopped: () {
+          _isPlaying = false;
+          notifyPlayStateChanged();
+        });
   }
 
-  final _player = MusicPlayer();
+  player.MusicPlayer? _player;
+
+  var _trackList = TrackList.empty();
+  Track? _current;
+  bool _isPlaying = false;
+  bool _error = false;
+  bool _isBuffing = false;
+  Duration? _position;
+  Duration? _duration;
 
   RepeatMode _mode = RepeatMode.random;
 
   @override
-  Duration? get bufferedPosition =>
-      Duration(milliseconds: _player.playbackState.bufferedPosition);
+  Duration? get bufferedPosition => const Duration(milliseconds: 0);
 
   @override
-  Track? get current => _player.metadata?.toTrack();
+  Track? get current => _current;
 
   @override
-  Duration? get duration {
-    final d = _player.metadata?.duration;
-    if (d == null) {
-      return null;
-    }
-    return Duration(milliseconds: d);
-  }
+  Duration? get duration => _duration;
 
   @override
   Future<void> insertToNext(Track track) async {
-    _player.insertToNext(track.toMetadata());
+    trackList.tracks.add(track);
   }
 
   @override
-  bool get isPlaying =>
-      _player.value.playbackState.state == PlayerState.Playing;
+  bool get isPlaying => _isPlaying;
 
   @override
   Future<void> pause() async {
-    await _player.transportControls.pause();
+    await _player?.pause();
+  }
+
+  Future<void> _play(Track? value) {
+    if (value != null) {
+      if (value.mp3Url == null) {
+        return networkRepository!.getPlayUrl(value).then((v) {
+          value.mp3Url = v.mp3Url;
+          _current = value;
+          _player!.play(value.toMusic(), showNext: true, showPrevious: true);
+          notifyPlayStateChanged();
+        });
+      } else {
+        _current = value;
+        return _player!
+            .play(value.toMusic(), showNext: true, showPrevious: true)
+            .then((value) => notifyPlayStateChanged());
+      }
+    }
+    return Future.error(const QuietException('no track'));
   }
 
   @override
   Future<void> play() {
-    return _player.transportControls.play();
+    if (_isPlaying) {
+      return _player!.resume();
+    } else if (_current != null) {
+      if (position != null) {
+        /// 代表可能此时有进度，不能从头播放
+        return _player!.resume();
+      } else {
+        return _play(_current);
+      }
+    } else {
+      return Future.error(const QuietException('no track'));
+    }
   }
 
   @override
   Future<void> playFromMediaId(int trackId) async {
-    await _player.transportControls.playFromMediaId(trackId.toString());
+    // await _player.transportControls.playFromMediaId(trackId.toString());
+    final track = trackList.tracks.firstWhereOrNull((t) => t.id == trackId);
+    if (track != null) {
+      MusicApiContainer.instance
+          .getApi(track.origin)
+          .then((value) => value.playUrl(track))
+          .then((value) => _play(value));
+    } else {
+      log('没有track=$trackId list=${trackList.tracks}');
+    }
   }
 
   @override
-  double get playbackSpeed => _player.playbackState.speed;
+  double get playbackSpeed => 1;
 
   @override
-  Duration? get position {
-    final p = _player.playbackState.position;
-    return Duration(milliseconds: p);
-  }
+  Duration? get position => _position;
 
   @override
   RepeatMode get repeatMode => _mode;
@@ -148,117 +168,48 @@ class TracksPlayerImplMobile extends TracksPlayer {
 
   @override
   Future<void> seekTo(Duration position) async {
-    await _player.transportControls.seekTo(position.inMilliseconds);
+    _player?.seek(position);
   }
 
   @override
   Future<void> setPlaybackSpeed(double speed) {
-    return _player.transportControls.setPlaybackSpeed(speed);
+    throw const QuietException('unsupported operator');
   }
 
   @override
   void setTrackList(TrackList trackList) {
-    _player.setPlayQueue(trackList.toPlayQueue());
+    _trackList = trackList;
   }
 
   @override
   Future<void> setVolume(double volume) async {
-    // TODO
+    throw const QuietException('unsupported operator');
   }
 
   @override
   Future<void> skipToNext() {
-    return _player.transportControls.skipToNext();
+    return getNextTrack().then((value) => _play(value));
   }
 
   @override
   Future<void> skipToPrevious() {
-    return _player.transportControls.skipToPrevious();
+    return getPreviousTrack().then((value) => _play(value));
   }
 
   @override
   Future<void> stop() {
-    return _player.transportControls.pause();
+    return _player!.pause();
   }
 
   @override
-  TrackList get trackList => _player.queue.toTrackList();
+  TrackList get trackList => _trackList;
 
   @override
   double get volume => 1;
 
   @override
-  bool get isBuffering => _player.playbackState.state == PlayerState.Buffering;
-}
+  bool get isBuffering => _isBuffing;
 
-void runMobileBackgroundService() {
-  runBackgroundService(
-    imageLoadInterceptor: _loadImageInterceptor,
-    playUriInterceptor: _playUriInterceptor,
-    playQueueInterceptor: _PlayQueueInterceptor(),
-  );
-}
-
-Track _convertCallToTrack(MethodCall call) {
-  return Track(
-      id: call.arguments['id'],
-      file: call.arguments['file'],
-      uri: call.arguments['uri'],
-      name: call.arguments['name'],
-      artists: call.arguments['artists'],
-      album: call.arguments['album'],
-      imageUrl: call.arguments['imageUrl'],
-      duration: call.arguments['duration'],
-      type: call.arguments['type']);
-}
-
-// 获取播放地址
-Future<String> _playUriInterceptor(MethodCall? methodCall) {
-  Track t = _convertCallToTrack(methodCall!);
-
-  if (t.file != null) {
-    return Future.value(t.file);
-  }
-
-  return networkRepository!.getPlayUrl(t).then((value) {
-    if (value.mp3Url == null || value.mp3Url!.isEmpty) {
-      return Future.error(PlayDetailException);
-    }
-    return value.mp3Url!.replaceFirst("http://", "https://");
-  });
-}
-
-Future<Uint8List> _loadImageInterceptor(MusicMetadata metadata) async {
-  final ImageStream stream =
-      CachedImage(metadata.iconUri.toString()).resolve(ImageConfiguration(
-    size: const Size(150, 150),
-    devicePixelRatio: WidgetsBinding.instance?.window.devicePixelRatio,
-  ));
-  final image = Completer<ImageInfo>();
-  stream.addListener(ImageStreamListener((info, a) {
-    image.complete(info);
-  }, onError: (exception, stackTrace) {
-    image.completeError(exception, stackTrace);
-  }));
-  final result = await image.future
-      .then((image) => image.image.toByteData(format: ImageByteFormat.png))
-      .then((byte) => byte!.buffer.asUint8List())
-      .timeout(const Duration(seconds: 10));
-  debugPrint("load image for : ${metadata.title} ${result.length}");
-  return result;
-}
-
-class _PlayQueueInterceptor extends PlayQueueInterceptor {
   @override
-  Future<List<MusicMetadata>> fetchMoreMusic(
-      BackgroundPlayQueue queue, PlayMode playMode) async {
-    if (queue.queueId == kFmPlayQueueId) {
-      final musics = await networkRepository!.getPersonalFmMusics();
-      if (musics.isError) {
-        return [];
-      }
-      return musics.asValue!.value.map((m) => m.toMetadata()).toList();
-    }
-    return super.fetchMoreMusic(queue, playMode);
-  }
+  bool get error => _error;
 }
