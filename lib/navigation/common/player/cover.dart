@@ -363,7 +363,8 @@ class _RotationCoverImageState extends State<_RotationCoverImage>
   @override
   Widget build(BuildContext context) {
     ImageProvider image;
-    if (widget.music == null || widget.music!.imageUrl == null) {
+    //TODO 2022-03-23 加强一下封面图片是否存在的逻辑，最好的办法是在 CacheImage 里做调整，但是实在做不到
+    if (widget.music == null || widget.music!.imageUrl == null || widget.music!.imageUrl!.isEmpty) {
       image = const AssetImage("assets/playing_page_disc.png");
     } else {
       image = CachedImage(widget.music!.imageUrl.toString());

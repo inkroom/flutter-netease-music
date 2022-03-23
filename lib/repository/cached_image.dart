@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:quiet/component/cache/key_value_cache.dart';
+import 'package:quiet/component/exceptions.dart';
 import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository/database.dart';
 
@@ -27,11 +28,11 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
   static CachedImage? _imageFail;
 
   factory CachedImage.notImage() {
-    return _notImage ??= CachedImage('');
+    return _notImage ??= CachedImage('网络禁止');
   }
 
   factory CachedImage.imageFail() {
-    return _imageFail ??= CachedImage('');
+    return _imageFail ??= CachedImage('图片失败');
   }
 
   const CachedImage._internal(this.url, this._size,
@@ -106,7 +107,10 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
     }
 
     if (key.url.isEmpty) {
-      throw Exception('image url is empty.');
+      // TODO 2022-03-23 这种异常没法被外层给 catch 或者 onError 处理，原因不明
+      return Future.error(const QuietException('image url is empty.'));
+      // throw StateError('image url is empty.');
+      // throw const QuietException('image url is empty.');
     }
     log("图片缓存 ${key.url}  从网络加载图片");
     //request network source
@@ -117,13 +121,13 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
     });
     final HttpClientResponse response = await request.close();
     if (response.statusCode != HttpStatus.ok) {
-      throw Exception(
+      throw QuietException(
           'HTTP request failed, statusCode: ${response.statusCode}, $resolved');
     }
 
     final Uint8List bytes = await consolidateHttpClientResponseBytes(response);
     if (bytes.lengthInBytes == 0) {
-      throw Exception('NetworkImage is an empty file: $resolved');
+      throw QuietException('NetworkImage is an empty file: $resolved');
     }
 
     //save image to cache
