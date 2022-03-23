@@ -24,8 +24,14 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
 
   static CachedImage? _notImage;
 
+  static CachedImage? _imageFail;
+
   factory CachedImage.notImage() {
     return _notImage ??= CachedImage('');
+  }
+
+  factory CachedImage.imageFail() {
+    return _imageFail ??= CachedImage('');
   }
 
   const CachedImage._internal(this.url, this._size,
@@ -79,6 +85,13 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
   /// 加载占位图
   Future<ui.Codec> _loadNotImageAsync(DecoderCallback decode) async {
     var data = await rootBundle.load("assets/not_image.png");
+    return decode(data.buffer.asUint8List(),
+        cacheWidth: null, cacheHeight: null);
+  }
+
+  /// 加载图片失败占位图
+  Future<ui.Codec> _loadImageFailAsync(DecoderCallback decode) async {
+    var data = await rootBundle.load("assets/image_fail.png");
     return decode(data.buffer.asUint8List(),
         cacheWidth: null, cacheHeight: null);
   }
@@ -157,11 +170,25 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
       log("图片缓存 ${key.url} 允许加载");
 
       /// 获取缓存
-      completer = PaintingBinding.instance!.imageCache!.putIfAbsent(
-        key,
-        () => load(key, PaintingBinding.instance!.instantiateImageCodec),
-        onError: handleError,
-      );
+      try {
+        completer = PaintingBinding.instance!.imageCache!.putIfAbsent(
+          key,
+          () => load(key, PaintingBinding.instance!.instantiateImageCodec),
+          onError: null, //必须为null，不然catch没有用
+        );
+      } catch (e) {
+        log('图片缓存 ${key.url} 加载失败 $e');
+        key = CachedImage.imageFail();
+        completer =
+            completer = PaintingBinding.instance!.imageCache!.putIfAbsent(
+          key,
+          () => MultiFrameImageStreamCompleter(
+              codec: _loadImageFailAsync(
+                  PaintingBinding.instance!.instantiateImageCodec),
+              scale: key.scale),
+          onError: handleError,
+        );
+      }
     } else {
       /// 缓存不存在，且网络关闭
       key = CachedImage.notImage();
