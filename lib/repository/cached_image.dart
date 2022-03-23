@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:quiet/component/cache/key_value_cache.dart';
+import 'package:quiet/providers/settings_provider.dart';
+import 'package:quiet/repository/database.dart';
 
 ///default image size in dimens
 const _defaultImageSize = Size.fromWidth(200);
@@ -17,6 +21,12 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
   ///
   /// The arguments must not be null.
   CachedImage(this.url, {this.scale = 1.0, this.headers}) : _size = null;
+
+  static CachedImage? _notImage;
+
+  factory CachedImage.notImage() {
+    return _notImage ??= CachedImage('');
+  }
 
   const CachedImage._internal(this.url, this._size,
       {this.scale = 1.0, this.headers});
@@ -66,10 +76,18 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
 
   static final HttpClient _httpClient = HttpClient();
 
+  /// 加载占位图
+  Future<ui.Codec> _loadNotImageAsync(DecoderCallback decode) async {
+    var data = await rootBundle.load("assets/not_image.png");
+    return decode(data.buffer.asUint8List(),
+        cacheWidth: null, cacheHeight: null);
+  }
+
   Future<ui.Codec> _loadAsync(CachedImage key, DecoderCallback decode) async {
     final cache = await _imageCache();
     final image = await cache.get(key);
     if (image != null) {
+      log("图片缓存 ${key.url}  命中本地文件缓存");
       return decode(Uint8List.fromList(image),
           cacheWidth: key.width, cacheHeight: null);
     }
@@ -77,7 +95,7 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
     if (key.url.isEmpty) {
       throw Exception('image url is empty.');
     }
-
+    log("图片缓存 ${key.url}  从网络加载图片");
     //request network source
     final Uri resolved = Uri.base.resolve(key.url);
     final HttpClientRequest request = await _httpClient.getUrl(resolved);
@@ -100,6 +118,74 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
 
     return decode(Uint8List.fromList(bytes),
         cacheWidth: key.width, cacheHeight: null);
+  }
+
+  @override
+  void resolveStreamForKey(ImageConfiguration configuration, ImageStream stream,
+      CachedImage key, ImageErrorListener handleError) async {
+    // super.resolveStreamForKey(configuration, stream, key, handleError);
+
+    if (stream.completer != null) {
+      final ImageStreamCompleter? completer =
+          PaintingBinding.instance!.imageCache!.putIfAbsent(
+        key,
+        () => stream.completer!,
+        onError: handleError,
+      );
+      assert(identical(completer, stream.completer));
+      return;
+    }
+
+    /// 先使用图片本身的key去查找缓存（包括本类实现的文件缓存），如果缓存存在，就返回缓存，
+    ///
+    /// 如果缓存不存在，但是网络正常，直接获取图片
+    ///
+    /// 如果缓存不存在，且此时网络关闭，那么就去获取一份指向占位图的缓存
+    ///
+
+    ///
+    /// 如果占位图缓存不存在，就加载占位图
+    ///
+    final cache = await _imageCache();
+    final image = await cache.get(key);
+    ImageStreamCompleter? completer;
+    final s = PaintingBinding.instance!.imageCache!.statusForKey(key);
+    if (s.keepAlive ||
+        s.live ||
+        image != null ||
+        NetworkSingleton.instance.allowNetwork()) {
+      log("图片缓存 ${key.url} 允许加载");
+
+      /// 获取缓存
+      completer = PaintingBinding.instance!.imageCache!.putIfAbsent(
+        key,
+        () => load(key, PaintingBinding.instance!.instantiateImageCodec),
+        onError: handleError,
+      );
+    } else {
+      /// 缓存不存在，且网络关闭
+      key = CachedImage.notImage();
+      log("图片缓存 ${key.url} 缓存不存在，且网络关闭");
+
+      /// 尝试获取占位图的缓存
+      completer = PaintingBinding.instance!.imageCache!.putIfAbsent(
+        key,
+        () {
+          log("图片缓存 ${key.url} 占位图缓存不存在，加载占位图");
+
+          /// 占位图没有缓存，从文件中加载
+          ///
+          return MultiFrameImageStreamCompleter(
+              codec: _loadNotImageAsync(
+                  PaintingBinding.instance!.instantiateImageCodec),
+              scale: key.scale);
+        },
+        onError: handleError,
+      );
+    }
+    if (completer != null) {
+      stream.setCompleter(completer);
+    }
   }
 
   @override
@@ -129,8 +215,7 @@ Future<_ImageCache> _imageCache() async {
   if (__imageCache != null) {
     return __imageCache!;
   }
-  final temp = await getTemporaryDirectory();
-  var dir = Directory("${temp.path}/quiet_images/");
+  var dir = Directory(await getThumbDirectory());
   if (!(await dir.exists())) {
     dir = await dir.create();
   }
