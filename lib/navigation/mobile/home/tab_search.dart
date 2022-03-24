@@ -147,11 +147,13 @@ class _RadioListTile<T> extends StatelessWidget {
       child: ListTileTheme.merge(
         selectedColor: Theme.of(context).toggleableActiveColor,
         child: ListTileMoreCustomizable(
-          leading: control,
-          title: Center(
-            child: Text(title),
+          contentPadding: EdgeInsets.zero,
+          // leading: control,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [control, Text(title,overflow: TextOverflow.clip,)],
           ),
-          minLeadingWidth: 10,
+          minLeadingWidth: 0,
           horizontalTitleGap: 0.0,
           enabled: onChanged != null,
           onTap: (details) {
