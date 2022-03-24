@@ -1,8 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kugou_api/ku_api.dart';
+import 'package:kuwo_api/kuwo_api.dart';
 import 'package:netease_api/netease_api.dart' as neteaseApi;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -36,6 +38,7 @@ class NetworkRepository {
     /// 注册api
     MusicApiContainer.instance.regiester(KuApi(cookiePath));
     MusicApiContainer.instance.regiester(neteaseApi.Repository(cookiePath));
+    MusicApiContainer.instance.regiester(KuWoApi(cookiePath));
 
     networkRepository = NetworkRepository(cachePath);
   }

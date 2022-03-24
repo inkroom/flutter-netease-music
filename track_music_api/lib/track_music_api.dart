@@ -63,7 +63,7 @@ class MusicApiContainer {
   regiester(MusicApi api) {
     for (var s in _plugins) {
       if (s.origin == api.origin) {
-        throw RegiesterException('$api 注册失败');
+        throw RegisterException('$api 注册失败');
       }
     }
 
@@ -77,7 +77,7 @@ class MusicApiContainer {
     for (var s in _plugins) {
       if (s.origin == origin) return Future.value(s);
     }
-    return Future.error(UnsupportOriginException);
+    return Future.error(UnsupportedOriginException);
   }
 
   MusicApi? getApiSync(int origin) {
@@ -104,12 +104,12 @@ class MusicException implements Exception {
   String toString() => 'MusicException: $message';
 }
 
-class UnsupportOriginException extends MusicException {
-  UnsupportOriginException(String message) : super(message);
+class UnsupportedOriginException extends MusicException {
+  UnsupportedOriginException(String message) : super(message);
 }
 
-class RegiesterException extends MusicException {
-  RegiesterException(String message) : super(message);
+class RegisterException extends MusicException {
+  RegisterException(String message) : super(message);
 }
 
 class PlayDetailException extends MusicException {
@@ -118,4 +118,9 @@ class PlayDetailException extends MusicException {
 
 class SearchException extends MusicException {
   SearchException(String message) : super(message);
+}
+/// 部分api可能不支持某项功能
+class UnsupportedException extends MusicException{
+  UnsupportedException(String message) : super(message);
+
 }

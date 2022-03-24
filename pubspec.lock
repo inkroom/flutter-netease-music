@@ -483,6 +483,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  kuwo_api:
+    dependency: "direct main"
+    description:
+      path: kuwo_api
+      relative: true
+    source: path
+    version: "0.0.1"
   lints:
     dependency: transitive
     description:

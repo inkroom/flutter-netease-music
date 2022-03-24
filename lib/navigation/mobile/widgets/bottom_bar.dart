@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/material.dart';
 import 'package:quiet/navigation/common/navigation_target.dart';
@@ -232,17 +235,43 @@ class _SubTitleOrLyric extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final music = ref.watch(playingTrackProvider);
-    final playingLyric = ref.watch(lyricProvider(music!).stateOrNull());
-    if (playingLyric == null) {
-      return Text(subtitle);
-    }
-    final position = ref.read(playerStateProvider.notifier).position;
-    final line =
-        playingLyric.getLineByTimeStamp(position?.inMilliseconds ?? 0, 0)?.line;
-    if (line == null || line.isEmpty) {
-      return Text(subtitle);
-    }
-    return Text(line);
+    final playingLyric = ref.watch(lyricProvider(music!));
+    return playingLyric.when(
+        data: (data) {
+          if (data == null) {
+            return Text(subtitle);
+          }
+          final position = ref.read(playerStateProvider.notifier).position;
+          final line =
+              data.getLineByTimeStamp(position?.inMilliseconds ?? 0, 0)?.line;
+          if (line == null || line.isEmpty) {
+            return Text(subtitle);
+          }
+          return Text(line);
+        },
+        // TODO 2022-03-24 歌词获取失败还是会一直刷新 该组件，还是一直走error，
+        error: (error, stack) => Text(subtitle),
+        loading: () => Center(
+              child: SizedBox.square(
+                dimension: 24,
+                child: CircularProgressIndicator(
+                    color: context.textTheme.bodyMedium?.color),
+              ),
+            ));
+    // if (playingLyric == null) {
+    //   return Text(subtitle);
+    // }
+    // final position = ref
+    //     .read(playerStateProvider.notifier)
+    //     .position;
+    // final line =
+    //     playingLyric
+    //         .getLineByTimeStamp(position?.inMilliseconds ?? 0, 0)
+    //         ?.line;
+    // if (line == null || line.isEmpty) {
+    //   return Text(subtitle);
+    // }
+    // return Text(line);
   }
 }
 

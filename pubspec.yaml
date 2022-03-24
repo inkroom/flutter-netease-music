@@ -36,6 +36,8 @@ dependencies:
     path: netease_api/
   kugou_api:
     path: kugou_api/
+  kuwo_api:
+    path: kuwo_api/
   path: ^1.8.0
   async: ^2.8.0
   riverpod: ^1.0.3
