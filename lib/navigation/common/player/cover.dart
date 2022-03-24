@@ -1,10 +1,11 @@
+import 'dart:developer';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/providers/player_provider.dart';
-import 'package:quiet/repository/cached_image.dart';
 import 'package:track_music_api/track_music_api.dart';
 
 ///播放页面歌曲封面
@@ -120,7 +121,12 @@ class _AlbumCoverState extends ConsumerState<AlbumCover>
     //handle album cover animation
     final _isPlaying = _player.isPlaying;
     setState(() {
-      _coverRotating = _isPlaying && _needleAttachCover;
+      /// 没有封面图不旋转
+      _coverRotating = _current != null &&
+          _current!.imageUrl != null &&
+          _current!.imageUrl!.isNotEmpty &&
+          _isPlaying &&
+          _needleAttachCover;
     });
   }
 
@@ -362,13 +368,6 @@ class _RotationCoverImageState extends State<_RotationCoverImage>
 
   @override
   Widget build(BuildContext context) {
-    ImageProvider image;
-    //TODO 2022-03-23 加强一下封面图片是否存在的逻辑，最好的办法是在 CacheImage 里做调整，但是实在做不到
-    if (widget.music == null || widget.music!.imageUrl == null || widget.music!.imageUrl!.isEmpty) {
-      image = const AssetImage("assets/playing_page_disc.png");
-    } else {
-      image = CachedImage(widget.music!.imageUrl.toString());
-    }
     return Transform.rotate(
       angle: rotation,
       child: Material(
@@ -384,8 +383,9 @@ class _RotationCoverImageState extends State<_RotationCoverImage>
                     image: AssetImage("assets/playing_page_disc.png"))),
             padding: const EdgeInsets.all(30),
             child: ClipOval(
-              child: Image(
-                image: image,
+              child: QuietImage(
+                url: widget.music?.imageUrl?.toString(),
+                assets: 'assets/playing_page_disc.png',
                 fit: BoxFit.cover,
               ),
             ),
