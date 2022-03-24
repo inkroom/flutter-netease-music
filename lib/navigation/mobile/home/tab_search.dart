@@ -149,10 +149,13 @@ class _RadioListTile<T> extends StatelessWidget {
         child: ListTileMoreCustomizable(
           contentPadding: EdgeInsets.zero,
           // leading: control,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [control, Text(title,overflow: TextOverflow.clip,)],
-          ),
+          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            control,
+            Text(
+              title,
+              overflow: TextOverflow.clip,
+            ),
+          ]),
           minLeadingWidth: 0,
           horizontalTitleGap: 0.0,
           enabled: onChanged != null,
