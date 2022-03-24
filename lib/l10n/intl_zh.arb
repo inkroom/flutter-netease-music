@@ -1,4 +1,8 @@
 {
+  "albumCount": "专辑{count}",
+  "videoCount": "视频{count}",
+  "artistInfo": "艺人信息",
+  "hotSong": "热门单曲",
   "emptyList": "歌曲列表为空",
   "getPlayDetailFail": "获取歌曲详情失败",
   "settingItemGroupNetwork": "网络",

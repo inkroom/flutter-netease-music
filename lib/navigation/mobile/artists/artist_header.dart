@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:quiet/material/flexible_app_bar.dart';
-import 'package:quiet/material/tabs.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/repository.dart';
+import 'package:quiet/extension.dart';
 
 class ArtistHeader extends StatelessWidget {
   const ArtistHeader({Key? key, required this.artist}) : super(key: key);
@@ -17,10 +17,10 @@ class ArtistHeader extends StatelessWidget {
       elevation: 0,
       bottom: RoundedTabBar(
         tabs: <Widget>[
-          const Tab(text: "热门单曲"),
-          Tab(text: "专辑${artist.albumSize}"),
-          Tab(text: "视频${artist.mvSize}"),
-          const Tab(text: "艺人信息"),
+          Tab(text: context.strings.hotSong),
+          Tab(text: context.strings.albumCount(artist.albumSize)),
+          Tab(text: context.strings.videoCount(artist.mvSize)),
+          Tab(text: context.strings.artistInfo),
         ],
       ),
       actions: <Widget>[
@@ -44,10 +44,8 @@ class _ArtistFlexHeader extends StatelessWidget {
       maxLines: 1,
       child: FlexibleDetailBar(
         background: FlexShadowBackground(
-            child: Image(
-                image: CachedImage(artist.picUrl),
-                height: 300,
-                fit: BoxFit.cover)),
+            child: QuietImage(
+                url: (artist.picUrl), height: 300, fit: BoxFit.cover)),
         content: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: Column(
@@ -57,10 +55,10 @@ class _ArtistFlexHeader extends StatelessWidget {
                 Text(
                     '${artist.name}${artist.alias.isEmpty ? '' : '(${artist.alias[0]})'}',
                     style: const TextStyle(fontSize: 20)),
-                Text('歌曲数量:${artist.musicSize}'),
+                Text('${context.strings.cloudMusicUsage}:${artist.musicSize}'),
               ]),
         ),
-        builder: (context, t) {
+        builder: (BuildContext context, double t) {
           return AppBar(
             title: Text(t > 0.5 ? artist.name : ''),
             backgroundColor: Colors.transparent,
@@ -69,9 +67,9 @@ class _ArtistFlexHeader extends StatelessWidget {
             actions: <Widget>[
               IconButton(
                   icon: const Icon(Icons.share),
-                  tooltip: "分享",
+                  tooltip: context.strings.share,
                   onPressed: () {
-                    toast('分享');
+                    toast(context.strings.share);
                   })
             ],
           );

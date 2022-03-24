@@ -1,4 +1,8 @@
 {
+  "albumCount": "Album: {count}",
+  "videoCount": "Video : {count}",
+  "artistInfo": "Artist",
+  "hotSong": "Hot Song",
   "emptyList": "The Music List Is Empty",
   "getPlayDetailFail": "Fetch Music Failed",
   "settingItemGroupNetwork": "Network",
@@ -93,7 +97,7 @@
   "currentPlaying": "Current Playing",
   "searchMusicResultCount": "Find {value} music",
   "songs": "Songs",
-  "cloudMusicUsage": "Musci Count",
+  "cloudMusicUsage": "Music Count",
   "cloudMusicFileDropDescription": "Drop your music file to here to upload.",
   "repeatModeRandom":"random",
   "repeatModeNext":"circle",

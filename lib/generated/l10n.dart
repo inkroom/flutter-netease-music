@@ -50,6 +50,46 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Album: {count}`
+  String albumCount(Object count) {
+    return Intl.message(
+      'Album: $count',
+      name: 'albumCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Video : {count}`
+  String videoCount(Object count) {
+    return Intl.message(
+      'Video : $count',
+      name: 'videoCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Artist`
+  String get artistInfo {
+    return Intl.message(
+      'Artist',
+      name: 'artistInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hot Song`
+  String get hotSong {
+    return Intl.message(
+      'Hot Song',
+      name: 'hotSong',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `The Music List Is Empty`
   String get emptyList {
     return Intl.message(
@@ -992,10 +1032,10 @@ class S {
     );
   }
 
-  /// `Musci Count`
+  /// `Music Count`
   String get cloudMusicUsage {
     return Intl.message(
-      'Musci Count',
+      'Music Count',
       name: 'cloudMusicUsage',
       desc: '',
       args: [],

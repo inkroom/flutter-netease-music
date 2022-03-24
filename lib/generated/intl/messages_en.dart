@@ -20,27 +20,31 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(artistName, albumName, albumId, sharedUserId) =>
+  static String m0(count) => "Album: ${count}";
+
+  static String m1(artistName, albumName, albumId, sharedUserId) =>
       "The ${artistName}\'s album《${albumName}》: http://music.163.com/album/${albumId}/?userid=${sharedUserId} (From @NeteaseCouldMusic)";
 
-  static String m1(value) => "Created at ${value}";
+  static String m2(value) => "Created at ${value}";
 
-  static String m2(value) => "${value} Music";
+  static String m3(value) => "${value} Music";
 
-  static String m3(value) => "${value} download fail";
+  static String m4(value) => "${value} download fail";
 
-  static String m4(value) => "${value} downloading";
+  static String m5(value) => "${value} downloading";
 
-  static String m5(value) => "${value} downloaded";
+  static String m6(value) => "${value} downloaded";
 
-  static String m6(value) => "Play Count: ${value}";
+  static String m7(value) => "Play Count: ${value}";
 
-  static String m7(username, title, playlistId, userId, shareUserId) =>
+  static String m8(username, title, playlistId, userId, shareUserId) =>
       "The PlayList created by ${username}「${title}」: http://music.163.com/playlist/${playlistId}/${userId}/?userid=${shareUserId} (From @NeteaseCouldMusic)";
 
-  static String m8(value) => "Track Count: ${value}";
+  static String m9(value) => "Track Count: ${value}";
 
-  static String m9(value) => "Find ${value} music";
+  static String m10(value) => "Find ${value} music";
+
+  static String m11(count) => "Video : ${count}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -52,15 +56,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "addToPlaylistFailed":
             MessageLookupByLibrary.simpleMessage("add to playlist failed"),
         "album": MessageLookupByLibrary.simpleMessage("Album"),
-        "albumShareContent": m0,
+        "albumCount": m0,
+        "albumShareContent": m1,
         "alreadyBuy": MessageLookupByLibrary.simpleMessage("Payed"),
+        "artistInfo": MessageLookupByLibrary.simpleMessage("Artist"),
         "artists": MessageLookupByLibrary.simpleMessage("Artists"),
         "cloudMusic": MessageLookupByLibrary.simpleMessage("Music List"),
         "cloudMusicFileDropDescription": MessageLookupByLibrary.simpleMessage(
             "Drop your music file to here to upload."),
-        "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("Musci Count"),
+        "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("Music Count"),
         "collectionLike": MessageLookupByLibrary.simpleMessage("Collections"),
-        "createdDate": m1,
+        "createdDate": m2,
         "createdSongList":
             MessageLookupByLibrary.simpleMessage("Created Song List"),
         "currentPlaying":
@@ -90,6 +96,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Description"),
         "getPlayDetailFail":
             MessageLookupByLibrary.simpleMessage("Fetch Music Failed"),
+        "hotSong": MessageLookupByLibrary.simpleMessage("Hot Song"),
         "keySpace": MessageLookupByLibrary.simpleMessage("Space"),
         "latestPlayHistory":
             MessageLookupByLibrary.simpleMessage("Play History"),
@@ -99,10 +106,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginWithPhone":
             MessageLookupByLibrary.simpleMessage("login with phone"),
-        "musicCountFormat": m2,
-        "musicDownloadFail": m3,
-        "musicDownloaded": m4,
-        "musicDownloading": m5,
+        "musicCountFormat": m3,
+        "musicDownloadFail": m4,
+        "musicDownloaded": m5,
+        "musicDownloading": m6,
         "musicName": MessageLookupByLibrary.simpleMessage("Music Name"),
         "my": MessageLookupByLibrary.simpleMessage("My"),
         "myDjs": MessageLookupByLibrary.simpleMessage("Dj"),
@@ -125,9 +132,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "playlist": MessageLookupByLibrary.simpleMessage("PlayList"),
         "playlistLoginDescription": MessageLookupByLibrary.simpleMessage(
             "Login to discover your playlists."),
-        "playlistPlayCount": m6,
-        "playlistShareContent": m7,
-        "playlistTrackCount": m8,
+        "playlistPlayCount": m7,
+        "playlistShareContent": m8,
+        "playlistTrackCount": m9,
         "projectDescription": MessageLookupByLibrary.simpleMessage(
             "OpenSource project https://github.com/boyan01/flutter-netease-music"),
         "recommendPlayLists":
@@ -140,7 +147,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "repeatModeOne": MessageLookupByLibrary.simpleMessage("single repeat"),
         "repeatModeRandom": MessageLookupByLibrary.simpleMessage("random"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
-        "searchMusicResultCount": m9,
+        "searchMusicResultCount": m10,
         "searchPlaylistSongs":
             MessageLookupByLibrary.simpleMessage("Search Songs"),
         "selectRegionDiaCode":
@@ -181,6 +188,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "trackNoCopyright":
             MessageLookupByLibrary.simpleMessage("Track No Copyright"),
         "trackVIP": MessageLookupByLibrary.simpleMessage("Track only for VIP"),
+        "videoCount": m11,
         "volumeDown": MessageLookupByLibrary.simpleMessage("Volume Down"),
         "volumeUp": MessageLookupByLibrary.simpleMessage("Volume Up")
       };
