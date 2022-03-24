@@ -55,7 +55,6 @@ class KuWoApi extends MusicApi {
 
   @override
   Future<PageResult<Track>> search(String keyword, int page, int size) {
-
     return _doRequest(
             "http://www.kuwo.cn/api/www/search/searchMusicBykeyWord?key=${Uri.encodeFull(keyword)}&pn=$page&rn=$size&httpsStatus=1&reqId=3e5b4f20-ab44-11ec-bac5-bfdfcde1c601",
             {
@@ -100,7 +99,11 @@ class KuWoApi extends MusicApi {
                     : null,
                 imageUrl: '',
                 duration: Duration(seconds: e['duration']),
-                type: TrackType.free,
+                /// 1111 为付费的
+                /// 1100和0000都能播放
+                type: e['payInfo']['play'].toString().endsWith("00")
+                    ? TrackType.free
+                    : TrackType.noCopyright,
                 origin: origin,
                 extra: e['musicrid']));
           }
