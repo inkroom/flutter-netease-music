@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loader/loader.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/navigation/mobile/playlists/page_playlist_detail.dart';
 import 'package:quiet/repository.dart';
 
@@ -99,7 +100,7 @@ class _ItemLeaderBoard2 extends StatelessWidget {
                 borderRadius: BorderRadius.circular(3),
                 child: Stack(
                   children: <Widget>[
-                    Image(image: CachedImage(row["coverImgUrl"])),
+                    QuietImage(url: (row["coverImgUrl"])),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material/images.dart';
 import 'package:quiet/navigation/desktop/widgets/highlight_clickable_text.dart';
 import 'package:quiet/providers/album_detail_provider.dart';
 import 'package:quiet/repository.dart';
@@ -118,8 +119,8 @@ class _AlbumDetailHeader extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             child: AspectRatio(
               aspectRatio: 1,
-              child: Image(
-                image: CachedImage(album.picUrl),
+              child: QuietImage(
+                url: (album.picUrl),
                 width: 160,
                 height: 160,
                 fit: BoxFit.cover,

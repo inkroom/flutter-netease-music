@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loader/loader.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/navigation/mobile/artists/page_artist_detail.dart';
 import 'package:quiet/repository.dart';
 
@@ -58,8 +59,8 @@ class ArtistTile extends StatelessWidget {
                 aspectRatio: 1,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
-                  child: Image(
-                    image: CachedImage(map["img1v1Url"]),
+                  child: QuietImage(
+                    url: (map["img1v1Url"]),
                     fit: BoxFit.cover,
                   ),
                 ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/media/tracks/track_list.dart';
 import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/navigation/common/navigation_target.dart';
@@ -347,12 +348,12 @@ class MusicTileConfiguration extends StatelessWidget {
           margin: const EdgeInsets.only(left: 8, right: 8),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(3),
-            child: FadeInImage(
+            child: QuietImage(
               width: 40,
               height: 40,
               fit: BoxFit.cover,
-              image: CachedImage(music.imageUrl?.toString() ?? ""),
-              placeholder: const AssetImage("assets/playlist_playlist.9.png"),
+              url: music.imageUrl?.toString() ?? "",
+              assets: "assets/playlist_playlist.9.png",
             ),
           ),
         );

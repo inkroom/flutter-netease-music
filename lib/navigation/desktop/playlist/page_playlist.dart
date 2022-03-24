@@ -144,8 +144,8 @@ class _PlaylistDetailHeader extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             child: AspectRatio(
               aspectRatio: 1,
-              child: Image(
-                image: CachedImage(playlist.coverUrl),
+              child: QuietImage(
+                url:(playlist.coverUrl),
                 width: 160,
                 height: 160,
                 fit: BoxFit.cover,

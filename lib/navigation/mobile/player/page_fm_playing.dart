@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material/images.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 import 'package:quiet/providers/player_provider.dart';
 import 'package:quiet/repository.dart';
@@ -130,8 +131,8 @@ class _FmCover extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(4),
-            child: Image(
-              image: CachedImage(track.imageUrl!),
+            child: QuietImage(
+              url:track.imageUrl?.toString(),
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress != null) {
                   child = Container(child: child);

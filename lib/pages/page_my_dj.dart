@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loader/loader.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/part/part.dart';
 import 'package:quiet/repository.dart';
 
@@ -53,7 +54,7 @@ class DjTile extends StatelessWidget {
                 size: const Size(64, 64),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
-                  child: Image(image: CachedImage(data['picUrl'] as String)),
+                  child: QuietImage(url: data['picUrl']?.toString()),
                 ),
               ),
               const SizedBox(width: 4),

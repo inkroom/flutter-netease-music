@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/providers/player_provider.dart';
 import 'package:quiet/repository.dart';
@@ -79,8 +80,8 @@ class _PlayingItemWidget extends ConsumerWidget {
           const SizedBox(width: 20),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image(
-              image: CachedImage(track.imageUrl!),
+            child: QuietImage(
+              url: track.imageUrl?.toString(),
               width: 48,
               height: 48,
             ),
@@ -121,7 +122,7 @@ class _CenterControllerWidget extends ConsumerWidget {
     final playingFm = ref.watch(
       playerStateProvider.select((value) => value.playingList.isFM),
     );
-    if(ref.watch(playerStateProvider).error == true){
+    if (ref.watch(playerStateProvider).error == true) {
       toast(context.strings.failedToPlayMusic);
     }
 
@@ -211,7 +212,7 @@ class _RpeatModeControl extends ConsumerWidget {
     if (mode == RepeatMode.random) {
       i = Icons.shuffle;
     } else if (mode == RepeatMode.next) {
-       i = Icons.next_plan;
+      i = Icons.next_plan;
     } else if (mode == RepeatMode.one) {
       i = Icons.repeat_one;
     } else if (mode == RepeatMode.none) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/repository.dart';
 
 class RecommendedPlaylistTile extends StatelessWidget {
@@ -33,8 +34,8 @@ class RecommendedPlaylistTile extends StatelessWidget {
               message: playlist.copywriter,
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(6)),
-                child: Image(
-                  image: CachedImage(playlist.picUrl),
+                child: QuietImage(
+                  url: playlist.picUrl,
                   fit: BoxFit.cover,
                   width: imageSize,
                   height: imageSize,

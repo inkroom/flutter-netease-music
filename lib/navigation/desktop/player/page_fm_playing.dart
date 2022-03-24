@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/media/tracks/track_list.dart';
 import 'package:quiet/navigation/common/like_button.dart';
 import 'package:quiet/providers/fm_playlist_provider.dart';
@@ -68,7 +69,7 @@ class _CoverLayout extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image(image: CachedImage(track.imageUrl!)),
+                child: QuietImage(url:track.imageUrl?.toString()),
               ),
               _CoverPlayPauseButton(track: track)
             ],

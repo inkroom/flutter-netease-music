@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/navigation/common/navigation_target.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 import 'package:quiet/repository.dart';
@@ -153,12 +154,6 @@ class BottomPlayerBar extends ConsumerWidget {
     if (music == null) {
       return const SizedBox(height: kBottomPlayerBarHeight);
     }
-    ImageProvider image;
-    if (music.imageUrl == null || music.imageUrl!.isEmpty) {
-      image = const AssetImage("assets/playing_page_disc.png");
-    } else {
-      image = CachedImage(music.imageUrl.toString());
-    }
 
     return Material(
       elevation: 8,
@@ -173,9 +168,10 @@ class BottomPlayerBar extends ConsumerWidget {
               const SizedBox(width: 8),
               ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(4)),
-                child: Image(
+                child: QuietImage(
                   fit: BoxFit.cover,
-                  image: image,
+                  url: music.imageUrl?.toString(),
+                  assets: "assets/playing_page_disc.png",
                   width: 48,
                   height: 48,
                 ),

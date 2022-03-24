@@ -1,5 +1,6 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/navigation/mobile/artists/page_artist_detail.dart';
 import 'package:quiet/repository.dart';
 
@@ -19,7 +20,7 @@ class CollectionArtists extends StatelessWidget {
                         leading: SizedBox(
                           height: 48,
                           width: 48,
-                          child: Image(image: CachedImage(artist['img1v1Url'])),
+                          child: QuietImage(url: (artist['img1v1Url'])),
                         ),
                         title: Text(artist['name']),
                         subtitle: Text(

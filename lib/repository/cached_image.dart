@@ -61,7 +61,9 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
 
   ///the id of this image
   ///netease image url has a unique id at url last part
-  String get id => url.isEmpty ? '' : url.substring(url.lastIndexOf('/'));
+  String get id => url.isEmpty
+      ? ''
+      : url.substring(url.lastIndexOf('/') == -1 ? 0 : url.lastIndexOf('/'));
 
   @override
   bool operator ==(Object other) =>
@@ -90,13 +92,6 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
         cacheWidth: null, cacheHeight: null);
   }
 
-  /// 加载图片失败占位图
-  Future<ui.Codec> _loadImageFailAsync(DecoderCallback decode) async {
-    var data = await rootBundle.load("assets/image_fail.png");
-    return decode(data.buffer.asUint8List(),
-        cacheWidth: null, cacheHeight: null);
-  }
-
   Future<ui.Codec> _loadAsync(CachedImage key, DecoderCallback decode) async {
     final cache = await _imageCache();
     final image = await cache.get(key);
@@ -107,10 +102,7 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
     }
 
     if (key.url.isEmpty) {
-      // TODO 2022-03-23 这种异常没法被外层给 catch 或者 onError 处理，原因不明
-      return Future.error(const QuietException('image url is empty.'));
-      // throw StateError('image url is empty.');
-      // throw const QuietException('image url is empty.');
+      throw const QuietException('image url is empty.');
     }
     log("图片缓存 ${key.url}  从网络加载图片");
     //request network source
@@ -174,25 +166,11 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
       log("图片缓存 ${key.url} 允许加载");
 
       /// 获取缓存
-      try {
-        completer = PaintingBinding.instance!.imageCache!.putIfAbsent(
-          key,
-          () => load(key, PaintingBinding.instance!.instantiateImageCodec),
-          onError: null, //必须为null，不然catch没有用
-        );
-      } catch (e) {
-        log('图片缓存 ${key.url} 加载失败 $e');
-        key = CachedImage.imageFail();
-        completer =
-            completer = PaintingBinding.instance!.imageCache!.putIfAbsent(
-          key,
-          () => MultiFrameImageStreamCompleter(
-              codec: _loadImageFailAsync(
-                  PaintingBinding.instance!.instantiateImageCodec),
-              scale: key.scale),
-          onError: handleError,
-        );
-      }
+      completer = PaintingBinding.instance!.imageCache!.putIfAbsent(
+        key,
+        () => load(key, PaintingBinding.instance!.instantiateImageCodec),
+        onError: null, //必须为null，不然catch没有用
+      );
     } else {
       /// 缓存不存在，且网络关闭
       key = CachedImage.notImage();
@@ -231,7 +209,7 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
 
   @override
   String toString() {
-    return 'NeteaseImage{url: $url, scale: $scale, size: $_size}';
+    return 'CacheImage{url: $url, scale: $scale, size: $_size}';
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 import 'package:quiet/repository/cached_image.dart';
 
@@ -38,8 +39,7 @@ class AlbumTile extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(4),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: Image(
-                      image: CachedImage(album["picUrl"]), fit: BoxFit.cover),
+                  child: QuietImage(url: album["picUrl"], fit: BoxFit.cover),
                 ),
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loader/loader.dart';
 import 'package:quiet/component/utils/utils.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/repository.dart';
 
 class PlaylistResultSection extends StatefulWidget {
@@ -55,8 +56,8 @@ class _PlayListTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: Image(
-                      image: CachedImage(item["coverImgUrl"]),
+                  child: QuietImage(
+                      url: (item["coverImgUrl"]),
                       fit: BoxFit.cover),
                 ),
               ),

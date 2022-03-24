@@ -95,11 +95,11 @@ class _UserDetailAppBar extends StatelessWidget {
       expandedHeight: 330,
       flexibleSpace: FlexibleDetailBar(
         background: FlexShadowBackground(
-          child: Image(
+          child: QuietImage(
               height: 300,
               width: 300,
               fit: BoxFit.cover,
-              image: CachedImage(user.backgroundUrl)),
+              url: (user.backgroundUrl)),
         ),
         content: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),

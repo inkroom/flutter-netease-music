@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/repository.dart';
 
 ///page for playlist edit
@@ -40,10 +41,8 @@ class _PlaylistEditPageState extends State<PlaylistEditPage> {
                 child: Row(
                   children: <Widget>[
                     Expanded(child: Text("更换封面", style: style)),
-                    Image(
-                        image: CachedImage(widget.playlist.coverUrl),
-                        height: 56,
-                        width: 56)
+                    QuietImage(
+                        url: widget.playlist.coverUrl, height: 56, width: 56)
                   ],
                 ),
               ),

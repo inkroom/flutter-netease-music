@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loader/loader.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
 import 'package:quiet/navigation/mobile/playlists/dialog_selector.dart';
 import 'package:quiet/navigation/mobile/playlists/page_playlist_detail_selection.dart';
@@ -230,8 +231,8 @@ class _PageMVsState extends State<_PageMVs> with AutomaticKeepAliveClientMixin {
                     padding: const EdgeInsets.all(4),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(3),
-                      child: Image(
-                        image: CachedImage(mv["imgurl16v9"]),
+                      child: QuietImage(
+                        url:(mv["imgurl16v9"]),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -334,8 +335,8 @@ class _PageArtistIntroductionState extends State<_PageArtistIntroduction>
                 padding: const EdgeInsets.all(4),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(3),
-                  child: Image(
-                    image: CachedImage(topic["rectanglePicUrl"]),
+                  child: QuietImage(
+                    url:(topic["rectanglePicUrl"]),
                     fit: BoxFit.cover,
                   ),
                 ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/repository.dart';
 
 import '../../../component/utils/time.dart';
@@ -47,7 +48,7 @@ class AlbumFlexibleAppBar extends StatelessWidget {
       right: 0,
       bottom: 0,
       child: _Background(
-        image: CachedImage(album.picUrl),
+        url: (album.picUrl),
         current: settings.currentExtent - settings.minExtent,
       ),
     ));
@@ -165,7 +166,7 @@ class PlaylistFlexibleAppBar extends StatelessWidget {
       right: 0,
       bottom: 0,
       child: _Background(
-        image: CachedImage(playlist.coverUrl),
+        url: (playlist.coverUrl),
         current: settings.currentExtent - settings.minExtent,
       ),
     ));
@@ -341,9 +342,9 @@ class _AlbumHeaderContent extends ConsumerWidget {
               const SizedBox(width: 32),
               ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-                child: Image(
+                child: QuietImage(
                   fit: BoxFit.cover,
-                  image: CachedImage(album.picUrl),
+                  url: (album.picUrl),
                   width: 120,
                   height: 120,
                 ),
@@ -409,11 +410,11 @@ class _AppBar extends StatelessWidget {
 class _Background extends StatelessWidget {
   const _Background({
     Key? key,
-    required this.image,
+    required this.url,
     required this.current,
   }) : super(key: key);
 
-  final ImageProvider image;
+  final String url;
 
   final double current;
 
@@ -429,7 +430,7 @@ class _Background extends StatelessWidget {
       child: Stack(
         fit: StackFit.passthrough,
         children: <Widget>[
-          Image(image: image, fit: BoxFit.cover, width: 120, height: 1),
+          QuietImage(url: url, fit: BoxFit.cover, width: 120, height: 1),
           RepaintBoundary(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),

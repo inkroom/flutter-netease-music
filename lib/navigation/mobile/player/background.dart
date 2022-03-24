@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/repository.dart';
 
 class BlurBackground extends StatelessWidget {
@@ -12,8 +13,8 @@ class BlurBackground extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        Image(
-          image: CachedImage(music.imageUrl.toString()),
+        QuietImage(
+          url: music.imageUrl?.toString(),
           fit: BoxFit.cover,
           height: 15,
           width: 15,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/navigation/desktop/login/login_dialog.dart';
 import 'package:quiet/navigation/desktop/playlist/user_playlists.dart';
 import 'package:quiet/navigation/desktop/widgets/navigation_tile.dart';
@@ -116,8 +117,8 @@ class _ProfileTile extends HookConsumerWidget {
               children: [
                 const SizedBox(width: 4),
                 ClipOval(
-                  child: Image(
-                    image: CachedImage(user.avatarUrl),
+                  child: QuietImage(
+                    url: (user.avatarUrl),
                     width: 32,
                     height: 32,
                   ),

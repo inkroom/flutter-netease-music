@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loader/loader.dart';
 import 'package:quiet/component/utils/utils.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/repository.dart';
 
 ///video list result
@@ -56,8 +57,8 @@ class VideoTile extends StatelessWidget {
               padding: const EdgeInsets.all(4),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(3),
-                child: Image(
-                  image: CachedImage(map["coverUrl"]),
+                child: QuietImage(
+                  url: (map["coverUrl"]),
                   fit: BoxFit.cover,
                 ),
               ),

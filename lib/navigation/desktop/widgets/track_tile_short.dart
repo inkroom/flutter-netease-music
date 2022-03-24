@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/repository.dart';
 import 'package:track_music_api/track_music_api.dart';
 
@@ -34,8 +35,8 @@ class TrackShortTile extends StatelessWidget {
             const SizedBox(width: 12),
             ClipRRect(
               borderRadius: BorderRadius.circular(4),
-              child: Image(
-                image: CachedImage(track.imageUrl!),
+              child: QuietImage(
+                url:(track.imageUrl?.toString()),
                 width: 40,
                 height: 40,
                 fit: BoxFit.cover,
