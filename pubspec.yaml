@@ -56,6 +56,7 @@ dependencies:
   connectivity_plus: ^2.2.1
   music:
     path: mobile_player/
+  list_tile_more_customizable: ^2.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -7,7 +7,7 @@ import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
 import 'package:quiet/navigation/mobile/widgets/track_title.dart';
 import 'package:quiet/repository.dart';
-
+import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import '../../../providers/player_provider.dart';
 import '../../../providers/search_provider.dart';
 
@@ -80,8 +80,8 @@ class _SearchTextField extends ConsumerWidget implements PreferredSizeWidget {
             children: MusicApiContainer.instance.list
                 .map((e) => Expanded(
                     flex: 1,
-                    child: RadioListTile<int>(
-                        title: Text(e.name),
+                    child: _RadioListTile<int>(
+                        title: e.name,
                         value: e.origin,
                         groupValue: origin,
                         onChanged: (value) {
@@ -118,4 +118,55 @@ class _SearchTextField extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(90);
+}
+
+class _RadioListTile<T> extends StatelessWidget {
+  const _RadioListTile(
+      {Key? key,
+      required this.title,
+      required this.groupValue,
+      required this.value,
+      required this.onChanged});
+
+  final String title;
+  final T? groupValue;
+  final T value;
+  final ValueChanged<T?>? onChanged;
+
+  bool get checked => value == groupValue;
+
+  @override
+  Widget build(BuildContext context) {
+    final Widget control = Radio<T>(
+      value: value,
+      groupValue: groupValue,
+      onChanged: onChanged,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    );
+    return MergeSemantics(
+      child: ListTileTheme.merge(
+        selectedColor: Theme.of(context).toggleableActiveColor,
+        child: ListTileMoreCustomizable(
+          leading: control,
+          title: Center(
+            child: Text(title),
+          ),
+          minLeadingWidth: 10,
+          horizontalTitleGap: 0.0,
+          enabled: onChanged != null,
+          onTap: (details) {
+            if (onChanged != null) {
+              if (checked) {
+                onChanged!(null);
+                return;
+              }
+              if (!checked) {
+                onChanged!(value);
+              }
+            }
+          },
+        ),
+      ),
+    );
+  }
 }
