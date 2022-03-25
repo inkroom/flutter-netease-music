@@ -18,7 +18,7 @@ class PageMusicSearchResult extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchResult = ref.watch(searchMusicProvider(query));
+    final searchResult = ref.watch(searchMusicProvider(''));
     return searchResult.value.when(
       data: (data) => SearchResultScaffold(
         query: query,

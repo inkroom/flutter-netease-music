@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/navigation/common/search_origin.dart';
 import 'package:quiet/providers/navigator_provider.dart';
+import 'package:quiet/providers/search_provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../common/navigation_target.dart';
@@ -31,6 +33,10 @@ class HeaderBar extends StatelessWidget {
             children: [
               const SizedBox(width: 180, child: _HeaderNavigationButtons()),
               const Expanded(child: _MoveWindow.expand()),
+              SizedBox(
+                child: SearchOrigin(),
+                width: 300,
+              ),
               const _SearchBar(),
               const SizedBox(width: 10, child: _MoveWindow.expand()),
               const _SettingButton(),
@@ -87,7 +93,7 @@ class _SearchBar extends HookConsumerWidget {
     final textEditingController = useTextEditingController();
     return SizedBox(
       height: 24,
-      width: 400,
+      width: 200,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
@@ -105,20 +111,25 @@ class _SearchBar extends HookConsumerWidget {
             const SizedBox(width: 4, child: _MoveWindow.expand()),
             Expanded(
               child: TextField(
-                cursorHeight: 12,
-                controller: textEditingController,
-                style: const TextStyle(fontSize: 14),
-                decoration: InputDecoration.collapsed(
-                  hintText: context.strings.search,
-                  hintStyle: TextStyle(
-                    fontSize: 14,
-                    color: context.textTheme.caption!.color,
+                  cursorHeight: 12,
+                  controller: textEditingController,
+                  style: const TextStyle(fontSize: 14),
+                  decoration: InputDecoration.collapsed(
+                    hintText: context.strings.search,
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      color: context.textTheme.caption!.color,
+                    ),
                   ),
-                ),
-                onSubmitted: (value) => ref
-                    .read(navigatorProvider.notifier)
-                    .navigate(NavigationTargetSearchMusicResult(value.trim())),
-              ),
+                  onSubmitted: (value) {
+                    if (value.trim().isNotEmpty) {
+                      ref
+                          .read(searchMusicProvider('').notifier)
+                          .search(value.trim());
+                      ref.read(navigatorProvider.notifier).navigate(
+                          NavigationTargetSearchMusicResult(value.trim()));
+                    }
+                  }),
             ),
           ],
         ),

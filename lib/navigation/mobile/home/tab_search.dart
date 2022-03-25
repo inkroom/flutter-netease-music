@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
+import 'package:quiet/navigation/common/search_origin.dart';
 import 'package:quiet/navigation/mobile/widgets/track_title.dart';
-import 'package:quiet/repository.dart';
-import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import '../../../providers/player_provider.dart';
 import '../../../providers/search_provider.dart';
 
@@ -16,7 +15,7 @@ class HomeTabSearch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchResult = ref.watch(mobileSearchMusicProvider(''));
+    final searchResult = ref.watch(searchMusicProvider(''));
     log('查询数据了');
 
     return Scaffold(
@@ -67,7 +66,7 @@ class _SearchTextField extends ConsumerWidget implements PreferredSizeWidget {
     //   ],
     // );
 
-    final origin = ref.watch(mobileSearchMusicProvider('')).origin;
+    final origin = ref.watch(searchMusicProvider('')).origin;
 
     log('来源origin = $origin');
 
@@ -75,24 +74,7 @@ class _SearchTextField extends ConsumerWidget implements PreferredSizeWidget {
       padding: const EdgeInsets.all(8),
       child: Column(
         children: [
-          Expanded(
-              child: Row(
-            children: MusicApiContainer.instance.list
-                .map((e) => Expanded(
-                    flex: 1,
-                    child: _RadioListTile<int>(
-                        title: e.name,
-                        value: e.origin,
-                        groupValue: origin,
-                        onChanged: (value) {
-                          if (value != null) {
-                            ref
-                                .read(mobileSearchMusicProvider('').notifier)
-                                .origin = value;
-                          }
-                        })))
-                .toList(),
-          )),
+          SearchOrigin(),
           CupertinoSearchTextField(
             style: context.textTheme.bodyMedium,
             placeholder: context.strings.search,
@@ -108,7 +90,7 @@ class _SearchTextField extends ConsumerWidget implements PreferredSizeWidget {
               log('查询的value=$value');
               if (value.trim().isNotEmpty) {
                 ref
-                    .read(mobileSearchMusicProvider('').notifier)
+                    .read(searchMusicProvider('').notifier)
                     .search(value.trim());
               }
             },
@@ -120,60 +102,4 @@ class _SearchTextField extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(90);
-}
-
-class _RadioListTile<T> extends StatelessWidget {
-  const _RadioListTile(
-      {Key? key,
-      required this.title,
-      required this.groupValue,
-      required this.value,
-      required this.onChanged});
-
-  final String title;
-  final T? groupValue;
-  final T value;
-  final ValueChanged<T?>? onChanged;
-
-  bool get checked => value == groupValue;
-
-  @override
-  Widget build(BuildContext context) {
-    final Widget control = Radio<T>(
-      value: value,
-      groupValue: groupValue,
-      onChanged: onChanged,
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    );
-    return MergeSemantics(
-      child: ListTileTheme.merge(
-        selectedColor: Theme.of(context).toggleableActiveColor,
-        child: ListTileMoreCustomizable(
-          contentPadding: EdgeInsets.zero,
-          // leading: control,
-          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            control,
-            Text(
-              title,
-              overflow: TextOverflow.clip,
-            ),
-          ]),
-          minLeadingWidth: 0,
-          horizontalTitleGap: 0.0,
-          enabled: onChanged != null,
-          onTap: (details) {
-            if (onChanged != null) {
-              if (checked) {
-                onChanged!(null);
-                return;
-              }
-              if (!checked) {
-                onChanged!(value);
-              }
-            }
-          },
-        ),
-      ),
-    );
-  }
 }

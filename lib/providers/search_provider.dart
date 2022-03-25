@@ -5,20 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/repository.dart';
 import 'package:quiet/repository/data/search_result.dart';
 
-final searchMusicProvider = StateNotifierProvider.family<
-    SearchResultStateNotify<Track>, SearchResultState<Track>, String>(
-  (ref, query) => _TrackResultStateNotify(query),
-);
 
 /// 参数随便填，但是如果要监听的话，确保前后传递的参数一致,获取数据要调用Notify
-final mobileSearchMusicProvider = StateNotifierProvider.family<
-    _MobileSearchNotify,
+final searchMusicProvider = StateNotifierProvider.family<
+    _SearchNotify,
     SearchResultState<Track>,
-    String>((ref, query) => _MobileSearchNotify());
+    String>((ref, query) => _SearchNotify());
 
-/// 给移动端使用的搜索功能
-class _MobileSearchNotify extends SearchResultStateNotify<Track> {
-  _MobileSearchNotify() : super();
+class _SearchNotify extends SearchResultStateNotify<Track> {
+  _SearchNotify() : super();
 
   @override
   int get pageSize => 100;
@@ -122,19 +117,4 @@ abstract class SearchResultStateNotify<T>
       origin: _origin,
     );
   }
-}
-
-class _TrackResultStateNotify extends SearchResultStateNotify<Track> {
-  _TrackResultStateNotify(String query) : super() {
-    super.query = query;
-    _loadQuery(1);
-  }
-
-  @override
-  Future<SearchResult<List<Track>>> load(int page, int size) =>
-      networkRepository!
-          .searchMusics(query, page: page, size: size, origin: _origin);
-
-  @override
-  int get pageSize => 100;
 }
