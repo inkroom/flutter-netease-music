@@ -239,6 +239,7 @@ class Repository extends MusicApi {
     return Future.value(PageResult(
         data:
         r.asValue!.value.songs.map((e) => e.toTrack(e.privilege)).toList(),
+        total: r.asValue!.value.songCount,
         hasMore: r.asValue!.value.hasMore));
   }
 
