@@ -6,6 +6,8 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/component/exceptions.dart';
 import 'package:quiet/providers/settings_provider.dart';
 
@@ -128,6 +130,14 @@ class TracksPlayerImplMobile extends TracksPlayer {
           _current = value;
           _player!.play(value.toMusic(), showNext: true, showPrevious: true);
           notifyPlayStateChanged();
+        }).catchError((onError){
+          if (onError is NetworkException) {
+            toast(Intl.message('networkNotAllow'));
+            // return Future.error(onError);
+          }
+          debugPrint('Failed to get play url: ${onError?.toString()}');
+          toast(Intl.message('getPlayDetailFail'));
+          // return Future.error(onError);
         });
       // } else {
       //   _current = value;

@@ -11,7 +11,7 @@ import '../netease_api.dart';
 
 export 'package:async/async.dart' show Result, ValueResult, ErrorResult;
 
-const int _Origin_ = 1;
+const int _origin_ = 1;
 
 ///enum for [NeteaseRepository.search] param type
 class SearchType {
@@ -484,7 +484,7 @@ class Repository extends MusicApi {
   }
 
   @override
-  int get origin => _Origin_;
+  int get origin => _origin_;
 
   @override
   String get name => "网易云";
@@ -533,7 +533,7 @@ extension _TrackMapper on TracksItem {
       ),
       file: null,
       mp3Url: null,
-      origin: _Origin_,
+      origin: _origin_,
     );
   }
 }

@@ -582,6 +582,7 @@ extension _CloudTrackMapper on neteaseApi.CloudSongItem {
       imageUrl: album.picUri,
       file: null,
       mp3Url: null,
+      origin: 1,
     );
   }
 }
@@ -599,6 +600,7 @@ extension _FmTrackMapper on neteaseApi.FmTrackItem {
             _trackType(fee: privilege.fee, st: privilege.st, cs: privilege.cs),
         file: null,
         mp3Url: null,
+        origin: 1,
       );
 }
 
@@ -662,6 +664,7 @@ extension _TrackMapper on neteaseApi.TracksItem {
       ),
       file: null,
       mp3Url: null,
+      origin: 1,///默认为网易云的
     );
   }
 }
