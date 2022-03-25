@@ -306,12 +306,15 @@ class TrackTile extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 40,
+                    width: 50,
                     child: Align(
                       alignment: AlignmentDirectional.centerEnd,
                       child: Row(
                         children: [
-                          icon(track),
+                          Padding(
+                            child: icon(track),
+                            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          ),
                           IndexOrPlayIcon(index: index, track: track)
                         ],
                       ),
@@ -335,24 +338,16 @@ class TrackTile extends ConsumerWidget {
                       alignment: AlignmentDirectional.centerStart,
                       child: Row(
                         children: [
-                          // if (track.type == TrackType.noCopyright)
-                          trackLabel(Text(
-                            context.strings.tipNoCopyright,
-                            textAlign: TextAlign.center,
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              fontSize: 10,
-                              color: Colors.white,
+                          if (track.type == TrackType.noCopyright)
+                            trackLabel(
+                              context,
+                              context.strings.tipNoCopyright,
                             ),
-                          )),
                           if (track.type == TrackType.vip)
-                            trackLabel(Text(
+                            trackLabel(
+                              context,
                               context.strings.tipVIP,
-                              textAlign: TextAlign.justify,
-                              style: context.textTheme.bodyMedium?.copyWith(
-                                fontSize: 10,
-                                color: Colors.white,
-                              ),
-                            )),
+                            ),
                           Expanded(
                             child: Text(
                               (track.type != TrackType.free ? ' ' : '') +

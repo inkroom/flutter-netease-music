@@ -46,23 +46,15 @@ class TrackTile extends ConsumerWidget {
                   Row(
                     children: [
                       if (track.type == TrackType.noCopyright)
-                      trackLabel(Text(
-                        context.strings.tipNoCopyright,
-                        textAlign: TextAlign.center,
-                        style: context.textTheme.bodyMedium?.copyWith(
-                          fontSize: 10,
-                          color: Colors.white,
+                        trackLabel(
+                          context,
+                          context.strings.tipNoCopyright,
                         ),
-                      )),
                       if (track.type == TrackType.vip)
-                        trackLabel(Text(
+                        trackLabel(
+                          context,
                           context.strings.tipVIP,
-                          textAlign: TextAlign.justify,
-                          style: context.textTheme.bodyMedium?.copyWith(
-                            fontSize: 10,
-                            color: Colors.white,
-                          ),
-                        )),
+                        ),
                       Expanded(
                           child: Text(
                         (track.type != TrackType.free ? ' ' : '') + track.name,

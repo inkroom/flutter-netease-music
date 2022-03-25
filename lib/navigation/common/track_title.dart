@@ -20,7 +20,7 @@ Widget icon(Track track) {
 }
 
 /// 获取歌曲的一些说明性标签
-Widget trackLabel(Widget child) {
+Widget trackLabel(BuildContext context, String text) {
   return DecoratedBox(
     decoration: BoxDecoration(
         gradient:
@@ -31,8 +31,16 @@ Widget trackLabel(Widget child) {
           BoxShadow(
               color: Colors.black54, offset: Offset(2.0, 2.0), blurRadius: 4.0)
         ]),
-    child:
-        Padding(padding: const EdgeInsets.fromLTRB(3, 1, 3, 1), child: child),
+    child: Padding(
+        padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: context.textTheme.bodyMedium?.copyWith(
+            fontSize: 10,
+            color: Colors.white,
+          ),
+        )),
   );
 }
 
