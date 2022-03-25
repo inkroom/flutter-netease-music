@@ -84,7 +84,10 @@ class _PlayerProgressSliderSnapshot extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Text(positionText ?? '00:00',style: context.primaryTextTheme.bodyMedium,),
+          child: Text(
+            positionText ?? '00:00',
+            style: context.textTheme.bodyMedium,
+          ),
         ),
         Expanded(
             child: Slider(
@@ -105,7 +108,8 @@ class _PlayerProgressSliderSnapshot extends StatelessWidget {
         )),
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Text(durationText ?? '00:00',style: context.primaryTextTheme.bodyMedium),
+          child: Text(durationText ?? '00:00',
+              style: context.textTheme.bodyMedium),
         ),
       ],
     );
