@@ -82,6 +82,7 @@ class _PlayingItemWidget extends ConsumerWidget {
             borderRadius: BorderRadius.circular(10),
             child: QuietImage(
               url: track.imageUrl?.toString(),
+              assets: "assets/playing_page_disc.png",
               width: 48,
               height: 48,
             ),
