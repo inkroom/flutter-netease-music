@@ -53,11 +53,15 @@ void _initialDesktop() async {
   if (Platform.isWindows) {
     // only Windows need this.
     WindowManager.instance.setMinimumSize(const Size(960, 720));
+    // setResizable windows下没有生效，就直接限制最大尺寸;其他平台未测试
+    WindowManager.instance.setMaximumSize(const Size(960, 720));
+      WindowManager.instance.setResizable(false);
   }
 
   assert(() {
     scheduleMicrotask(() async {
       final size = await WindowManager.instance.getSize();
+      WindowManager.instance.setResizable(false);
       if (size.width < 960 || size.height < 720) {
         WindowManager.instance.setSize(const Size(960, 720), animate: true);
       }
