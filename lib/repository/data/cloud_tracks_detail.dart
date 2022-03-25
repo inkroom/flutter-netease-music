@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/services.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -26,6 +28,17 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
       if (value != null) {
         var c = CloudTracksDetail.fromJson(value as Map<String, dynamic>);
         _notify(c.tracks, c.size, c.maxSize, c.trackCount);
+      } else {
+        //赠送一份歌单
+        rootBundle
+            .loadString("assets/gift.json")
+        .then((value) => json.decode(value))
+            .then((value) =>
+                CloudTracksDetail.fromJson( value as Map<String, dynamic>))
+            .then((value) {
+          _save(value.tracks, value.size, value.maxSize, value.trackCount);
+          _notify(value.tracks, value.size, value.maxSize, value.trackCount);
+        });
       }
     }).catchError((onError) => log('读取数据失败=$onError'));
   }
