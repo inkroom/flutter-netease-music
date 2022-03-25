@@ -7,7 +7,6 @@ import 'package:kugou_api/ku_api.dart';
 import 'package:kuwo_api/kuwo_api.dart';
 import 'package:netease_api/netease_api.dart' as neteaseApi;
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 import 'package:quiet/component/cache/cache.dart';
 import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository.dart';
@@ -29,18 +28,17 @@ export 'package:netease_api/netease_api.dart'
 
 class NetworkRepository {
   NetworkRepository(this.cachePath)
-      : _lyricCache = _LyricCache(p.join(cachePath, 'lyrics'));
+      : _lyricCache = _LyricCache(p.join(cachePath));
 
   static Future<void> initialize() async {
     final cookiePath = await getCookieDirectory();
-    final cachePath = await getCacheDirectory();
 
     /// 注册api
     MusicApiContainer.instance.regiester(KuApi(cookiePath));
     MusicApiContainer.instance.regiester(neteaseApi.Repository(cookiePath));
     MusicApiContainer.instance.regiester(KuWoApi(cookiePath));
 
-    networkRepository = NetworkRepository(cachePath);
+    networkRepository = NetworkRepository(await getLyricDirectory());
   }
 
   final String cachePath;
@@ -790,9 +788,9 @@ class _LyricCache implements Cache<String?> {
   Future<String?> get(CacheKey key) async {
     final file = provider.getFile(key);
     if (await file.exists()) {
+      provider.touchFile(file);
       return file.readAsStringSync();
     }
-    provider.touchFile(file);
     return null;
   }
 
