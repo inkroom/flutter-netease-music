@@ -85,9 +85,11 @@ class _SearchTextField extends ConsumerWidget implements PreferredSizeWidget {
                         value: e.origin,
                         groupValue: origin,
                         onChanged: (value) {
-                          ref
-                              .read(mobileSearchMusicProvider('').notifier)
-                              .origin = value!;
+                          if (value != null) {
+                            ref
+                                .read(mobileSearchMusicProvider('').notifier)
+                                .origin = value;
+                          }
                         })))
                 .toList(),
           )),
