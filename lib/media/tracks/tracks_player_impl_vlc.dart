@@ -179,6 +179,8 @@ class TracksPlayerImplVlc extends TracksPlayer {
     // scheduleMicrotask(() {
     if (track.file != null) {
       log('从文件播放${track.file}');
+      _current = track;
+      notifyPlayStateChanged();
       _player.open(Media.file(File(track.file!)), autoStart: true);
     } else {
       if (_current == track) {
@@ -192,6 +194,8 @@ class TracksPlayerImplVlc extends TracksPlayer {
           log('获取的播放uri=${value.toString()}');
           if (value.mp3Url != null && value.mp3Url!.isNotEmpty) {
             log('url=${value.mp3Url}');
+            _current = track;
+            notifyPlayStateChanged();
             _player.open(Media.network(value.mp3Url), autoStart: true);
             return value;
           }
@@ -210,8 +214,6 @@ class TracksPlayerImplVlc extends TracksPlayer {
       });
     }
 
-    _current = track;
-    notifyPlayStateChanged();
   }
 
   @override
