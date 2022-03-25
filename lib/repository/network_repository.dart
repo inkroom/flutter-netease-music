@@ -802,7 +802,7 @@ class _LyricCache implements Cache<String?> {
       file.deleteSync();
     }
 
-    file.createSync(recursive: false);
+    file.createSync(recursive: true);
     file.writeAsStringSync(t);
     try {
       return file.exists();
