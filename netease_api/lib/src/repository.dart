@@ -480,7 +480,7 @@ class Repository extends MusicApi {
 
     final l = result.asValue!.value['data'] as List;
     if (l.first['url'] == null) {
-      return Future.error(const MusicException('fail'));
+      return Future.error(PlayDetailException('fail'));
     }
     track.mp3Url = l.first['url'] as String;
     return Future.value(track);

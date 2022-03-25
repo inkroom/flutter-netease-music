@@ -59,7 +59,7 @@ class NetworkRepository {
           .getApi(id.origin)
           .then((value) => value.lyric(id));
     }).then((value) {
-      if (value == null) return Future.error("获取歌词失败");
+      if (value == null) return Future.error(LyricException(''));
       _lyricCache.update(key, value);
       return value;
     });

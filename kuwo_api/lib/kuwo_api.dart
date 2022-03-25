@@ -126,7 +126,7 @@ class KuWoApi extends MusicApi {
 
   @override
   Future<String?> lyric(Track track) {
-    return Future.error(UnsupportedException(''));
+    return Future.error(LyricException(''));
     // return _doRequest(
     //         'https://wwwapi.kugou.com/yy/index.php?r=play%2Fgetdata&hash=${track.extra}&appid=1014&platid=4&album_id=${track.album?.id}',
     //         {
