@@ -71,7 +71,7 @@ class _SearchTextField extends ConsumerWidget implements PreferredSizeWidget {
     log('来源origin = $origin');
 
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.only(left: 8,right: 8,bottom: 8,top: 0),
       child: Column(
         children: [
           SearchOrigin(),
