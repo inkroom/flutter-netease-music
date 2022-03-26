@@ -40,6 +40,7 @@ class TracksPlayerImplMobile extends TracksPlayer {
           log('onCompleted');
           _isPlaying = false;
           notifyPlayStateChanged();
+          skipToNext();
         },
         onDuration: (duration) {
           log('onDuration');
