@@ -5,12 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/repository.dart';
 import 'package:quiet/repository/data/search_result.dart';
 
-
 /// 参数随便填，但是如果要监听的话，确保前后传递的参数一致,获取数据要调用Notify
-final searchMusicProvider = StateNotifierProvider.family<
-    _SearchNotify,
-    SearchResultState<Track>,
-    String>((ref, query) => _SearchNotify());
+final searchMusicProvider = StateNotifierProvider.family<_SearchNotify,
+    SearchResultState<Track>, String>((ref, query) => _SearchNotify());
 
 class _SearchNotify extends SearchResultStateNotify<Track> {
   _SearchNotify() : super();
@@ -18,8 +15,11 @@ class _SearchNotify extends SearchResultStateNotify<Track> {
   @override
   int get pageSize => 100;
 
-  void search(query) {
+  void search(query, {int? origin}) {
     super.query = query;
+    if (origin != null) {
+      super.origin = origin;
+    }
     super._loadQuery(1);
   }
 
@@ -70,6 +70,8 @@ abstract class SearchResultStateNotify<T>
   int _origin = 1;
 
   String query = '';
+
+  int get origin => _origin;
 
   set origin(int origin) {
     if (_origin != origin) {
