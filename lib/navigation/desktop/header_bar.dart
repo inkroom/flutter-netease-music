@@ -124,7 +124,7 @@ class _SearchBar extends HookConsumerWidget {
                   onSubmitted: (value) {
                     if (value.trim().isNotEmpty) {
                       ref
-                          .read(searchMusicProvider('').notifier)
+                          .read(searchMusicProvider(value.trim()).notifier)
                           .search(value.trim());
                       ref.read(navigatorProvider.notifier).navigate(
                           NavigationTargetSearchMusicResult(value.trim()));
