@@ -8,6 +8,7 @@ import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/common/search_origin.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 import 'package:quiet/providers/search_provider.dart';
+import 'package:quiet/repository.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../common/navigation_target.dart';
@@ -35,7 +36,7 @@ class HeaderBar extends StatelessWidget {
               const Expanded(child: _MoveWindow.expand()),
               SizedBox(
                 child: SearchOrigin(),
-                width: 300,
+                width: MusicApiContainer.instance.list.length * 80,
               ),
               const _SearchBar(),
               const SizedBox(width: 10, child: _MoveWindow.expand()),

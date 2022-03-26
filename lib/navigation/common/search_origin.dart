@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import 'package:quiet/providers/search_provider.dart';
 import 'package:quiet/repository.dart';
+import 'package:quiet/component.dart';
 
 /// 搜索来源选择框
 class SearchOrigin extends ConsumerWidget {
@@ -63,6 +64,7 @@ class _RadioListTile<T> extends StatelessWidget {
             Text(
               title,
               overflow: TextOverflow.clip,
+              style: context.textTheme.bodySmall,
             ),
           ]),
           minLeadingWidth: 0,
