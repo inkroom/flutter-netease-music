@@ -1,4 +1,7 @@
 {
+  "applicationLegalese": "仅供个人使用",
+  "updateTitle": "{appName}正在更新",
+  "updateTip": "检测到新版本{version}，即将更新",
   "albumCount": "专辑{count}",
   "videoCount": "视频{count}",
   "artistInfo": "艺人信息",

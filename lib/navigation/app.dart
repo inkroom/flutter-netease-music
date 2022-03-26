@@ -29,25 +29,6 @@ class QuietApp extends ConsumerWidget {
         break;
     }
 
-    /// 当前只支持android平台自动更新
-    if (Platform.isAndroid) {
-      networkRepository?.checkUpdate().then((value) {
-        if (value != null) {
-          toast('当前版本落后，将更新到新版本');
-          UpdateApp.updateApp(
-                  url:
-                      "http://minio.bcyunqian.com/temp/app-v$value-release.apk",
-                  appleId: "375380948",
-                  title: "quiet正在更新",
-                  description: "当前版本落后，将更新到新版本")
-              .then((value) {
-            if (value == -1) {
-              toast('app更新失败');
-            }
-          });
-        }
-      });
-    }
 
     return MaterialApp(
       title: 'Quiet',

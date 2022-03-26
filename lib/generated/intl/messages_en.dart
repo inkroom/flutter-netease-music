@@ -44,7 +44,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m10(value) => "Find ${value} music";
 
-  static String m11(count) => "Video : ${count}";
+  static String m11(version) => "New Version ${version}, Updating";
+
+  static String m12(appName) => "${appName} is updating";
+
+  static String m13(count) => "Video : ${count}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -59,6 +63,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "albumCount": m0,
         "albumShareContent": m1,
         "alreadyBuy": MessageLookupByLibrary.simpleMessage("Payed"),
+        "applicationLegalese":
+            MessageLookupByLibrary.simpleMessage("Only For Special Person"),
         "artistInfo": MessageLookupByLibrary.simpleMessage("Artist"),
         "artists": MessageLookupByLibrary.simpleMessage("Artists"),
         "cloudMusic": MessageLookupByLibrary.simpleMessage("Music List"),
@@ -188,7 +194,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "trackNoCopyright":
             MessageLookupByLibrary.simpleMessage("Track No Copyright"),
         "trackVIP": MessageLookupByLibrary.simpleMessage("Track only for VIP"),
-        "videoCount": m11,
+        "updateTip": m11,
+        "updateTitle": m12,
+        "videoCount": m13,
         "volumeDown": MessageLookupByLibrary.simpleMessage("Volume Down"),
         "volumeUp": MessageLookupByLibrary.simpleMessage("Volume Up")
       };

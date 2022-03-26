@@ -44,7 +44,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m10(value) => "找到 ${value} 首歌曲";
 
-  static String m11(count) => "视频${count}";
+  static String m11(version) => "检测到新版本${version}，即将更新";
+
+  static String m12(appName) => "${appName}正在更新";
+
+  static String m13(count) => "视频${count}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -56,6 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "albumCount": m0,
         "albumShareContent": m1,
         "alreadyBuy": MessageLookupByLibrary.simpleMessage("收藏和赞"),
+        "applicationLegalese": MessageLookupByLibrary.simpleMessage("仅供个人使用"),
         "artistInfo": MessageLookupByLibrary.simpleMessage("艺人信息"),
         "artists": MessageLookupByLibrary.simpleMessage("歌手"),
         "cloudMusic": MessageLookupByLibrary.simpleMessage("歌单"),
@@ -161,7 +166,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "todo": MessageLookupByLibrary.simpleMessage("TBD"),
         "trackNoCopyright": MessageLookupByLibrary.simpleMessage("此音乐暂无版权"),
         "trackVIP": MessageLookupByLibrary.simpleMessage("此音乐为VIP"),
-        "videoCount": m11,
+        "updateTip": m11,
+        "updateTitle": m12,
+        "videoCount": m13,
         "volumeDown": MessageLookupByLibrary.simpleMessage("音量-"),
         "volumeUp": MessageLookupByLibrary.simpleMessage("音量+")
       };

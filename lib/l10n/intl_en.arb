@@ -1,4 +1,7 @@
 {
+  "applicationLegalese": "Only For Special Person",
+  "updateTitle": "{appName} is updating",
+  "updateTip": "New Version {version}, Updating",
   "albumCount": "Album: {count}",
   "videoCount": "Video : {count}",
   "artistInfo": "Artist",

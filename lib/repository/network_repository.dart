@@ -13,7 +13,6 @@ import 'package:quiet/component/cache/cache.dart';
 import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository.dart';
 import 'package:quiet/repository/data/search_result.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import '../component/exceptions.dart';
 
 import './database.dart';
@@ -49,18 +48,11 @@ class NetworkRepository {
 
   /// 检查是否需要更新
   /// 需要更新返回新的版本号，否则返回null
-  Future<String?> checkUpdate() {
+  Future<dynamic> checkUpdate() {
     // 获取网络版本
     return Dio()
         .get("http://minio.bcyunqian.com/temp/output-metadata.json")
-        .then((value) => value.data['elements'][0]['versionName'])
-        .then((v) {
-      // 获取当前版本号
-      return PackageInfo.fromPlatform().then((value) {
-        log('网上的版本好=$v 当前版本好=${value.version}');
-        return value.version != v ? v : null;
-      });
-    });
+        .then((value) => value.data['elements'][0]);
   }
 
   /// Fetch lyric by track id

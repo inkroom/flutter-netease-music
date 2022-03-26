@@ -50,6 +50,36 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Only For Special Person`
+  String get applicationLegalese {
+    return Intl.message(
+      'Only For Special Person',
+      name: 'applicationLegalese',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{appName} is updating`
+  String updateTitle(Object appName) {
+    return Intl.message(
+      '$appName is updating',
+      name: 'updateTitle',
+      desc: '',
+      args: [appName],
+    );
+  }
+
+  /// `New Version {version}, Updating`
+  String updateTip(Object version) {
+    return Intl.message(
+      'New Version $version, Updating',
+      name: 'updateTip',
+      desc: '',
+      args: [version],
+    );
+  }
+
   /// `Album: {count}`
   String albumCount(Object count) {
     return Intl.message(
