@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/component.dart';
 
 import '../../common/settings.dart';
@@ -31,15 +32,22 @@ class PageSettings extends StatelessWidget {
               ListTile(
                 title: Text(context.strings.about),
                 onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AboutDialog(
-                          applicationIcon:
-                              Image.asset("assets/ic_launcher_round.png"),
-                          applicationVersion: "0.3-alpha",
-                        );
-                      });
+                  PackageInfo.fromPlatform().then((value) {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AboutDialog(
+                            applicationIcon: Image.asset(
+                              "assets/ic_launcher_round.png",
+                              width: 50,
+                              height: 50,
+                            ),
+                            applicationVersion: value.version,
+                            applicationLegalese:
+                                context.strings.applicationLegalese,
+                          );
+                        });
+                  });
                 },
               )
             ],
