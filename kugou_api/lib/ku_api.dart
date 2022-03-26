@@ -23,13 +23,13 @@ class KuApi extends MusicApi {
     log('hash=${track.extra}');
 
     return _doRequest(
-        'https://wwwapi.kugou.com/yy/index.php?r=play%2Fgetdata&hash=${track.extra}&appid=1014&platid=4&album_id=${track.album?.id}',
-        {
-          'Cookie':
-          'kg_mid=c64d12df8bef9907d2c2b636167d10a8; kg_dfid=1tyJiN22XC5K3SD5Xz0ojfVx; kg_dfid_collect=d41d8cd98f00b204e9800998ecf8427e'
-        },
-        {},
-        'get')
+            'https://wwwapi.kugou.com/yy/index.php?r=play%2Fgetdata&hash=${track.extra}&appid=1014&platid=4&album_id=${track.album?.id}',
+            {
+              'Cookie':
+                  'kg_mid=c64d12df8bef9907d2c2b636167d10a8; kg_dfid=1tyJiN22XC5K3SD5Xz0ojfVx; kg_dfid_collect=d41d8cd98f00b204e9800998ecf8427e'
+            },
+            {},
+            'get')
         .then((value) => value.transform(utf8.decoder).join())
         .then((value) => json.decode(value))
         .then((e) {
@@ -57,10 +57,10 @@ class KuApi extends MusicApi {
   @override
   Future<PageResult<Track>> search(String keyword, int page, int size) {
     return _doRequest(
-        "https://songsearch.kugou.com/song_search_v2?pagesize=$size&keyword=$keyword&page=$page",
-        {},
-        {},
-        'get')
+            "http://mobilecdn.kugou.com/api/v3/search/song?format=json&keyword=${Uri.encodeComponent(keyword)}&page=${page}&pagesize=${size}&showtype=1",
+            {},
+            {},
+            'get')
         .then((value) => value.transform(utf8.decoder).join())
         .then((value) => json.decode(value))
         .then((value) {
@@ -70,40 +70,43 @@ class KuApi extends MusicApi {
       log('value=$value');
       final total = value['data']['total'];
       List<Track> list = List.empty(growable: true);
-      final s = value['data']['lists'] as List;
+      final s = value['data']['info'] as List;
       log('s=${s}');
       for (var e in s) {
         log('e=$e');
-        final art = e['Singers'] as List;
-
-        log('art=$art');
 
         List<ArtistMini> a = List.empty(growable: true);
-        for (var e in art) {
-          a.add(ArtistMini(id: e['id'], name: e['name'], imageUrl: ''));
-        }
-
+        a.add(ArtistMini(id: -1, name: e['singername'], imageUrl: ''));
+        log('id = ${e['audio_id']}');
         list.add(Track(
-            id: e['Audioid'],
+            id: e['audio_id'],
             uri: '',
-            name: _escape2Html(e['SongName']),
+            name: _escape2Html(e['songname']),
             artists: a,
-            album: (e['AlbumID'] != null && e['AlbumID'] != '')
+            album: (e['album_id'] != null && e['album_id'] != '')
                 ? AlbumMini(
-                id: int.parse(e['AlbumID']),
-                name: e['AlbumName'],
-                picUri: "")
+                    id: int.parse(e['album_id']),
+                    name: e['album_name'],
+                    picUri: "")
                 : null,
             imageUrl: '',
-            duration: Duration(seconds: e['Duration']),
-            type: TrackType.free,
+            duration: Duration(seconds: e['duration']),
+            type: _convertType(e),
             origin: origin,
-            extra: e['FileHash']));
+            extra: e['hash']));
       }
 
       return PageResult(data: list, total: total);
     });
   }
+
+  TrackType _convertType(e){
+    if(e['privilege'] & 3 == 2 ){
+      return TrackType.vip;
+    }
+    return TrackType.free;
+  }
+
 
   @override
   int get origin => 2;
@@ -119,15 +122,14 @@ class KuApi extends MusicApi {
 
   @override
   Future<String?> lyric(Track track) {
-
     return _doRequest(
-        'https://wwwapi.kugou.com/yy/index.php?r=play%2Fgetdata&hash=${track.extra}&appid=1014&platid=4&album_id=${track.album?.id}',
-        {
-          'Cookie':
-          'kg_mid=c64d12df8bef9907d2c2b636167d10a8; kg_dfid=1tyJiN22XC5K3SD5Xz0ojfVx; kg_dfid_collect=d41d8cd98f00b204e9800998ecf8427e'
-        },
-        {},
-        'get')
+            'https://wwwapi.kugou.com/yy/index.php?r=play%2Fgetdata&hash=${track.extra}&appid=1014&platid=4&album_id=${track.album?.id}',
+            {
+              'Cookie':
+                  'kg_mid=c64d12df8bef9907d2c2b636167d10a8; kg_dfid=1tyJiN22XC5K3SD5Xz0ojfVx; kg_dfid_collect=d41d8cd98f00b204e9800998ecf8427e'
+            },
+            {},
+            'get')
         .then((value) => value.transform(utf8.decoder).join())
         .then((value) => json.decode(value))
         .then((e) {
