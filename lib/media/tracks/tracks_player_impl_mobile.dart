@@ -123,22 +123,29 @@ class TracksPlayerImplMobile extends TracksPlayer {
 
   Future<void> _play(Track? value) {
     if (value != null) {
+      if (value.file != null) {
+        log("从文件播放= ${value.file}");
+        _current = value;
+        _player!.play(value.toMusic(), showNext: true, showPrevious: true);
+        notifyPlayStateChanged();
+        return Future.value();
+      }
       // if (value.mp3Url == null || value.mp3Url!.isEmpty) {
-        return networkRepository!.getPlayUrl(value).then((v) {
-          value.mp3Url = v.mp3Url;
-          log('播放器播放的url=${v.mp3Url.toString()} file=${v.file} ${value.toMusic()}');
-          _current = value;
-          _player!.play(value.toMusic(), showNext: true, showPrevious: true);
-          notifyPlayStateChanged();
-        }).catchError((onError){
-          if (onError is NetworkException) {
-            toast(Intl.message('networkNotAllow'));
-            // return Future.error(onError);
-          }
-          debugPrint('Failed to get play url: ${onError?.toString()}');
-          toast(Intl.message('getPlayDetailFail'));
+      return networkRepository!.getPlayUrl(value).then((v) {
+        value.mp3Url = v.mp3Url;
+        log('播放器播放的url=${v.mp3Url.toString()} file=${v.file} ${value.toMusic()}');
+        _current = value;
+        _player!.play(value.toMusic(), showNext: true, showPrevious: true);
+        notifyPlayStateChanged();
+      }).catchError((onError) {
+        if (onError is NetworkException) {
+          toast(Intl.message('networkNotAllow'));
           // return Future.error(onError);
-        });
+        }
+        debugPrint('Failed to get play url: ${onError?.toString()}');
+        toast(Intl.message('getPlayDetailFail'));
+        // return Future.error(onError);
+      });
       // } else {
       //   _current = value;
       //   return _player!
