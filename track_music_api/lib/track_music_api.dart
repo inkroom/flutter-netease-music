@@ -1,6 +1,6 @@
-export 'src/track.dart';
-
 import 'src/track.dart';
+
+export 'src/track.dart';
 
 /// 基础接口
 
@@ -119,11 +119,12 @@ class PlayDetailException extends MusicException {
 class SearchException extends MusicException {
   SearchException(String message) : super(message);
 }
+
 /// 部分api可能不支持某项功能
-class UnsupportedException extends MusicException{
+class UnsupportedException extends MusicException {
   UnsupportedException(String message) : super(message);
 }
 
-class LyricException extends MusicException{
+class LyricException extends MusicException {
   LyricException(String message) : super(message);
 }

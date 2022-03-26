@@ -3,9 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/repository.dart';
 
-import '../../../providers/player_provider.dart';
-import '../../common/track_title.dart';
 import '../../common/playlist/music_list.dart';
+import '../../common/track_title.dart';
 
 class TrackTile extends ConsumerWidget {
   const TrackTile({

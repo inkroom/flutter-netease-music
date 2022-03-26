@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:path/path.dart';
@@ -43,9 +42,7 @@ Future<String> getCookieDirectory() {
         ? getApplicationDocumentsDirectory()
         : Future.value(value));
   }
-  return p
-      .then((value) => join(value.path, 'quiet', 'cookie'))
-      .then(_checkDir);
+  return p.then((value) => join(value.path, 'quiet', 'cookie')).then(_checkDir);
 }
 
 Future<String> getCacheDirectory() {
@@ -55,9 +52,7 @@ Future<String> getCacheDirectory() {
         ? getApplicationDocumentsDirectory()
         : Future.value(value));
   }
-  return p
-      .then((value) => join(value.path, 'quiet', 'cache'))
-      .then(_checkDir);
+  return p.then((value) => join(value.path, 'quiet', 'cache')).then(_checkDir);
 }
 
 /// 图片缓存路径
@@ -68,9 +63,7 @@ Future<String> getThumbDirectory() {
         ? getApplicationDocumentsDirectory()
         : Future.value(value));
   }
-  return p
-      .then((value) => join(value.path, 'quiet', 'images'))
-      .then(_checkDir);
+  return p.then((value) => join(value.path, 'quiet', 'images')).then(_checkDir);
 }
 
 /// 歌词文件缓存位置
@@ -81,9 +74,7 @@ Future<String> getLyricDirectory() {
         ? getApplicationDocumentsDirectory()
         : Future.value(value));
   }
-  return p
-      .then((value) => join(value.path, 'quiet', 'lyrics'))
-      .then(_checkDir);
+  return p.then((value) => join(value.path, 'quiet', 'lyrics')).then(_checkDir);
 }
 
 /// 校验并创建目录

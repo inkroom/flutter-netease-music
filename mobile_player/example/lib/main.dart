@@ -3,8 +3,8 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
-import 'package:provider/provider.dart';
 import 'package:music/music.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(

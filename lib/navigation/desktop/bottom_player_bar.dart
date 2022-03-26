@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -7,7 +5,6 @@ import 'package:quiet/extension.dart';
 import 'package:quiet/material.dart';
 import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/providers/player_provider.dart';
-import 'package:quiet/repository.dart';
 
 import '../../providers/navigator_provider.dart';
 import '../common/buttons.dart';
@@ -325,7 +322,6 @@ class _ProgressBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playingTrack = ref.watch(playingTrackProvider);
-    final player = ref.read(playerProvider);
     if (playingTrack == null) {
       return const SizedBox.shrink();
     }

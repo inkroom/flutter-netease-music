@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:track_music_api/track_music_api.dart';
 
 /// 基础接口
@@ -57,7 +56,7 @@ class KuApi extends MusicApi {
   @override
   Future<PageResult<Track>> search(String keyword, int page, int size) {
     return _doRequest(
-            "http://mobilecdn.kugou.com/api/v3/search/song?format=json&keyword=${Uri.encodeComponent(keyword)}&page=${page}&pagesize=${size}&showtype=1",
+            "http://mobilecdn.kugou.com/api/v3/search/song?format=json&keyword=${Uri.encodeComponent(keyword)}&page=$page&pagesize=$size&showtype=1",
             {},
             {},
             'get')
@@ -71,7 +70,7 @@ class KuApi extends MusicApi {
       final total = value['data']['total'];
       List<Track> list = List.empty(growable: true);
       final s = value['data']['info'] as List;
-      log('s=${s}');
+      log('s=$s');
       for (var e in s) {
         log('e=$e');
 
@@ -100,13 +99,12 @@ class KuApi extends MusicApi {
     });
   }
 
-  TrackType _convertType(e){
-    if(e['privilege'] & 3 == 2 ){
+  TrackType _convertType(e) {
+    if (e['privilege'] & 3 == 2) {
       return TrackType.vip;
     }
     return TrackType.free;
   }
-
 
   @override
   int get origin => 2;

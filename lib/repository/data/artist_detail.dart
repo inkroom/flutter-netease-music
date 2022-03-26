@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-
 import 'package:track_music_api/track_music_api.dart';
 
 part 'artist_detail.g.dart';

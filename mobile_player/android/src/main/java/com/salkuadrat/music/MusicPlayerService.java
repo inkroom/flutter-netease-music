@@ -52,7 +52,7 @@ public class MusicPlayerService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelName = "Music Player";
             NotificationChannel channel = new NotificationChannel(
-                channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                    channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setSound(null, null);
             channel.enableLights(true);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
@@ -69,11 +69,11 @@ public class MusicPlayerService extends Service {
         MediaSessionCompat session = new MediaSessionCompat(getApplicationContext(), "MusicPlayerService");
         MediaStyle mediaStyle = new MediaStyle().setMediaSession(session.getSessionToken());
         NotificationCompat.Builder builder = new NotificationCompat
-            .Builder(getApplicationContext(), channelId)
-            .setContentTitle("")
-            .setContentText("")
-            .setSmallIcon(R.drawable.notification_icon)
-            .setStyle(mediaStyle);
+                .Builder(getApplicationContext(), channelId)
+                .setContentTitle("")
+                .setContentText("")
+                .setSmallIcon(R.drawable.notification_icon)
+                .setStyle(mediaStyle);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             builder.setChannelId(channelId);
@@ -84,7 +84,7 @@ public class MusicPlayerService extends Service {
 
     private PendingIntent pendingIntent(int code, Intent intent) {
         return PendingIntent.getBroadcast(
-            getApplicationContext(), code, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                getApplicationContext(), code, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private NotificationCompat.Action mediaAction(int icon, int code, String title, Intent intent) {
@@ -116,41 +116,41 @@ public class MusicPlayerService extends Service {
         //Log.v("MusicPlayerService", "Duration: " + music.duration);
 
         MediaMetadataCompat metadata = new MediaMetadataCompat.Builder()
-            .putString(MediaMetadata.METADATA_KEY_TITLE, music.title)
-            .putString(MediaMetadata.METADATA_KEY_ARTIST, music.artist)
-            .putString(MediaMetadata.METADATA_KEY_ALBUM, music.album)
-            .putBitmap(MediaMetadata.METADATA_KEY_ART, music.image)
-            .putLong(MediaMetadata.METADATA_KEY_DURATION, music.duration)
-            .build();
+                .putString(MediaMetadata.METADATA_KEY_TITLE, music.title)
+                .putString(MediaMetadata.METADATA_KEY_ARTIST, music.artist)
+                .putString(MediaMetadata.METADATA_KEY_ALBUM, music.album)
+                .putBitmap(MediaMetadata.METADATA_KEY_ART, music.image)
+                .putLong(MediaMetadata.METADATA_KEY_DURATION, music.duration)
+                .build();
 
         session.setMetadata(metadata);
 
         int playbackSpeed = music.isPlaying ? 1 : 0;
         int playbackState = music.isPlaying
-            ? PlaybackStateCompat.STATE_PLAYING
-            : PlaybackStateCompat.STATE_PAUSED;
+                ? PlaybackStateCompat.STATE_PLAYING
+                : PlaybackStateCompat.STATE_PAUSED;
 
         boolean showPrevNext = music.showPrevious || music.showNext;
 
         PlaybackStateCompat state = new PlaybackStateCompat.Builder()
-            .setState(playbackState, music.position, playbackSpeed)
-            .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE |
-                PlaybackStateCompat.ACTION_PLAY |
-                PlaybackStateCompat.ACTION_PAUSE |
-                PlaybackStateCompat.ACTION_SEEK_TO |
-                PlaybackStateCompat.ACTION_STOP |
-                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
-                PlaybackStateCompat.ACTION_SKIP_TO_NEXT)
-            .build();
+                .setState(playbackState, music.position, playbackSpeed)
+                .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE |
+                        PlaybackStateCompat.ACTION_PLAY |
+                        PlaybackStateCompat.ACTION_PAUSE |
+                        PlaybackStateCompat.ACTION_SEEK_TO |
+                        PlaybackStateCompat.ACTION_STOP |
+                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT)
+                .build();
 
         session.setPlaybackState(state);
         session.setActive(true);
 
         MediaStyle mediaStyle = new MediaStyle()
-            .setMediaSession(session.getSessionToken())
-            // For backwards compatibility with Android L and earlier.
-            .setShowCancelButton(true)
-            .setCancelButtonIntent(pendingIntent(4, MusicAction.stop));
+                .setMediaSession(session.getSessionToken())
+                // For backwards compatibility with Android L and earlier.
+                .setShowCancelButton(true)
+                .setCancelButtonIntent(pendingIntent(4, MusicAction.stop));
 
         if (!music.isLoading) {
             if (showPrevNext) {
@@ -161,13 +161,13 @@ public class MusicPlayerService extends Service {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat
-            .Builder(getApplicationContext(), channelId)
-            .setContentTitle(music.artist)
-            .setContentText(music.title)
-            .setLargeIcon(music.image)
-            .setSmallIcon(R.drawable.notification_icon)
-            .setOngoing(music.isPlaying)
-            .setStyle(mediaStyle);
+                .Builder(getApplicationContext(), channelId)
+                .setContentTitle(music.artist)
+                .setContentText(music.title)
+                .setLargeIcon(music.image)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setOngoing(music.isPlaying)
+                .setStyle(mediaStyle);
 
         int secpos = music.position / 1000;
         int hour = secpos / 3600;
@@ -202,13 +202,13 @@ public class MusicPlayerService extends Service {
             R.drawable.media_next, "Next", PlaybackStateCompat.ACTION_SKIP_TO_NEXT);*/
 
         NotificationCompat.Action previous = mediaAction(
-            R.drawable.media_previous, 1, "Previous", MusicAction.previous);
+                R.drawable.media_previous, 1, "Previous", MusicAction.previous);
         NotificationCompat.Action pause = mediaAction(
-            R.drawable.media_pause, 2, "Pause", MusicAction.pause);
+                R.drawable.media_pause, 2, "Pause", MusicAction.pause);
         NotificationCompat.Action play = mediaAction(
-            R.drawable.media_play, 2, "Play", MusicAction.play);
+                R.drawable.media_play, 2, "Play", MusicAction.play);
         NotificationCompat.Action next = mediaAction(
-            R.drawable.media_next, 3, "Next", MusicAction.next);
+                R.drawable.media_next, 3, "Next", MusicAction.next);
 
         if (showPrevNext) {
             builder.addAction(previous);
@@ -245,7 +245,7 @@ public class MusicPlayerService extends Service {
 
     private void detachNotifyFromService() {
         //Log.v("MusicPlayerService", "detachNotifyFromService");
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             stopForeground(STOP_FOREGROUND_DETACH);
         } else {
             stopForeground(false);

@@ -7,6 +7,7 @@ import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
 import 'package:quiet/navigation/common/search_origin.dart';
 import 'package:quiet/navigation/mobile/widgets/track_title.dart';
+
 import '../../../providers/player_provider.dart';
 import '../../../providers/search_provider.dart';
 
@@ -71,7 +72,7 @@ class _SearchTextField extends ConsumerWidget implements PreferredSizeWidget {
     log('来源origin = $origin');
 
     return Padding(
-      padding: const EdgeInsets.only(left: 8,right: 8,bottom: 8,top: 0),
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8, top: 0),
       child: Column(
         children: [
           SearchOrigin(),
@@ -89,9 +90,7 @@ class _SearchTextField extends ConsumerWidget implements PreferredSizeWidget {
             onChanged: (value) {
               log('查询的value=$value');
               if (value.trim().isNotEmpty) {
-                ref
-                    .read(searchMusicProvider('').notifier)
-                    .search(value.trim());
+                ref.read(searchMusicProvider('').notifier).search(value.trim());
               }
             },
           )

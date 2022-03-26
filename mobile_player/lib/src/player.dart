@@ -5,6 +5,21 @@ import 'shared.dart';
 
 /// Music Player
 class MusicPlayer {
+  MusicPlayer({
+    this.onLoading,
+    this.onPlaying,
+    this.onPaused,
+    this.onStopped,
+    this.onCompleted,
+    this.onPlayNext,
+    this.onPlayPrevious,
+    this.onDuration,
+    this.onPosition,
+    this.onError,
+  }) {
+    _init();
+  }
+
   MethodChannel channel = MethodChannel('salkuadrat/musicplayer');
 
   /// Callback to be called when loading music
@@ -36,21 +51,6 @@ class MusicPlayer {
 
   /// Callback to be called when error
   final void Function(String)? onError;
-
-  MusicPlayer({
-    this.onLoading,
-    this.onPlaying,
-    this.onPaused,
-    this.onStopped,
-    this.onCompleted,
-    this.onPlayNext,
-    this.onPlayPrevious,
-    this.onDuration,
-    this.onPosition,
-    this.onError,
-  }) {
-    _init();
-  }
 
   void _init() {
     channel.setMethodCallHandler((MethodCall call) async {
@@ -113,7 +113,6 @@ class MusicPlayer {
   /// Play the music
   Future<void> play(Music music,
       {bool showPrevious = false, bool showNext = false}) async {
-
     onDuration?.call(Duration(milliseconds: 0));
     onPosition?.call(Duration(milliseconds: 0));
     await channel.invokeMethod('play', <String, dynamic>{

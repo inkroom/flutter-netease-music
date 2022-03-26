@@ -33,9 +33,9 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
 public class MusicPlugin extends BroadcastReceiver implements
-    FlutterPlugin, MethodCallHandler, ActivityAware,
-    Application.ActivityLifecycleCallbacks,
-    AudioManager.OnAudioFocusChangeListener {
+        FlutterPlugin, MethodCallHandler, ActivityAware,
+        Application.ActivityLifecycleCallbacks,
+        AudioManager.OnAudioFocusChangeListener {
 
     private MethodChannel channel;
     private Context context;
@@ -77,9 +77,9 @@ public class MusicPlugin extends BroadcastReceiver implements
     };
 
     private final AudioAttributes audioAttributes = new AudioAttributes.Builder()
-        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-        .setUsage(AudioAttributes.USAGE_MEDIA)
-        .build();
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .setUsage(AudioAttributes.USAGE_MEDIA)
+            .build();
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -135,7 +135,7 @@ public class MusicPlugin extends BroadcastReceiver implements
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         Log.v("MusicPlayerPlugin", "onAttachedToEngine");
         channel = new MethodChannel(
-            flutterPluginBinding.getBinaryMessenger(), "salkuadrat/musicplayer");
+                flutterPluginBinding.getBinaryMessenger(), "salkuadrat/musicplayer");
         channel.setMethodCallHandler(this);
     }
 
@@ -198,7 +198,7 @@ public class MusicPlugin extends BroadcastReceiver implements
     private void registerNoisyFilter() {
         try {
             context.unregisterReceiver(receiver);
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             //e.printStackTrace();
         }
 
@@ -220,7 +220,7 @@ public class MusicPlugin extends BroadcastReceiver implements
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             music.image = BitmapFactory.decodeFile(
-                new File(context.getCacheDir(), image).getAbsolutePath(), options);
+                    new File(context.getCacheDir(), image).getAbsolutePath(), options);
         } else {
             music.image = null;
         }
@@ -256,7 +256,7 @@ public class MusicPlugin extends BroadcastReceiver implements
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             music.image = BitmapFactory.decodeFile(
-                new File(context.getCacheDir(), image).getAbsolutePath(), options);
+                    new File(context.getCacheDir(), image).getAbsolutePath(), options);
         } else {
             music.image = null;
         }
@@ -370,12 +370,12 @@ public class MusicPlugin extends BroadcastReceiver implements
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             audioFocus = new AudioFocusRequest
-                .Builder(AudioManager.AUDIOFOCUS_GAIN)
-                .setAudioAttributes(audioAttributes)
-                .setWillPauseWhenDucked(true)
-                .setAcceptsDelayedFocusGain(true)
-                .setOnAudioFocusChangeListener(this)
-                .build();
+                    .Builder(AudioManager.AUDIOFOCUS_GAIN)
+                    .setAudioAttributes(audioAttributes)
+                    .setWillPauseWhenDucked(true)
+                    .setAcceptsDelayedFocusGain(true)
+                    .setOnAudioFocusChangeListener(this)
+                    .build();
 
             audioManager.requestAudioFocus(audioFocus);
         }

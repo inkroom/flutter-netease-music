@@ -1,14 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/desktop/home_window.dart';
 import 'package:quiet/providers/navigator_provider.dart';
-import 'package:quiet/repository.dart';
-import 'package:update_app/update_app.dart';
+
 import '../providers/settings_provider.dart';
 import 'mobile/mobile_window.dart';
 
@@ -28,7 +24,6 @@ class QuietApp extends ConsumerWidget {
         home = const MobileWindow();
         break;
     }
-
 
     return MaterialApp(
       title: 'Quiet',

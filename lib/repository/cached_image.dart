@@ -7,7 +7,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:quiet/component/cache/key_value_cache.dart';
 import 'package:quiet/component/exceptions.dart';
 import 'package:quiet/providers/settings_provider.dart';
@@ -18,15 +17,6 @@ const _defaultImageSize = Size.fromWidth(200);
 
 ///image provider for network image
 class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
-  /// Creates an object that fetches the image at the given URL.
-  ///
-  /// The arguments must not be null.
-  CachedImage(this.url, {this.scale = 1.0, this.headers}) : _size = null;
-
-  static CachedImage? _notImage;
-
-  static CachedImage? _imageFail;
-
   factory CachedImage.notImage() {
     return _notImage ??= CachedImage('网络禁止');
   }
@@ -37,6 +27,15 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
 
   const CachedImage._internal(this.url, this._size,
       {this.scale = 1.0, this.headers});
+
+  /// Creates an object that fetches the image at the given URL.
+  ///
+  /// The arguments must not be null.
+  CachedImage(this.url, {this.scale = 1.0, this.headers}) : _size = null;
+
+  static CachedImage? _notImage;
+
+  static CachedImage? _imageFail;
 
   /// The URL from which the image will be fetched.
   final String url;

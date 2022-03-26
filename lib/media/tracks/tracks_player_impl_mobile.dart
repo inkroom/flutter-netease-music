@@ -1,21 +1,17 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:ffi';
-import 'dart:typed_data';
-import 'dart:ui';
 
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:music/music.dart' as player;
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/component/exceptions.dart';
+import 'package:quiet/extension.dart';
 import 'package:quiet/providers/settings_provider.dart';
 
 import '../../repository.dart';
 import 'track_list.dart';
 import 'tracks_player.dart';
-import 'package:music/music.dart' as player;
-import 'package:quiet/extension.dart';
 
 extension _Track on Track {
   player.Music toMusic() {
@@ -27,7 +23,11 @@ extension _Track on Track {
     }
 
     return player.Music(
-        url: file ?? (mp3Url ?? ''), artist: '',album: album?.name, title: name, image: i);
+        url: file ?? (mp3Url ?? ''),
+        artist: '',
+        album: album?.name,
+        title: name,
+        image: i);
   }
 }
 

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quiet/component.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
 import 'package:quiet/navigation/mobile/widgets/track_title.dart';
 import 'package:quiet/providers/cloud_tracks_provider.dart';
 import 'package:quiet/providers/player_provider.dart';
-import 'package:quiet/component.dart';
-import 'package:quiet/repository.dart';
 
 /// 本地音乐歌单
 class LocalMusicList extends ConsumerWidget {

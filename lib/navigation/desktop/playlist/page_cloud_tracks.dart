@@ -51,7 +51,7 @@ class _PageCloudTracksBody extends ConsumerWidget {
               child: _DropUploadArea(
                 child: Padding(
                   /// 右边加个padding，否则滚动条很难拖动
-                  padding:const EdgeInsets.only( right: 5),
+                  padding: const EdgeInsets.only(right: 5),
                   child: ListView.builder(
                     itemCount: t.length,
                     itemBuilder: (context, index) {

@@ -213,7 +213,6 @@ class TracksPlayerImplVlc extends TracksPlayer {
         });
       });
     }
-
   }
 
   @override

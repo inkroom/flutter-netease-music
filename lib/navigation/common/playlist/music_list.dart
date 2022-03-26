@@ -58,11 +58,12 @@ class TrackOperator {
     toast(context.strings.musicDownloading(track.name));
     ref.read(cloudTracksProvider.notifier).download(track).then((value) {
       toast(context.strings.musicDownloaded(value.name));
+
       /// 加入到歌单中
       ref.read(cloudTracksProvider.notifier).add(track);
+
       /// 缓存歌词
       ref.read(lyricProvider(track));
-
     }).catchError((error) {
       log('歌曲下载失败= $track $error');
       toast(context.strings.musicDownloadFail(track.name));

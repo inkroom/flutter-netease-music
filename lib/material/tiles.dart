@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:quiet/material.dart';
 import 'package:quiet/providers/navigator_provider.dart';
-import 'package:quiet/repository/cached_image.dart';
 
 import '../navigation/common/navigation_target.dart';
 

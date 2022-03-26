@@ -1,10 +1,9 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
+import 'package:quiet/component.dart';
 import 'package:quiet/providers/search_provider.dart';
 import 'package:quiet/repository.dart';
-import 'package:quiet/component.dart';
 
 /// 搜索来源选择框
 class SearchOrigin extends ConsumerWidget {
@@ -21,8 +20,7 @@ class SearchOrigin extends ConsumerWidget {
                   groupValue: origin,
                   onChanged: (value) {
                     if (value != null) {
-                      ref.read(searchMusicProvider('').notifier).origin =
-                          value;
+                      ref.read(searchMusicProvider('').notifier).origin = value;
                     }
                   })))
           .toList(),

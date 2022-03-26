@@ -5,8 +5,6 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
-import 'package:kugou_api/ku_api.dart';
-import 'package:netease_api/netease_api.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:quiet/navigation/app.dart';
@@ -14,8 +12,6 @@ import 'package:quiet/pages/splash/page_splash.dart';
 import 'package:quiet/repository.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'media/tracks/tracks_player_impl_mobile.dart';
-import 'providers/settings_provider.dart';
 import 'utils/system/system_fonts.dart';
 
 void main() async {
@@ -55,7 +51,7 @@ void _initialDesktop() async {
     WindowManager.instance.setMinimumSize(const Size(960, 720));
     // setResizable windows下没有生效，就直接限制最大尺寸;其他平台未测试
     WindowManager.instance.setMaximumSize(const Size(960, 720));
-      WindowManager.instance.setResizable(false);
+    WindowManager.instance.setResizable(false);
   }
 
   assert(() {

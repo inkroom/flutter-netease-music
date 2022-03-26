@@ -14,7 +14,7 @@ import java.util.TimerTask;
 import io.flutter.plugin.common.MethodChannel;
 
 public class MusicPlayer implements MediaPlayer.OnPreparedListener,
-    MediaPlayer.OnCompletionListener {
+        MediaPlayer.OnCompletionListener {
 
     private final MediaPlayer player = new MediaPlayer();
 
@@ -32,9 +32,9 @@ public class MusicPlayer implements MediaPlayer.OnPreparedListener,
         this.onPositionUpdated = onPositionUpdated;
 
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
-            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-            .setUsage(AudioAttributes.USAGE_MEDIA)
-            .build();
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .build();
         player.setAudioAttributes(audioAttributes);
 
         // Make sure the media player will acquire a wake-lock while playing.
@@ -59,12 +59,12 @@ public class MusicPlayer implements MediaPlayer.OnPreparedListener,
 
         if (proxy == null) {
             proxy = new HttpProxyCacheServer
-                .Builder(context)
-                .cacheDirectory(context.getExternalCacheDir())
-                .build();
+                    .Builder(context)
+                    .cacheDirectory(context.getExternalCacheDir())
+                    .build();
         }
         String proxyUrl = url;
-        if(url.startsWith("http")){
+        if (url.startsWith("http")) {
             proxyUrl = proxy.getProxyUrl(url);
         }
 

@@ -102,11 +102,11 @@
   "songs": "歌曲",
   "cloudMusicUsage": "歌曲数目",
   "cloudMusicFileDropDescription": "将音乐文件拖放到这里进行上传",
-  "repeatModeRandom":"随机播放",
-  "repeatModeNext":"列表循环",
-  "repeatModeOne":"单曲循环",
-  "repeatModeNone":"播放完停止",
-  "musicDownloading":"{value} 开始下载",
-  "musicDownloaded":"{value} 下载完成",
-  "musicDownloadFail":"{value} 下载失败"
+  "repeatModeRandom": "随机播放",
+  "repeatModeNext": "列表循环",
+  "repeatModeOne": "单曲循环",
+  "repeatModeNone": "播放完停止",
+  "musicDownloading": "{value} 开始下载",
+  "musicDownloaded": "{value} 下载完成",
+  "musicDownloadFail": "{value} 下载失败"
 }

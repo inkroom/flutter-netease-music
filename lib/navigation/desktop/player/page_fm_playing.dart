@@ -69,7 +69,7 @@ class _CoverLayout extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: QuietImage(url:track.imageUrl?.toString()),
+                child: QuietImage(url: track.imageUrl?.toString()),
               ),
               _CoverPlayPauseButton(track: track)
             ],

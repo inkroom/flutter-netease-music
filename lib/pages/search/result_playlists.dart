@@ -56,9 +56,8 @@ class _PlayListTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: QuietImage(
-                      url: (item["coverImgUrl"]),
-                      fit: BoxFit.cover),
+                  child:
+                      QuietImage(url: (item["coverImgUrl"]), fit: BoxFit.cover),
                 ),
               ),
             ),

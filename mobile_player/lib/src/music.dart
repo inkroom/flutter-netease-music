@@ -1,5 +1,15 @@
 /// Class to create instance of music to play using MusicPlayer
 class Music {
+  Music({
+    String? id,
+    required this.url,
+    required this.artist,
+    required this.title,
+    required this.image,
+    this.album,
+    this.duration,
+  }) : this.id = id ?? url;
+
   /// Music ID
   final String id;
 
@@ -20,14 +30,4 @@ class Music {
 
   /// Music Duration
   final Duration? duration;
-
-  Music({
-    String? id,
-    required this.url,
-    required this.artist,
-    this.album,
-    required this.title,
-    required this.image,
-    this.duration,
-  }) : this.id = id ?? url;
 }

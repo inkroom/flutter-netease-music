@@ -1,10 +1,10 @@
 import 'dart:developer';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 
 const String _prefix = 'quiet:settings:';
 
@@ -129,21 +129,6 @@ class Settings extends StateNotifier<SettingState> {
 
 /// 用于实现网络控制的单例模式
 class NetworkSingleton {
-  // 工厂模式
-  factory NetworkSingleton() => _getInstance();
-
-  static NetworkSingleton get instance => _getInstance();
-  static NetworkSingleton _instance = NetworkSingleton._internal();
-
-  NetworkMode _mode = NetworkMode.NONE;
-
-  setMode(NetworkMode mode) {
-    _mode = mode;
-  }
-
-  NetworkMode mode() => _mode;
-  ConnectivityResult? _now;
-
   NetworkSingleton._internal() {
     ProviderContainer().listen<SettingState>(settingStateProvider,
         (previous, next) {
@@ -164,6 +149,21 @@ class NetworkSingleton {
     // 初始化
     _mode = NetworkMode.NONE;
   }
+
+  // 工厂模式
+  factory NetworkSingleton() => _getInstance();
+
+  static NetworkSingleton get instance => _getInstance();
+  static NetworkSingleton _instance = NetworkSingleton._internal();
+
+  NetworkMode _mode = NetworkMode.NONE;
+
+  setMode(NetworkMode mode) {
+    _mode = mode;
+  }
+
+  NetworkMode mode() => _mode;
+  ConnectivityResult? _now;
 
   static NetworkSingleton _getInstance() {
     return _instance;

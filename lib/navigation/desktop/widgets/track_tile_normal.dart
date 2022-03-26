@@ -1,19 +1,15 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/common/buttons.dart';
 import 'package:quiet/navigation/common/like_button.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
-import 'package:quiet/providers/cloud_tracks_provider.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 import 'package:quiet/providers/player_provider.dart';
 import 'package:quiet/repository.dart';
 
-import '../../common/track_title.dart';
 import '../../common/navigation_target.dart';
+import '../../common/track_title.dart';
 import 'highlight_clickable_text.dart';
 
 class TrackTableContainer extends StatelessWidget {
@@ -313,7 +309,7 @@ class TrackTile extends ConsumerWidget {
                         children: [
                           Padding(
                             child: icon(track),
-                            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                           ),
                           IndexOrPlayIcon(index: index, track: track)
                         ],

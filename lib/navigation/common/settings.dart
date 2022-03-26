@@ -86,8 +86,9 @@ class SkipAccompanimentCheckBox extends ConsumerWidget {
     );
   }
 }
+
 /// 切换网络设置
-class NetworkSwitchRadios extends ConsumerWidget{
+class NetworkSwitchRadios extends ConsumerWidget {
   const NetworkSwitchRadios({Key? key}) : super(key: key);
 
   @override

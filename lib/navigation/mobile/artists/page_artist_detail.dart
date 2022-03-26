@@ -9,7 +9,6 @@ import 'package:quiet/navigation/mobile/playlists/page_playlist_detail_selection
 import 'package:quiet/part/part.dart';
 import 'package:quiet/repository.dart';
 
-import '../../../material/tiles.dart';
 import 'artist_header.dart';
 
 ///歌手详情页
@@ -232,7 +231,7 @@ class _PageMVsState extends State<_PageMVs> with AutomaticKeepAliveClientMixin {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(3),
                       child: QuietImage(
-                        url:(mv["imgurl16v9"]),
+                        url: (mv["imgurl16v9"]),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -336,7 +335,7 @@ class _PageArtistIntroductionState extends State<_PageArtistIntroduction>
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(3),
                   child: QuietImage(
-                    url:(topic["rectanglePicUrl"]),
+                    url: (topic["rectanglePicUrl"]),
                     fit: BoxFit.cover,
                   ),
                 ),

@@ -132,7 +132,7 @@ class _FmCover extends ConsumerWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: QuietImage(
-              url:track.imageUrl?.toString(),
+              url: track.imageUrl?.toString(),
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress != null) {
                   child = Container(child: child);

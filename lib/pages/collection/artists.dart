@@ -2,7 +2,6 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:quiet/material.dart';
 import 'package:quiet/navigation/mobile/artists/page_artist_detail.dart';
-import 'package:quiet/repository.dart';
 
 import '../../component/netease/netease_loader.dart';
 

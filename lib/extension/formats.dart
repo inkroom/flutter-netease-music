@@ -8,17 +8,17 @@ import 'package:quiet/repository.dart';
 
 extension ErrorFormat on BuildContext {
   /// human-readable error message
-  String formattedError(dynamic error,{StackTrace? stacktrace}) {
+  String formattedError(dynamic error, {StackTrace? stacktrace}) {
     if (error is NotLoginException) {
       return strings.errorNotLogin;
-    }else if(error is NetworkException){
+    } else if (error is NetworkException) {
       return strings.networkNotAllow;
-    }else if(error is LyricException){
+    } else if (error is LyricException) {
       return strings.noLyric;
-    }else if(error is MusicException){
+    } else if (error is MusicException) {
       return strings.getPlayDetailFail;
     }
-    if(stacktrace!=null){
+    if (stacktrace != null) {
       log('错误堆栈 $stacktrace');
     }
     return '$error';

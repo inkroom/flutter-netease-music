@@ -51,6 +51,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m13(count) => "Video : ${count}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
+
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about": MessageLookupByLibrary.simpleMessage("About"),
         "addToMusicList":

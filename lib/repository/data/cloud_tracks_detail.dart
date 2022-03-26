@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quiet/repository.dart';
 
@@ -20,27 +20,30 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
             trackCount: 0)) {
     _load();
   }
+
   final _kCacheKey = 'user_cloud_tracks_detail';
 
   _load() {
     final data = neteaseLocalData.get<Map<String, dynamic>>(_kCacheKey);
     data.then((value) {
       if (value != null) {
-        var c = CloudTracksDetail.fromJson(value as Map<String, dynamic>);
+        var c = CloudTracksDetail.fromJson(value);
         _notify(c.tracks, c.size, c.maxSize, c.trackCount);
       } else {
         //赠送一份歌单
         rootBundle
             .loadString("assets/gift.json")
-        .then((value) => json.decode(value))
+            .then((value) => json.decode(value))
             .then((value) =>
-                CloudTracksDetail.fromJson( value as Map<String, dynamic>))
+                CloudTracksDetail.fromJson(value as Map<String, dynamic>))
             .then((value) {
           _save(value.tracks, value.size, value.maxSize, value.trackCount);
           _notify(value.tracks, value.size, value.maxSize, value.trackCount);
         });
       }
-    }).catchError((onError) => log('读取数据失败=$onError'));
+    }).catchError((onError) {
+      log('读取数据失败=$onError');
+    });
   }
 
   _notify(List<Track> tracks, int size, int maxSize, int trackCount) {

@@ -6,7 +6,6 @@ import 'package:quiet/part/part.dart';
 import 'package:quiet/repository.dart';
 
 import '../component/netease/counter.dart';
-import '../material/dividers.dart';
 import '../providers/account_provider.dart';
 
 ///我的电台页面

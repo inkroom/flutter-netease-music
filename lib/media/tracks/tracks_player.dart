@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:track_music_api/track_music_api.dart';
+
 import 'track_list.dart';
 import 'tracks_player_impl_mobile.dart';
 import 'tracks_player_impl_vlc.dart';
@@ -27,17 +28,16 @@ enum RepeatMode {
 }
 
 class TracksPlayerState with EquatableMixin {
-  const TracksPlayerState({
-    required this.isBuffering,
-    required this.isPlaying,
-    required this.playingTrack,
-    required this.playingList,
-    required this.duration,
-    required this.volume,
-    required this.mode,
-    required this.error,
-    this.position
-  });
+  const TracksPlayerState(
+      {required this.isBuffering,
+      required this.isPlaying,
+      required this.playingTrack,
+      required this.playingList,
+      required this.duration,
+      required this.volume,
+      required this.mode,
+      required this.error,
+      this.position});
 
   final bool isBuffering;
   final bool isPlaying;
@@ -161,6 +161,7 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   bool get isPlaying;
 
   bool get isBuffering;
+
   /// 当前播放位置
   Duration? get position;
 

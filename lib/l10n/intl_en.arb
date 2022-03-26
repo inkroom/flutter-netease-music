@@ -102,11 +102,11 @@
   "songs": "Songs",
   "cloudMusicUsage": "Music Count",
   "cloudMusicFileDropDescription": "Drop your music file to here to upload.",
-  "repeatModeRandom":"random",
-  "repeatModeNext":"circle",
-  "repeatModeOne":"single repeat",
-  "repeatModeNone":"stop after finish",
-  "musicDownloading":"{value} downloaded",
-  "musicDownloaded":"{value} downloading",
-  "musicDownloadFail":"{value} download fail"
+  "repeatModeRandom": "random",
+  "repeatModeNext": "circle",
+  "repeatModeOne": "single repeat",
+  "repeatModeNone": "stop after finish",
+  "musicDownloading": "{value} downloaded",
+  "musicDownloaded": "{value} downloading",
+  "musicDownloadFail": "{value} download fail"
 }

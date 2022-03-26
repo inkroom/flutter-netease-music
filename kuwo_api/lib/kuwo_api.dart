@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:track_music_api/track_music_api.dart';
 
 /// 基础接口
@@ -99,6 +98,7 @@ class KuWoApi extends MusicApi {
                     : null,
                 imageUrl: '',
                 duration: Duration(seconds: e['duration']),
+
                 /// 1111 为付费的
                 /// 1100和0000都能播放
                 type: e['payInfo']['play'].toString().endsWith("00")
