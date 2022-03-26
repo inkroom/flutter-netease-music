@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:async/async.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kugou_api/ku_api.dart';
 import 'package:kuwo_api/kuwo_api.dart';
@@ -11,7 +13,7 @@ import 'package:quiet/component/cache/cache.dart';
 import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository.dart';
 import 'package:quiet/repository/data/search_result.dart';
-
+import 'package:package_info_plus/package_info_plus.dart';
 import '../component/exceptions.dart';
 
 import './database.dart';
@@ -44,6 +46,22 @@ class NetworkRepository {
   final String cachePath;
 
   final _LyricCache _lyricCache;
+
+  /// 检查是否需要更新
+  /// 需要更新返回新的版本号，否则返回null
+  Future<String?> checkUpdate() {
+    // 获取网络版本
+    return Dio()
+        .get("http://minio.bcyunqian.com/temp/output-metadata.json")
+        .then((value) => value.data['elements'][0]['versionName'])
+        .then((v) {
+      // 获取当前版本号
+      return PackageInfo.fromPlatform().then((value) {
+        log('网上的版本好=$v 当前版本好=${value.version}');
+        return value.version != v ? v : null;
+      });
+    });
+  }
 
   /// Fetch lyric by track id
   Future<String?> lyric(Track id) {
@@ -662,7 +680,9 @@ extension _TrackMapper on neteaseApi.TracksItem {
       ),
       file: null,
       mp3Url: null,
-      origin: 1,///默认为网易云的
+      origin: 1,
+
+      ///默认为网易云的
     );
   }
 }

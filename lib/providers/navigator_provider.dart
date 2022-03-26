@@ -17,7 +17,7 @@ enum NavigationPlatform {
 final debugNavigatorPlatformProvider = StateProvider<NavigationPlatform>(
   (ref) {
     if (defaultTargetPlatform.isDesktop()) {
-      return NavigationPlatform.mobile;
+      return NavigationPlatform.desktop;
     } else {
       return NavigationPlatform.mobile;
     }
@@ -30,7 +30,7 @@ final navigatorProvider =
     final platform = ref.watch(debugNavigatorPlatformProvider);
     switch (platform) {
       case NavigationPlatform.desktop:
-        return MobileNavigatorController();
+        return DesktopNavigatorController();
       case NavigationPlatform.mobile:
         return MobileNavigatorController();
     }

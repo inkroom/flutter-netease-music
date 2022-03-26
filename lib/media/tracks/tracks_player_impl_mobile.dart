@@ -27,7 +27,7 @@ extension _Track on Track {
     }
 
     return player.Music(
-        url: file ?? (mp3Url ?? ''), artist: '', title: name, image: i);
+        url: file ?? (mp3Url ?? ''), artist: '',album: album?.name, title: name, image: i);
   }
 }
 
