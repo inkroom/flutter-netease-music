@@ -49,11 +49,15 @@ class _PageCloudTracksBody extends ConsumerWidget {
             const TrackTableHeader(),
             Expanded(
               child: _DropUploadArea(
-                child: ListView.builder(
-                  itemCount: t.length,
-                  itemBuilder: (context, index) {
-                    return TrackTile(track: t[index], index: index + 1);
-                  },
+                child: Padding(
+                  /// 右边加个padding，否则滚动条很难拖动
+                  padding:const EdgeInsets.only( right: 5),
+                  child: ListView.builder(
+                    itemCount: t.length,
+                    itemBuilder: (context, index) {
+                      return TrackTile(track: t[index], index: index + 1);
+                    },
+                  ),
                 ),
               ),
             ),
