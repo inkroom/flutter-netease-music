@@ -53,101 +53,24 @@ class _TrackTableContainer extends StatefulWidget {
 }
 
 class _TrackTableContainerState extends State<_TrackTableContainer> {
-  double nameWidth = 0;
-  double artistWidth = 0;
-  double albumWidth = 0;
-  double durationWidth = 0;
-  double operatorWidth = 0;
-
-  static const _nameMinWidth = 70.0;
-  static const _artistMinWidth = 70.0;
-  static const _albumMinWidth = 70.0;
-  static const _durationMinWidth = 40.0;
-
-  @override
-  void initState() {
-    super.initState();
-    nameWidth = widget.width * .25;
-    artistWidth = widget.width * .20;
-    albumWidth = widget.width * .25;
-    durationWidth = widget.width * .07;
-    operatorWidth = widget.width * .15;
-  }
-
-  @override
-  void didUpdateWidget(covariant _TrackTableContainer oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.width != widget.width) {
-      // 重新计算宽度
-      final totalWidth =
-          nameWidth + artistWidth + albumWidth + durationWidth + operatorWidth;
-      nameWidth = widget.width * nameWidth / totalWidth;
-      artistWidth = widget.width * artistWidth / totalWidth;
-      albumWidth = widget.width * albumWidth / totalWidth;
-      durationWidth = widget.width * durationWidth / totalWidth;
-      operatorWidth = widget.width * operatorWidth / totalWidth;
-    }
-  }
-
-  void offsetNameArtist(double? delta) {
-    if (delta == null) {
-      return;
-    }
-    setState(() {
-      nameWidth += delta;
-      artistWidth -= delta;
-      if (nameWidth < _nameMinWidth) {
-        artistWidth = artistWidth + nameWidth - _nameMinWidth;
-        nameWidth = _nameMinWidth;
-      } else if (artistWidth < _artistMinWidth) {
-        nameWidth = nameWidth + artistWidth - _artistMinWidth;
-        artistWidth = _artistMinWidth;
-      }
-    });
-  }
-
-  void offsetArtistAlbum(double? delta) {
-    if (delta == null) {
-      return;
-    }
-    setState(() {
-      artistWidth += delta;
-      albumWidth -= delta;
-      if (artistWidth < _artistMinWidth) {
-        albumWidth = albumWidth + artistWidth - _artistMinWidth;
-        artistWidth = _artistMinWidth;
-      } else if (albumWidth < _albumMinWidth) {
-        artistWidth = artistWidth + albumWidth - _albumMinWidth;
-        albumWidth = _albumMinWidth;
-      }
-    });
-  }
-
-  void offsetAlbumDuration(double? delta) {
-    if (delta == null) {
-      return;
-    }
-    setState(() {
-      albumWidth += delta;
-      durationWidth -= delta;
-      if (albumWidth < _albumMinWidth) {
-        durationWidth = durationWidth + albumWidth - _albumMinWidth;
-        albumWidth = _albumMinWidth;
-      } else if (durationWidth < _durationMinWidth) {
-        albumWidth = albumWidth + durationWidth - _durationMinWidth;
-        durationWidth = _durationMinWidth;
-      }
-    });
-  }
+  final int indexFlex = 9;
+  final int likeFlex = 4;
+  final int nameFlex = 40;
+  final int artistFlex = 18;
+  final int albumFlex = 28;
+  final int durationFlex = 6;
+  final int operatorFlex = 14;
 
   @override
   Widget build(BuildContext context) {
     return _TrackTableConfiguration(
-      nameWidth: nameWidth,
-      artistWidth: artistWidth,
-      albumWidth: albumWidth,
-      durationWidth: durationWidth,
-      operatorWidth: operatorWidth,
+      indexFlex: indexFlex,
+      likeFlex: likeFlex,
+      nameFlex: nameFlex,
+      artistFlex: artistFlex,
+      albumFlex: albumFlex,
+      durationFlex: durationFlex,
+      operatorFlex: operatorFlex,
       child: widget.child,
     );
   }
@@ -157,18 +80,22 @@ class _TrackTableConfiguration extends InheritedWidget {
   const _TrackTableConfiguration({
     Key? key,
     required Widget child,
-    required this.nameWidth,
-    required this.artistWidth,
-    required this.albumWidth,
-    required this.durationWidth,
-    required this.operatorWidth,
+    required this.indexFlex,
+    required this.likeFlex,
+    required this.nameFlex,
+    required this.artistFlex,
+    required this.albumFlex,
+    required this.durationFlex,
+    required this.operatorFlex,
   }) : super(key: key, child: child);
 
-  final double nameWidth;
-  final double artistWidth;
-  final double albumWidth;
-  final double durationWidth;
-  final double operatorWidth;
+  final int indexFlex;
+  final int likeFlex;
+  final int nameFlex;
+  final int artistFlex;
+  final int albumFlex;
+  final int durationFlex;
+  final int operatorFlex;
 
   static _TrackTableConfiguration of(BuildContext context) {
     final _TrackTableConfiguration? result =
@@ -179,11 +106,7 @@ class _TrackTableConfiguration extends InheritedWidget {
 
   @override
   bool updateShouldNotify(_TrackTableConfiguration old) {
-    return nameWidth != old.nameWidth ||
-        artistWidth != old.artistWidth ||
-        albumWidth != old.albumWidth ||
-        durationWidth != old.durationWidth ||
-        operatorWidth != old.operatorWidth;
+    return false;
   }
 }
 
@@ -199,67 +122,37 @@ class TrackTableHeader extends StatelessWidget with PreferredSizeWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(width: 80),
-            SizedBox(
-              //歌曲名
-              width: _TrackTableConfiguration.of(context).nameWidth - 2,
+            Spacer(
+              flex: _TrackTableConfiguration.of(context).indexFlex +
+                  _TrackTableConfiguration.of(context).likeFlex +
+                  3,
+            ),
+            Expanded(
               child: Text(context.strings.musicName),
+              flex: _TrackTableConfiguration.of(context).nameFlex,
             ),
-            SizedBox(
-              width: 4,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.resizeLeftRight,
-                child: GestureDetector(
-                  onHorizontalDragUpdate: (details) =>
-                      _TrackTableContainer.of(context)
-                          .offsetNameArtist(details.primaryDelta),
-                ),
-              ),
-            ),
-            SizedBox(
-              //歌手
-              width: _TrackTableConfiguration.of(context).artistWidth - 4,
+
+            /// 歌手
+            Expanded(
               child: Text(context.strings.artists),
+              flex: _TrackTableConfiguration.of(context).artistFlex - 1,
             ),
-            SizedBox(
-              width: 4,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.resizeLeftRight,
-                child: GestureDetector(
-                  onHorizontalDragUpdate: (details) =>
-                      _TrackTableContainer.of(context)
-                          .offsetArtistAlbum(details.primaryDelta),
-                ),
-              ),
-            ),
-            SizedBox(
-              //专辑
-              width: _TrackTableConfiguration.of(context).albumWidth - 4,
+
+            /// 专辑
+            Expanded(
               child: Text(context.strings.album),
+              flex: _TrackTableConfiguration.of(context).albumFlex,
             ),
-            SizedBox(
-              width: 4,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.resizeLeftRight,
-                child: GestureDetector(
-                  onHorizontalDragUpdate: (details) =>
-                      _TrackTableContainer.of(context)
-                          .offsetAlbumDuration(details.primaryDelta),
-                ),
-              ),
-            ),
-            SizedBox(
-              //时长
-              width: _TrackTableConfiguration.of(context).durationWidth - 2,
+
+            /// 时长
+            Expanded(
               child: Text(context.strings.duration),
+              flex: _TrackTableConfiguration.of(context).durationFlex,
             ),
             const SizedBox(width: 20),
-            SizedBox(
-              //基础操作
-              width: _TrackTableConfiguration.of(context).durationWidth - 2,
-              child: const Text(''),
+            Spacer(
+              flex: _TrackTableConfiguration.of(context).operatorFlex,
             ),
-            const SizedBox(width: 10),
           ],
         ),
       ),
@@ -301,24 +194,22 @@ class TrackTile extends ConsumerWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: 50,
-                    child: Align(
-                      alignment: AlignmentDirectional.centerEnd,
-                      child: Row(
-                        children: [
-                          Padding(
-                            child: icon(track),
-                            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          ),
-                          IndexOrPlayIcon(index: index, track: track)
-                        ],
-                      ),
-                    ),
-                  ),
+                  Expanded(
+                      flex: configuration.indexFlex,
+                      child: Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: Row(
+                          children: [
+                            Padding(
+                              child: icon(track),
+                              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                            ),
+                            IndexOrPlayIcon(index: index, track: track)
+                          ],
+                        ),
+                      )),
                   const SizedBox(width: 10),
-                  SizedBox(
-                    width: 20,
+                  Expanded(
                     child: LikeButton(
                       music: track,
                       iconSize: 16,
@@ -326,10 +217,11 @@ class TrackTile extends ConsumerWidget {
                       likedColor: context.colorScheme.primary,
                       color: context.textTheme.caption?.color,
                     ),
+                    flex: configuration.likeFlex,
                   ),
                   const SizedBox(width: 10),
-                  SizedBox(
-                    width: configuration.nameWidth,
+                  Expanded(
+                    flex: configuration.nameFlex,
                     child: Align(
                       alignment: AlignmentDirectional.centerStart,
                       child: Row(
@@ -361,8 +253,8 @@ class TrackTile extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: configuration.artistWidth,
+                  Expanded(
+                    flex: configuration.artistFlex,
                     child: Align(
                       alignment: AlignmentDirectional.centerStart,
                       child: MouseHighlightText(
@@ -388,8 +280,8 @@ class TrackTile extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: configuration.albumWidth,
+                  Expanded(
+                    flex: configuration.albumFlex,
                     child: Align(
                       alignment: AlignmentDirectional.centerStart,
                       child: HighlightClickableText(
@@ -410,31 +302,45 @@ class TrackTile extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: configuration.durationWidth,
-                    child: Text(
-                      track.duration.timeStamp,
-                      style: context.textTheme.caption,
-                    ),
-                  ),
+                  Expanded(
+                      flex: configuration.durationFlex,
+                      child: Text(
+                        track.duration.timeStamp,
+                        style: context.textTheme.caption,
+                      )),
                   const SizedBox(width: 5),
                   Expanded(
+                    flex: configuration.operatorFlex,
                     child: Row(
                       children: [
-                        AppIconButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: () => operator.downloadOperator(track),
-                            icon: track.file != null
-                                ? Icons.download_done_outlined
-                                : Icons.download_outlined),
-                        AppIconButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: () => operator.addOperator(track),
-                            icon: Icons.add_outlined),
-                        AppIconButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: () => operator.deleteOperator(track),
-                            icon: Icons.delete_outline),
+                        InkWell(
+                          onTap: () => operator.downloadOperator(track),
+                          child: Icon(track.file != null
+                              ? Icons.download_done_outlined
+                              : Icons.download_outlined),
+                        ),
+                        InkWell(
+                          onTap: () => operator.addOperator(track),
+                          child: const Icon(Icons.add_outlined),
+                        ),
+                        InkWell(
+                          onTap: () => operator.deleteOperator(track),
+                          child: const Icon(Icons.delete_outline),
+                        ),
+                        // AppIconButton(
+                        //     padding: EdgeInsets.zero,
+                        //     onPressed: () => operator.downloadOperator(track),
+                        //     icon: track.file != null
+                        //         ? Icons.download_done_outlined
+                        //         : Icons.download_outlined),
+                        // AppIconButton(
+                        //     padding: EdgeInsets.zero,
+                        //     onPressed: () => operator.addOperator(track),
+                        //     icon: Icons.add_outlined),
+                        // AppIconButton(
+                        //     padding: EdgeInsets.zero,
+                        //     onPressed: () => operator.deleteOperator(track),
+                        //     icon: Icons.delete_outline),
                       ],
                     ),
                   ),
