@@ -80,6 +80,10 @@ public class MusicPlayer implements MediaPlayer.OnPreparedListener,
         }
     }
 
+    public boolean isPlaying() {
+        return player.isPlaying();
+    }
+
     private void startTask() {
         if (task != null) {
             task.cancel();

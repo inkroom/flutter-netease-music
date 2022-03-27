@@ -48,6 +48,8 @@ public class MusicPlugin extends BroadcastReceiver implements
 
     private final Music music = new Music();
     private boolean bound = false;
+    // 是否被中断，用在响应操作上
+    private boolean abort = false;
 
     private final Runnable onPositionUpdated = () -> {
         Log.v("MusicPlayerPlugin", "onPositionUpdated");
@@ -290,6 +292,7 @@ public class MusicPlugin extends BroadcastReceiver implements
         music.isLoading = false;
         music.isPlaying = false;
         player.pause();
+        abort = false;
 
         if (service != null) {
             service.showNotification(music);
@@ -332,6 +335,7 @@ public class MusicPlugin extends BroadcastReceiver implements
         music.isPlaying = false;
         music.isLoading = false;
         player.stop();
+        abort = false;
     }
 
     private void cancel() {
@@ -486,20 +490,19 @@ public class MusicPlugin extends BroadcastReceiver implements
     public void onAudioFocusChange(int focusChange) {
         switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN:
-                Log.v("MusicPlayerPlugin", "onReceive AUDIOFOCUS_GAIN");
-                resume();
+                Log.v("player focus", "onReceive AUDIOFOCUS_GAIN 中断 = " + abort);
+                // 被打断播放的才继续播放
+                if (abort)
+                    resume();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
-                Log.v("MusicPlayerPlugin", "onReceive AUDIOFOCUS_LOSS");
-                pause();
-                break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                Log.v("MusicPlayerPlugin", "onReceive AUDIOFOCUS_LOSS_TRANSIENT");
-                pause();
-                break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                Log.v("MusicPlayerPlugin", "onReceive AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
-                pause();
+                Log.v("player focus", "onReceive AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK 中断 = " + abort);
+                if (player.isPlaying()) {// 正在播放，当前音乐被打断，否则没有播放，那就不存在打断
+                    pause();
+                    abort = true;
+                }
                 break;
         }
     }
