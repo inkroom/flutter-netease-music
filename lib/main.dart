@@ -4,9 +4,7 @@ import 'dart:io';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:quiet/navigation/app.dart';
 import 'package:quiet/pages/splash/page_splash.dart';
 import 'package:quiet/repository.dart';
@@ -24,14 +22,9 @@ void main() async {
     runApp(ProviderScope(
       child: PageSplash(
         futures: [
-          getApplicationDocumentsDirectory().then((dir) {
-            Hive.init(dir.path);
-            return Hive.openBox<Map>('player');
-          }),
         ],
         builder: (BuildContext context, List<dynamic> data) {
           return MyApp(
-            player: data[0] as Box<Map>,
           );
         },
       ),
@@ -78,9 +71,7 @@ void _initialDesktop() async {
 // }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key, this.player}) : super(key: key);
-
-  final Box<Map>? player;
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

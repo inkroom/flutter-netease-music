@@ -8,7 +8,7 @@ import 'account_provider.dart';
 final allPlayRecordsProvider = FutureProvider<List<PlayRecord>>((ref) async {
   final userId = ref.watch(userIdProvider);
   if (userId == null) {
-    throw NotLoginException('not login');
+    return Future.error(NotLoginException('not login'));
   }
   final records = await networkRepository!.getRecord(
     userId,
