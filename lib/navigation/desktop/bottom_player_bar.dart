@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -347,7 +349,7 @@ class _ProgressBar extends ConsumerWidget {
             ),
             showValueIndicator: ShowValueIndicator.always,
           ),
-          child: PlayerProgressSlider(),
+          child: DurationProgressBar(),
         ),
       ),
     );

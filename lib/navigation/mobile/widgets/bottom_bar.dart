@@ -5,6 +5,7 @@ import 'package:quiet/extension.dart';
 import 'package:quiet/material.dart';
 import 'package:quiet/navigation/common/navigation_target.dart';
 import 'package:quiet/navigation/common/player/lyric_view.dart';
+import 'package:quiet/navigation/common/player_progress.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 
 import '../../../pages/page_playing_list.dart';
@@ -62,6 +63,7 @@ class AnimatedAppBottomBar extends HookConsumerWidget {
     final double height;
     final double navigationBarBottom;
     final double playerBarBottom;
+    final double processBarHeight = 10;
     if (hidePlayerBar && hideNavigationBar) {
       height = 0;
       navigationBarBottom = -playerBarHeight - navigationBarHeight;
@@ -82,6 +84,7 @@ class AnimatedAppBottomBar extends HookConsumerWidget {
 
     return Stack(
       children: [
+        /// 主体部分
         AnimatedPositioned(
           duration: const Duration(milliseconds: 300),
           top: 0,
@@ -95,6 +98,8 @@ class AnimatedAppBottomBar extends HookConsumerWidget {
           ),
           curve: Curves.easeInOut,
         ),
+
+        /// 底部播放栏部分
         AnimatedPositioned(
           height: playerBarHeight,
           left: 0,
@@ -109,6 +114,33 @@ class AnimatedAppBottomBar extends HookConsumerWidget {
             child: const BottomPlayerBar(),
           ),
         ),
+
+        /// 进度条
+        AnimatedPositioned(
+          height: processBarHeight,
+          left: 0,
+          right: 0,
+          duration: const Duration(milliseconds: 300),
+
+          /// bottom是调整过的，保证在bottom边缘上
+          bottom: navigationBarHeight +
+              kBottomPlayerBarHeight -
+              processBarHeight / 2,
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 200),
+            opacity: hidePlayerBar ? 0 : 1,
+            curve: Curves.easeIn,
+            child: SliderTheme(
+              data: const SliderThemeData(
+                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
+                showValueIndicator: ShowValueIndicator.always,
+              ),
+              child: PlayerProgressSlider(builder: (context, widget) => widget),
+            ),
+          ),
+        ),
+
+        /// 底部导航栏部分
         AnimatedPositioned(
           duration: const Duration(milliseconds: 300),
           bottom: navigationBarBottom,
@@ -157,66 +189,65 @@ class BottomPlayerBar extends ConsumerWidget {
     return Material(
       elevation: 8,
       child: InkWell(
-        onTap: () => ref.read(navigatorProvider.notifier).navigate(queue.isFM
-            ? NavigationTargetFmPlaying()
-            : NavigationTargetPlaying()),
-        child: SizedBox(
-          height: kBottomPlayerBarHeight,
-          child: Row(
-            children: [
-              const SizedBox(width: 8),
-              ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(4)),
-                child: QuietImage(
-                  fit: BoxFit.cover,
-                  url: music.imageUrl?.toString(),
-                  assets: "assets/playing_page_disc.png",
-                  width: 48,
-                  height: 48,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: DefaultTextStyle(
-                  style: const TextStyle(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        music.name,
-                        style: context.textTheme.bodyText2,
-                      ),
-                      const SizedBox(height: 2),
-                      DefaultTextStyle(
-                        maxLines: 1,
-                        style: context.textTheme.caption!,
-                        child: ProgressTrackingContainer(
-                          builder: (context) => SubTitleOrLyric(music),
-                        ),
-                      ),
-                    ],
+          onTap: () => ref.read(navigatorProvider.notifier).navigate(queue.isFM
+              ? NavigationTargetFmPlaying()
+              : NavigationTargetPlaying()),
+          child: SizedBox(
+            height: kBottomPlayerBarHeight,
+            child: Row(
+              children: [
+                const SizedBox(width: 8),
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                  child: QuietImage(
+                    fit: BoxFit.cover,
+                    url: music.imageUrl?.toString(),
+                    assets: "assets/playing_page_disc.png",
+                    width: 48,
+                    height: 48,
                   ),
                 ),
-              ),
-              _PauseButton(),
-              if (queue.isFM)
-                LikeButton(music: music)
-              else
-                IconButton(
-                  tooltip: context.strings.playingList,
-                  icon: const Icon(Icons.menu),
-                  onPressed: () {
-                    PlayingListDialog.show(context);
-                  },
+                const SizedBox(width: 8),
+                Expanded(
+                  child: DefaultTextStyle(
+                    style: const TextStyle(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          music.name,
+                          style: context.textTheme.bodyText2,
+                        ),
+                        const SizedBox(height: 2),
+                        DefaultTextStyle(
+                          maxLines: 1,
+                          style: context.textTheme.caption!,
+                          child: ProgressTrackingContainer(
+                            builder: (context) => SubTitleOrLyric(music),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-            ],
-          ),
-        ),
-      ),
+                _PauseButton(),
+                if (queue.isFM)
+                  LikeButton(music: music)
+                else
+                  IconButton(
+                    tooltip: context.strings.playingList,
+                    icon: const Icon(Icons.menu),
+                    onPressed: () {
+                      PlayingListDialog.show(context);
+                    },
+                  ),
+              ],
+            ),
+          )),
     );
   }
 }
