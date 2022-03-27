@@ -61,7 +61,10 @@ class Track with EquatableMixin {
 
   String get displaySubtitle {
     final artist = artists.map((artist) => artist.name).join('/');
-    return '$artist - ${album?.name ?? ''}';
+    if (album != null && album!.name.isNotEmpty) {
+      return '$artist - ${album!.name}';
+    }
+    return artist;
   }
 
   @override
