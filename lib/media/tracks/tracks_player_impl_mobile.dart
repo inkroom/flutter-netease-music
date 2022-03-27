@@ -24,7 +24,7 @@ extension _Track on Track {
 
     return player.Music(
         url: file ?? (mp3Url ?? ''),
-        artist: '',
+        artist: artists.map((artist) => artist.name).join('/'),
         album: album?.name,
         title: name,
         image: i);

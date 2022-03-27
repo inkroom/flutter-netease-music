@@ -169,8 +169,8 @@ public class MusicPlayerService extends Service implements AudioManager.OnAudioF
 
         NotificationCompat.Builder builder = new NotificationCompat
                 .Builder(getApplicationContext(), channelId)
-                .setContentTitle(music.artist)
-                .setContentText(music.title)
+                .setContentTitle(music.title)
+                .setContentText(music.artist)
                 .setLargeIcon(music.image)
                 .setSmallIcon(R.drawable.notification_icon)
                 .setOngoing(music.isPlaying)
