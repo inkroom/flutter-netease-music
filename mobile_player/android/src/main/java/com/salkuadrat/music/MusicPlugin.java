@@ -484,7 +484,7 @@ public class MusicPlugin extends BroadcastReceiver implements
 
     @Override
     public void onAudioFocusChange(int focusChange) {
-        /*switch (focusChange) {
+        switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN:
                 Log.v("MusicPlayerPlugin", "onReceive AUDIOFOCUS_GAIN");
                 resume();
@@ -501,6 +501,6 @@ public class MusicPlugin extends BroadcastReceiver implements
                 Log.v("MusicPlayerPlugin", "onReceive AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
                 pause();
                 break;
-        }*/
+        }
     }
 }

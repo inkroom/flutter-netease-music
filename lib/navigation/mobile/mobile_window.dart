@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository.dart';
 import 'package:update_app/update_app.dart';
 import 'package:window_manager/window_manager.dart';
@@ -27,7 +28,7 @@ class MobileWindow extends StatelessWidget {
     }
 
     /// 当前只支持android平台自动更新
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid && NetworkSingleton.instance.allowNetwork()) {
       networkRepository?.checkUpdate().then((value) {
         if (value != null && value['versionName'] != null) {
           PackageInfo.fromPlatform().then((info) {

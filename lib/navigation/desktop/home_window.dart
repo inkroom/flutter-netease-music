@@ -3,7 +3,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:overlay_support/overlay_support.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:quiet/providers/settings_provider.dart';
+import 'package:quiet/repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../providers/navigator_provider.dart';
 import '../common/navigation_target.dart';
 import '../common/navigator.dart';
@@ -14,12 +18,32 @@ import 'player/page_playing.dart';
 import 'player/page_playing_list.dart';
 import 'widgets/hotkeys.dart';
 import 'widgets/windows_task_bar.dart';
+import 'package:quiet/component.dart';
 
 class HomeWindow extends StatelessWidget {
   const HomeWindow({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    /// 当前只支持android平台自动更新
+    if(NetworkSingleton.instance.allowNetwork()){
+      networkRepository?.checkUpdate().then((value) {
+        if (value != null && value['versionName'] != null) {
+          PackageInfo.fromPlatform().then((info) {
+            if (info.version != value['versionName']) {
+              toast(context.strings.updateTip(value['versionName']));
+              /// 打开网址
+              launch("http://minio.bcyunqian.com/temp/${value['outputFile']}");
+            }
+          });
+        }
+      }).catchError((error) {
+        // showDialog(context: context, builder: (context) => Text('检查失败 $error'));
+        toast('检查失败 $error');
+      });
+    }
+
+
     return const WindowsTaskBar(child: GlobalHotkeys(child: _WindowLayout()));
   }
 }

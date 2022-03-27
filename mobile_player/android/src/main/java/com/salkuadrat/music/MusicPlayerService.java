@@ -5,7 +5,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaMetadata;
 import android.os.Binder;
 import android.os.Build;
@@ -24,7 +26,12 @@ import java.util.Calendar;
 
 import io.flutter.embedding.android.FlutterActivity;
 
-public class MusicPlayerService extends Service {
+public class MusicPlayerService extends Service implements AudioManager.OnAudioFocusChangeListener {
+
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+
+    }
 
     class LocalBinder extends Binder {
         MusicPlayerService service = MusicPlayerService.this;
@@ -32,7 +39,7 @@ public class MusicPlayerService extends Service {
 
     private NotificationManagerCompat manager;
 
-    private final int notifId = 13372589;
+    private final int notifyId = 13372589;
     private final String channelId = "musicplayer";
     private final LocalBinder binder = new LocalBinder();
     private long timeDiff = 0;
@@ -79,7 +86,7 @@ public class MusicPlayerService extends Service {
             builder.setChannelId(channelId);
         }
 
-        startForeground(notifId, builder.build());
+        startForeground(notifyId, builder.build());
     }
 
     private PendingIntent pendingIntent(int code, Intent intent) {
@@ -239,7 +246,7 @@ public class MusicPlayerService extends Service {
         Notification n = builder.build();
 
         if (manager != null) {
-            manager.notify(notifId, n);
+            manager.notify(notifyId, n);
         }
     }
 
@@ -255,7 +262,7 @@ public class MusicPlayerService extends Service {
     public void cancel() {
         //Log.v("MusicPlayerService", "cancelNotification");
         if (manager != null) {
-            manager.cancel(notifId);
+            manager.cancel(notifyId);
         }
     }
 }
