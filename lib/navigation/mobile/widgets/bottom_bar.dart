@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/material.dart';
 import 'package:quiet/navigation/common/navigation_target.dart';
+import 'package:quiet/navigation/common/player/lyric_view.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 
 import '../../../pages/page_playing_list.dart';
@@ -194,9 +195,7 @@ class BottomPlayerBar extends ConsumerWidget {
                         maxLines: 1,
                         style: context.textTheme.caption!,
                         child: ProgressTrackingContainer(
-                          builder: (context) => _SubTitleOrLyric(
-                            music.displaySubtitle,
-                          ),
+                          builder: (context) => SubTitleOrLyric(music),
                         ),
                       ),
                     ],
@@ -219,54 +218,6 @@ class BottomPlayerBar extends ConsumerWidget {
         ),
       ),
     );
-  }
-}
-
-class _SubTitleOrLyric extends ConsumerWidget {
-  const _SubTitleOrLyric(this.subtitle, {Key? key}) : super(key: key);
-
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final music = ref.watch(playingTrackProvider);
-    final playingLyric = ref.watch(lyricProvider(music!));
-    return playingLyric.when(
-        data: (data) {
-          if (data == null) {
-            return Text(subtitle);
-          }
-          final position = ref.read(playerStateProvider.notifier).position;
-          final line =
-              data.getLineByTimeStamp(position?.inMilliseconds ?? 0, 0)?.line;
-          if (line == null || line.isEmpty) {
-            return Text(subtitle);
-          }
-          return Text(line);
-        },
-        // TODO 2022-03-24 歌词获取失败还是会一直刷新 该组件，还是一直走error，
-        error: (error, stack) => Text(subtitle),
-        loading: () => Center(
-              child: SizedBox.square(
-                dimension: 24,
-                child: CircularProgressIndicator(
-                    color: context.textTheme.bodyMedium?.color),
-              ),
-            ));
-    // if (playingLyric == null) {
-    //   return Text(subtitle);
-    // }
-    // final position = ref
-    //     .read(playerStateProvider.notifier)
-    //     .position;
-    // final line =
-    //     playingLyric
-    //         .getLineByTimeStamp(position?.inMilliseconds ?? 0, 0)
-    //         ?.line;
-    // if (line == null || line.isEmpty) {
-    //   return Text(subtitle);
-    // }
-    // return Text(line);
   }
 }
 

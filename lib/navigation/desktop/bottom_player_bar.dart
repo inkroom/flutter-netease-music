@@ -4,6 +4,8 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/material.dart';
 import 'package:quiet/media/tracks/tracks_player.dart';
+import 'package:quiet/navigation/common/player/lyric_view.dart';
+import 'package:quiet/navigation/common/progress_track_container.dart';
 import 'package:quiet/providers/player_provider.dart';
 
 import '../../providers/navigator_provider.dart';
@@ -97,12 +99,14 @@ class _PlayingItemWidget extends ConsumerWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  track.displaySubtitle,
-                  style: context.textTheme.caption,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                ProgressTrackingContainer(
+                    builder: (context) => SubTitleOrLyric(track)),
+                // Text(
+                //   track.displaySubtitle,
+                //   style: context.textTheme.caption,
+                //   maxLines: 1,
+                //   overflow: TextOverflow.ellipsis,
+                // ),
               ],
             ),
           ),
@@ -191,7 +195,7 @@ class _PlayerControlWidget extends StatelessWidget {
         SizedBox(width: 10),
         _PlayingListButton(),
         SizedBox(width: 10),
-        _RpeatModeControl(),
+        _RepeatModeControl(),
         SizedBox(width: 36),
       ],
     );
@@ -199,8 +203,8 @@ class _PlayerControlWidget extends StatelessWidget {
 }
 
 /// 播放模式控制器
-class _RpeatModeControl extends ConsumerWidget {
-  const _RpeatModeControl({Key? key}) : super(key: key);
+class _RepeatModeControl extends ConsumerWidget {
+  const _RepeatModeControl({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -163,5 +164,59 @@ class _LyricView extends ConsumerWidget {
         textAlign: textAlign,
       ),
     );
+  }
+}
+
+/// 只有一行的歌词显示器
+///
+/// 必须使用 [ProgressTrackingContainer] 包裹才生效，原因不明
+///
+/// 同时用于监听歌词的music也不能通过provider获取，可能是拿到的不是同一个track
+///
+class SubTitleOrLyric extends ConsumerWidget {
+  const SubTitleOrLyric(this.music, {Key? key}) : super(key: key);
+
+  final Track music;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playingLyric = ref.watch(lyricProvider(music));
+    final position = ref.read(playerStateProvider.notifier).position;
+
+    return playingLyric.when(
+        data: (data) {
+          if (data == null) {
+            return Text(music.displaySubtitle);
+          }
+          final line =
+              data.getLineByTimeStamp(position?.inMilliseconds ?? 0, 0)?.line;
+          if (line == null || line.isEmpty) {
+            return Text(music.displaySubtitle);
+          }
+          return Text(line);
+        },
+        // TODO 2022-03-24 歌词获取失败还是会一直刷新 该组件，还是一直走error，
+        error: (error, stack) => Text(music.displaySubtitle),
+        loading: () => Center(
+              child: SizedBox.square(
+                dimension: 24,
+                child: CircularProgressIndicator(
+                    color: context.textTheme.bodyMedium?.color),
+              ),
+            ));
+    // if (playingLyric == null) {
+    //   return Text(subtitle);
+    // }
+    // final position = ref
+    //     .read(playerStateProvider.notifier)
+    //     .position;
+    // final line =
+    //     playingLyric
+    //         .getLineByTimeStamp(position?.inMilliseconds ?? 0, 0)
+    //         ?.line;
+    // if (line == null || line.isEmpty) {
+    //   return Text(subtitle);
+    // }
+    // return Text(line);
   }
 }
