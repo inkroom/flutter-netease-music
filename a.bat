@@ -1,1 +1,1 @@
-flutter build apk && mv cp build\app\outputs\apk\release\app-v%1-release.apk bc/temp && mc cp build\app\outputs\apk\release\output-metadata.json bc/temp
+flutter build apk && mc cp build\app\outputs\apk\release\app-v%1-release.apk bc/temp && mc cp build\app\outputs\apk\release\output-metadata.json bc/temp
