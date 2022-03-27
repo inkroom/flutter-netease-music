@@ -23,7 +23,7 @@ class BottomPlayerBar extends StatelessWidget {
     return Material(
       elevation: 10,
       child: SizedBox(
-        height: 70,
+        height: 80,
         child: Column(
           children: [
             const SizedBox(height: 20, child: _ProgressBar()),
