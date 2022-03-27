@@ -26,12 +26,13 @@ class HomeWindow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// 当前只支持android平台自动更新
-    if(NetworkSingleton.instance.allowNetwork()){
+    if (NetworkSingleton.instance.allowNetwork()) {
       networkRepository?.checkUpdate().then((value) {
         if (value != null && value['versionName'] != null) {
           PackageInfo.fromPlatform().then((info) {
             if (info.version != value['versionName']) {
               toast(context.strings.updateTip(value['versionName']));
+
               /// 打开网址
               launch("http://minio.bcyunqian.com/temp/${value['outputFile']}");
             }
@@ -42,9 +43,14 @@ class HomeWindow extends StatelessWidget {
         toast('检查失败 $error');
       });
     }
-
-
-    return const WindowsTaskBar(child: GlobalHotkeys(child: _WindowLayout()));
+    return Container(
+      foregroundDecoration: const BoxDecoration(
+          image: DecorationImage(
+              fit: BoxFit.cover,
+              opacity: 0.2,
+              image: AssetImage('assets/desktop_bg.jpg'))),
+      child: const WindowsTaskBar(child: GlobalHotkeys(child: _WindowLayout())),
+    );
   }
 }
 

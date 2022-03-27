@@ -66,8 +66,15 @@ class _MobileWindowLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: context.colorScheme.background,
-      child: const AnimatedAppBottomBar(
-        child: AppNavigator(),
+      child: Container(
+        foregroundDecoration: const BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                opacity: 0.2,
+                image: AssetImage("assets/mobile_bg.jpg"))),
+        child: const AnimatedAppBottomBar(
+          child: AppNavigator(),
+        ),
       ),
     );
   }
