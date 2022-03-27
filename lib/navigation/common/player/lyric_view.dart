@@ -191,12 +191,23 @@ class SubTitleOrLyric extends ConsumerWidget {
           final line =
               data.getLineByTimeStamp(position?.inMilliseconds ?? 0, 0)?.line;
           if (line == null || line.isEmpty) {
-            return Text(music.displaySubtitle);
+            return Text(
+              music.displaySubtitle,
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
+            );
           }
-          return Text(line);
+          return Text(
+            line,
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+          );
         },
         // TODO 2022-03-24 歌词获取失败还是会一直刷新 该组件，还是一直走error，
-        error: (error, stack) => Text(music.displaySubtitle),
+        error: (error, stack) => Text(
+              music.displaySubtitle,
+              overflow: TextOverflow.ellipsis,
+            ),
         loading: () => Center(
               child: SizedBox.square(
                 dimension: 24,
