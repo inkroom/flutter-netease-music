@@ -36,6 +36,7 @@ class UserFavoriteMusicListNotifier extends CacheableStateNotifier<List<int>> {
 
   @override
   Future<List<int>?> load() async {
+    if (userId == null) return null;
     final value = await networkRepository!.likedList(userId);
     if (value.isValue) {
       return value.asValue!.value;
