@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,10 +16,10 @@ class WindowsTaskBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (defaultTargetPlatform != TargetPlatform.windows) {
-      return child;
+    if (Platform.isWindows) {
+      return _WindowsTaskBar(child: child);
     }
-    return _WindowsTaskBar(child: child);
+    return child;
   }
 }
 
