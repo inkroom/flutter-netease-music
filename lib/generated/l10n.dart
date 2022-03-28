@@ -50,6 +50,16 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Unsupported Origin`
+  String get unsupportedOrigin {
+    return Intl.message(
+      'Unsupported Origin',
+      name: 'unsupportedOrigin',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Newest Version`
   String get newestVersion {
     return Intl.message(

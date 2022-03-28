@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
-import 'package:quiet/navigation/common/buttons.dart';
 import 'package:quiet/navigation/common/like_button.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
 import 'package:quiet/providers/navigator_provider.dart';
@@ -266,6 +266,10 @@ class TrackTile extends ConsumerWidget {
                             .map((artist) => MouseHighlightSpan.highlight(
                                   text: artist.name,
                                   onTap: () {
+                                    if (track.origin != 1) {
+                                      toast(context.strings.unsupportedOrigin);
+                                      return;
+                                    }
                                     if (artist.id == 0) {
                                       return;
                                     }
@@ -287,13 +291,17 @@ class TrackTile extends ConsumerWidget {
                       child: HighlightClickableText(
                         text: track.album?.name ?? '',
                         onTap: () {
-                          final albumId = track.album?.id;
-                          if (albumId == null) {
-                            return;
+                          if (track.origin == 1) {
+                            final albumId = track.album?.id;
+                            if (albumId == null) {
+                              return;
+                            }
+                            ref
+                                .read(navigatorProvider.notifier)
+                                .navigate(NavigationTargetAlbumDetail(albumId));
+                          } else {
+                            toast(context.strings.unsupportedOrigin);
                           }
-                          ref
-                              .read(navigatorProvider.notifier)
-                              .navigate(NavigationTargetAlbumDetail(albumId));
                         },
                         style: context.textTheme.caption,
                         highlightStyle: context.textTheme.caption?.copyWith(

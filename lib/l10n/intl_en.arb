@@ -1,4 +1,5 @@
 {
+  "unsupportedOrigin": "Unsupported Origin",
   "newestVersion": "Newest Version",
   "checkUpdate": "Check Update",
   "deleteTrackConfirm": "Remove {name} From Music List ?",

@@ -199,6 +199,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "trackNoCopyright":
             MessageLookupByLibrary.simpleMessage("Track No Copyright"),
         "trackVIP": MessageLookupByLibrary.simpleMessage("Track only for VIP"),
+        "unsupportedOrigin":
+            MessageLookupByLibrary.simpleMessage("Unsupported Origin"),
         "updateTip": m12,
         "updateTitle": m13,
         "videoCount": m14,

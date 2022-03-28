@@ -1,4 +1,5 @@
 {
+  "unsupportedOrigin": "不支持的来源",
   "newestVersion": "已是最新版本",
   "checkUpdate": "检查更新",
   "deleteTrackConfirm": "是否从歌单中移除{name}？",

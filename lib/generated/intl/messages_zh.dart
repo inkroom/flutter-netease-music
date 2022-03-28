@@ -171,6 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "todo": MessageLookupByLibrary.simpleMessage("TBD"),
         "trackNoCopyright": MessageLookupByLibrary.simpleMessage("此音乐暂无版权"),
         "trackVIP": MessageLookupByLibrary.simpleMessage("此音乐为VIP"),
+        "unsupportedOrigin": MessageLookupByLibrary.simpleMessage("不支持的来源"),
         "updateTip": m12,
         "updateTitle": m13,
         "videoCount": m14,
