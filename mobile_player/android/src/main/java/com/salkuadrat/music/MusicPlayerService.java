@@ -161,7 +161,7 @@ public class MusicPlayerService extends Service implements AudioManager.OnAudioF
 
         if (!music.isLoading) {
             if (showPrevNext) {
-                mediaStyle.setShowActionsInCompactView(1);
+                mediaStyle.setShowActionsInCompactView(1, 2);
             } else {
                 mediaStyle.setShowActionsInCompactView(0);
             }
