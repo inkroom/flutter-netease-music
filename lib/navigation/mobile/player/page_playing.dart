@@ -16,7 +16,7 @@ import 'background.dart';
 class PlayingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final current = ref.read(playerStateProvider).playingTrack;
+    final current = ref.watch(playerStateProvider).playingTrack;
     if (current == null) {
       WidgetsBinding.instance?.scheduleFrameCallback((_) {
         Navigator.of(context).pop();
