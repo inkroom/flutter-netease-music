@@ -87,7 +87,7 @@ class PageSettings extends StatelessWidget {
                         builder: (context) {
                           return AboutDialog(
                             applicationIcon: Image.asset(
-                              "assets/ic_launcher_round.png",
+                              "assets/logo.png",
                               width: 50,
                               height: 50,
                             ),
