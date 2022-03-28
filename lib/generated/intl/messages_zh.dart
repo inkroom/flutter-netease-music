@@ -27,28 +27,30 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(value) => "${value}创建";
 
-  static String m3(value) => "共${value}首";
+  static String m3(name) => "是否从歌单中移除${name}？";
 
-  static String m4(value) => "${value} 下载失败";
+  static String m4(value) => "共${value}首";
 
-  static String m5(value) => "${value} 下载完成";
+  static String m5(value) => "${value} 下载失败";
 
-  static String m6(value) => "${value} 开始下载";
+  static String m6(value) => "${value} 下载完成";
 
-  static String m7(value) => "播放数: ${value}";
+  static String m7(value) => "${value} 开始下载";
 
-  static String m8(username, title, playlistId, userId, shareUserId) =>
+  static String m8(value) => "播放数: ${value}";
+
+  static String m9(username, title, playlistId, userId, shareUserId) =>
       "分享${username}创建的歌单「${title}」: http://music.163.com/playlist/${playlistId}/${userId}/?userid=${shareUserId} (来自@网易云音乐)";
 
-  static String m9(value) => "歌曲数: ${value}";
+  static String m10(value) => "歌曲数: ${value}";
 
-  static String m10(value) => "找到 ${value} 首歌曲";
+  static String m11(value) => "找到 ${value} 首歌曲";
 
-  static String m11(version) => "检测到新版本${version}，即将更新";
+  static String m12(version) => "检测到新版本${version}，即将更新";
 
-  static String m12(appName) => "${appName}正在更新";
+  static String m13(appName) => "${appName}正在更新";
 
-  static String m13(count) => "视频${count}";
+  static String m14(count) => "视频${count}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -63,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "applicationLegalese": MessageLookupByLibrary.simpleMessage("仅供个人使用"),
         "artistInfo": MessageLookupByLibrary.simpleMessage("艺人信息"),
         "artists": MessageLookupByLibrary.simpleMessage("歌手"),
+        "checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
         "cloudMusic": MessageLookupByLibrary.simpleMessage("歌单"),
         "cloudMusicFileDropDescription":
             MessageLookupByLibrary.simpleMessage("将音乐文件拖放到这里进行上传"),
@@ -75,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dailyRecommendDescription":
             MessageLookupByLibrary.simpleMessage("网易云音乐每日推荐歌曲，每天 6:00 更新。"),
         "delete": MessageLookupByLibrary.simpleMessage("删除"),
+        "deleteTrackConfirm": m3,
         "discover": MessageLookupByLibrary.simpleMessage("发现"),
         "downloadMusic": MessageLookupByLibrary.simpleMessage("下载歌曲"),
         "duration": MessageLookupByLibrary.simpleMessage("时长"),
@@ -96,16 +100,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "localMusic": MessageLookupByLibrary.simpleMessage("本地音乐"),
         "login": MessageLookupByLibrary.simpleMessage("立即登录"),
         "loginWithPhone": MessageLookupByLibrary.simpleMessage("手机号登录"),
-        "musicCountFormat": m3,
-        "musicDownloadFail": m4,
-        "musicDownloaded": m5,
-        "musicDownloading": m6,
+        "musicCountFormat": m4,
+        "musicDownloadFail": m5,
+        "musicDownloaded": m6,
+        "musicDownloading": m7,
         "musicName": MessageLookupByLibrary.simpleMessage("歌曲名"),
         "my": MessageLookupByLibrary.simpleMessage("我的"),
         "myDjs": MessageLookupByLibrary.simpleMessage("我的电台"),
         "myMusic": MessageLookupByLibrary.simpleMessage("我的音乐"),
         "needLogin": MessageLookupByLibrary.simpleMessage("需要登录"),
         "networkNotAllow": MessageLookupByLibrary.simpleMessage("当前网络设置不允许"),
+        "newestVersion": MessageLookupByLibrary.simpleMessage("已是最新版本"),
         "nextStep": MessageLookupByLibrary.simpleMessage("下一步"),
         "noLyric": MessageLookupByLibrary.simpleMessage("暂无歌词"),
         "noMusic": MessageLookupByLibrary.simpleMessage("暂无音乐"),
@@ -120,9 +125,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "playlist": MessageLookupByLibrary.simpleMessage("歌单"),
         "playlistLoginDescription":
             MessageLookupByLibrary.simpleMessage("登录以加载你的私人播放列表。"),
-        "playlistPlayCount": m7,
-        "playlistShareContent": m8,
-        "playlistTrackCount": m9,
+        "playlistPlayCount": m8,
+        "playlistShareContent": m9,
+        "playlistTrackCount": m10,
         "projectDescription": MessageLookupByLibrary.simpleMessage(
             "开源项目 https://github.com/boyan01/flutter-netease-music"),
         "recommendPlayLists": MessageLookupByLibrary.simpleMessage("推荐歌单"),
@@ -132,7 +137,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "repeatModeOne": MessageLookupByLibrary.simpleMessage("单曲循环"),
         "repeatModeRandom": MessageLookupByLibrary.simpleMessage("随机播放"),
         "search": MessageLookupByLibrary.simpleMessage("搜索"),
-        "searchMusicResultCount": m10,
+        "searchMusicResultCount": m11,
         "searchPlaylistSongs": MessageLookupByLibrary.simpleMessage("搜索歌单歌曲"),
         "selectRegionDiaCode": MessageLookupByLibrary.simpleMessage("选择地区号码"),
         "selectTheArtist": MessageLookupByLibrary.simpleMessage("请选择要查看的歌手"),
@@ -166,9 +171,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "todo": MessageLookupByLibrary.simpleMessage("TBD"),
         "trackNoCopyright": MessageLookupByLibrary.simpleMessage("此音乐暂无版权"),
         "trackVIP": MessageLookupByLibrary.simpleMessage("此音乐为VIP"),
-        "updateTip": m11,
-        "updateTitle": m12,
-        "videoCount": m13,
+        "updateTip": m12,
+        "updateTitle": m13,
+        "videoCount": m14,
         "volumeDown": MessageLookupByLibrary.simpleMessage("音量-"),
         "volumeUp": MessageLookupByLibrary.simpleMessage("音量+")
       };

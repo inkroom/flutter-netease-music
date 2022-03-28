@@ -1,4 +1,7 @@
 {
+  "newestVersion": "Newest Version",
+  "checkUpdate": "Check Update",
+  "deleteTrackConfirm": "Remove {name} From Music List ?",
   "applicationLegalese": "Only For Special Person",
   "updateTitle": "{appName} is updating",
   "updateTip": "New Version {version}, Updating",

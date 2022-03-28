@@ -27,28 +27,30 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(value) => "Created at ${value}";
 
-  static String m3(value) => "${value} Music";
+  static String m3(name) => "Remove ${name} From Music List ?";
 
-  static String m4(value) => "${value} download fail";
+  static String m4(value) => "${value} Music";
 
-  static String m5(value) => "${value} downloading";
+  static String m5(value) => "${value} download fail";
 
-  static String m6(value) => "${value} downloaded";
+  static String m6(value) => "${value} downloading";
 
-  static String m7(value) => "Play Count: ${value}";
+  static String m7(value) => "${value} downloaded";
 
-  static String m8(username, title, playlistId, userId, shareUserId) =>
+  static String m8(value) => "Play Count: ${value}";
+
+  static String m9(username, title, playlistId, userId, shareUserId) =>
       "The PlayList created by ${username}「${title}」: http://music.163.com/playlist/${playlistId}/${userId}/?userid=${shareUserId} (From @NeteaseCouldMusic)";
 
-  static String m9(value) => "Track Count: ${value}";
+  static String m10(value) => "Track Count: ${value}";
 
-  static String m10(value) => "Find ${value} music";
+  static String m11(value) => "Find ${value} music";
 
-  static String m11(version) => "New Version ${version}, Updating";
+  static String m12(version) => "New Version ${version}, Updating";
 
-  static String m12(appName) => "${appName} is updating";
+  static String m13(appName) => "${appName} is updating";
 
-  static String m13(count) => "Video : ${count}";
+  static String m14(count) => "Video : ${count}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -67,6 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Only For Special Person"),
         "artistInfo": MessageLookupByLibrary.simpleMessage("Artist"),
         "artists": MessageLookupByLibrary.simpleMessage("Artists"),
+        "checkUpdate": MessageLookupByLibrary.simpleMessage("Check Update"),
         "cloudMusic": MessageLookupByLibrary.simpleMessage("Music List"),
         "cloudMusicFileDropDescription": MessageLookupByLibrary.simpleMessage(
             "Drop your music file to here to upload."),
@@ -82,6 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dailyRecommendDescription": MessageLookupByLibrary.simpleMessage(
             "Daily recommend music from Netease cloud music. Refresh every day at 06:00."),
         "delete": MessageLookupByLibrary.simpleMessage("delete"),
+        "deleteTrackConfirm": m3,
         "discover": MessageLookupByLibrary.simpleMessage("Discover"),
         "downloadMusic": MessageLookupByLibrary.simpleMessage("Download Music"),
         "duration": MessageLookupByLibrary.simpleMessage("Duration"),
@@ -112,10 +116,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginWithPhone":
             MessageLookupByLibrary.simpleMessage("login with phone"),
-        "musicCountFormat": m3,
-        "musicDownloadFail": m4,
-        "musicDownloaded": m5,
-        "musicDownloading": m6,
+        "musicCountFormat": m4,
+        "musicDownloadFail": m5,
+        "musicDownloaded": m6,
+        "musicDownloading": m7,
         "musicName": MessageLookupByLibrary.simpleMessage("Music Name"),
         "my": MessageLookupByLibrary.simpleMessage("My"),
         "myDjs": MessageLookupByLibrary.simpleMessage("Dj"),
@@ -123,6 +127,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "needLogin": MessageLookupByLibrary.simpleMessage("Login First"),
         "networkNotAllow": MessageLookupByLibrary.simpleMessage(
             "The Network Setting Not Allow"),
+        "newestVersion": MessageLookupByLibrary.simpleMessage("Newest Version"),
         "nextStep": MessageLookupByLibrary.simpleMessage("next step"),
         "noLyric": MessageLookupByLibrary.simpleMessage("No Lyric"),
         "noMusic": MessageLookupByLibrary.simpleMessage("no music"),
@@ -138,9 +143,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "playlist": MessageLookupByLibrary.simpleMessage("PlayList"),
         "playlistLoginDescription": MessageLookupByLibrary.simpleMessage(
             "Login to discover your playlists."),
-        "playlistPlayCount": m7,
-        "playlistShareContent": m8,
-        "playlistTrackCount": m9,
+        "playlistPlayCount": m8,
+        "playlistShareContent": m9,
+        "playlistTrackCount": m10,
         "projectDescription": MessageLookupByLibrary.simpleMessage(
             "OpenSource project https://github.com/boyan01/flutter-netease-music"),
         "recommendPlayLists":
@@ -153,7 +158,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "repeatModeOne": MessageLookupByLibrary.simpleMessage("single repeat"),
         "repeatModeRandom": MessageLookupByLibrary.simpleMessage("random"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
-        "searchMusicResultCount": m10,
+        "searchMusicResultCount": m11,
         "searchPlaylistSongs":
             MessageLookupByLibrary.simpleMessage("Search Songs"),
         "selectRegionDiaCode":
@@ -194,9 +199,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "trackNoCopyright":
             MessageLookupByLibrary.simpleMessage("Track No Copyright"),
         "trackVIP": MessageLookupByLibrary.simpleMessage("Track only for VIP"),
-        "updateTip": m11,
-        "updateTitle": m12,
-        "videoCount": m13,
+        "updateTip": m12,
+        "updateTitle": m13,
+        "videoCount": m14,
         "volumeDown": MessageLookupByLibrary.simpleMessage("Volume Down"),
         "volumeUp": MessageLookupByLibrary.simpleMessage("Volume Up")
       };

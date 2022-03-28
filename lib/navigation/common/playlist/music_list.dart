@@ -40,7 +40,13 @@ class TrackOperator {
   }
 
   void deleteOperator(Track track) {
-    ref.read(cloudTracksProvider.notifier).remove(track);
+    showConfirmDialog(
+            context, Text(context.strings.deleteTrackConfirm(track.name)))
+        .then((value) {
+      if (value) {
+        ref.read(cloudTracksProvider.notifier).remove(track);
+      }
+    });
   }
 
   void downloadOperator(Track track) {
