@@ -64,22 +64,29 @@ class AnimatedAppBottomBar extends HookConsumerWidget {
     final double navigationBarBottom;
     final double playerBarBottom;
     final double processBarHeight = 10;
+    final double processBarBottom;
     if (hidePlayerBar && hideNavigationBar) {
       height = 0;
       navigationBarBottom = -playerBarHeight - navigationBarHeight;
       playerBarBottom = -playerBarHeight;
+      processBarBottom = -processBarHeight;
     } else if (hidePlayerBar) {
       height = navigationBarHeight + bottomPadding;
       navigationBarBottom = bottomPadding;
       playerBarBottom = -playerBarHeight;
+      processBarBottom = -processBarHeight;
     } else if (hideNavigationBar) {
       height = playerBarHeight + bottomPadding;
       navigationBarBottom = -navigationBarHeight;
       playerBarBottom = bottomPadding;
+      processBarBottom = kBottomPlayerBarHeight - processBarHeight / 2;
     } else {
+      /// 都不隐藏，就显示底部导航栏和播放栏
       navigationBarBottom = bottomPadding;
       playerBarBottom = navigationBarHeight + bottomPadding;
       height = playerBarHeight + navigationBarHeight + bottomPadding;
+      processBarBottom =
+          navigationBarHeight + kBottomPlayerBarHeight - processBarHeight / 2;
     }
 
     return Stack(
@@ -121,15 +128,13 @@ class AnimatedAppBottomBar extends HookConsumerWidget {
           left: 0,
           right: 0,
           duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
 
           /// bottom是调整过的，保证在bottom边缘上
-          bottom: navigationBarHeight +
-              kBottomPlayerBarHeight -
-              processBarHeight / 2,
+          bottom: processBarBottom,
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 200),
             opacity: hidePlayerBar ? 0 : 1,
-            curve: Curves.easeIn,
             child: SliderTheme(
               data: const SliderThemeData(
                 thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
