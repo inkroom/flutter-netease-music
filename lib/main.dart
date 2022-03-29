@@ -21,10 +21,10 @@ void main() async {
   runZonedGuarded(() {
     runApp(ProviderScope(
       child: PageSplash(
-        futures: [
+        futures: const [
         ],
         builder: (BuildContext context, List<dynamic> data) {
-          return MyApp(
+          return const MyApp(
           );
         },
       ),
