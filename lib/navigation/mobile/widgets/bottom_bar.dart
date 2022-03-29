@@ -63,7 +63,7 @@ class AnimatedAppBottomBar extends HookConsumerWidget {
     final double height;
     final double navigationBarBottom;
     final double playerBarBottom;
-    final double processBarHeight = 10;
+    const double processBarHeight = 10;
     final double processBarBottom;
     if (hidePlayerBar && hideNavigationBar) {
       height = 0;
@@ -240,6 +240,13 @@ class BottomPlayerBar extends ConsumerWidget {
                   ),
                 ),
                 _PauseButton(),
+
+                /// 下一曲按钮
+                IconButton(
+                    onPressed: () {
+                      ref.read(playerProvider).skipToNext();
+                    },
+                    icon: const Icon(Icons.skip_next)),
                 if (queue.isFM)
                   LikeButton(music: music)
                 else
