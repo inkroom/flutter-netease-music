@@ -101,13 +101,7 @@ class PlayerControllerBar extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          IconButton(
-              splashRadius: 24,
-              icon: getPlayModeIcon(context, color),
-              onPressed: () {
-                // FIXME
-                // context.player.setPlayMode(context.playMode.next);
-              }),
+          const RepeatModeControl(),
           IconButton(
               iconSize: 36,
               splashRadius: 24,
