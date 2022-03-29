@@ -103,6 +103,7 @@ class Settings extends StateNotifier<SettingState> {
   void attachPreference(SharedPreferences preference) {
     _preferences = preference;
     state = SettingState.fromPreference(preference);
+    NetworkSingleton.instance.setMode(state.networkMode);
   }
 
   void setThemeMode(ThemeMode themeMode) {
@@ -112,6 +113,7 @@ class Settings extends StateNotifier<SettingState> {
 
   void setNetworkMode(NetworkMode networkMode) {
     NetworkSingleton().setMode(networkMode);
+    NetworkSingleton().updateNetwork();
     _preferences.setInt(_keyNetworkMode, networkMode.index);
     state = state.copyWith(networkMode: networkMode);
   }
@@ -129,14 +131,9 @@ class Settings extends StateNotifier<SettingState> {
 
 /// 用于实现网络控制的单例模式
 class NetworkSingleton {
-  NetworkSingleton._internal() {
-    ProviderContainer().listen<SettingState>(settingStateProvider,
-        (previous, next) {
-      log('网络设置变化$next');
-      NetworkSingleton().setMode(next.networkMode);
-    });
+  final f = Connectivity();
 
-    final f = Connectivity();
+  NetworkSingleton._internal() {
     f.checkConnectivity().then((value) {
       _now = value;
     }).catchError((onError) {
@@ -167,6 +164,15 @@ class NetworkSingleton {
 
   static NetworkSingleton _getInstance() {
     return _instance;
+  }
+
+  /// 主动更新网络，用于部分情况下监听网络变化失效问题
+  void updateNetwork() {
+    f.checkConnectivity().then((value) {
+      _now = value;
+    }).catchError((onError) {
+      log('网络状态error,$onError');
+    });
   }
 
   /// 判断是否运行联网
