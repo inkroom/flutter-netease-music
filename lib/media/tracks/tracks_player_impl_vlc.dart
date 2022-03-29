@@ -149,19 +149,21 @@ class TracksPlayerImplVlc extends TracksPlayer {
   }
 
   @override
-  Future<void> skipToNext() async {
-    final next = await getNextTrack();
-    if (next != null) {
-      _playTrack(next);
-    }
+  Future<void> skipToNext() {
+    return getNextTrack().then((value) {
+      if (value != null) {
+        _playTrack(value);
+      }
+    });
   }
 
   @override
   Future<void> skipToPrevious() async {
-    final previous = await getPreviousTrack();
-    if (previous != null) {
-      _playTrack(previous);
-    }
+    getPreviousTrack().then((value) {
+      if (value != null) {
+        _playTrack(value);
+      }
+    });
   }
 
   @override

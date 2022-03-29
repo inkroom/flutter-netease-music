@@ -103,25 +103,27 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   void setTrackList(TrackList trackList);
 
   /// 获取要播放的下一首音乐
+  /// 如果返回了null，代表不能或者不需要继续播放
   Future<Track?> getNextTrack() {
     List<Track> list = trackList.tracks
         .where((element) => element.type == TrackType.free)
         .toList();
-
     final index = list.cast().indexOf(current);
     if (repeatMode == RepeatMode.next) {
-      // 直接播放下一首
+      /// 直接播放下一首
       if (index == -1 || index == list.length - 1) {
         return Future.value(list.first);
       }
       return Future.value(list[index + 1]);
     } else if (repeatMode == RepeatMode.random) {
-      // 随机播放
+      /// 随机播放
       return Future.value(list[Random().nextInt(list.length)]);
-    } else if (repeatMode == RepeatMode.none) {
-      // 单曲循环
+    } else if (repeatMode == RepeatMode.one) {
+      /// 单曲循环
       return Future.value(current);
     }
+
+    /// 播放完停止
     return Future.value(null);
   }
 

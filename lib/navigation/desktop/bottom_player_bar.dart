@@ -3,8 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/material.dart';
-import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/navigation/common/player/lyric_view.dart';
+import 'package:quiet/navigation/common/player/player_actions.dart';
 import 'package:quiet/navigation/common/progress_track_container.dart';
 import 'package:quiet/providers/player_provider.dart';
 
@@ -195,52 +195,14 @@ class _PlayerControlWidget extends StatelessWidget {
         SizedBox(width: 10),
         _PlayingListButton(),
         SizedBox(width: 10),
-        _RepeatModeControl(),
+        RepeatModeControl(),
         SizedBox(width: 36),
       ],
     );
   }
 }
 
-/// 播放模式控制器
-class _RepeatModeControl extends ConsumerWidget {
-  const _RepeatModeControl({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final mode = ref.watch(playerStateProvider).mode;
-    final m = ref.read(playerProvider);
-    IconData i = Icons.autorenew;
-    if (mode == RepeatMode.random) {
-      i = Icons.shuffle;
-    } else if (mode == RepeatMode.next) {
-      i = Icons.next_plan;
-    } else if (mode == RepeatMode.one) {
-      i = Icons.repeat_one;
-    } else if (mode == RepeatMode.none) {
-      i = Icons.close_outlined;
-    }
-    return AppIconButton(
-      icon: i,
-      size: 24,
-      onPressed: () {
-        if (mode == RepeatMode.random) {
-          m.repeatMode = RepeatMode.next;
-          toast(context.strings.repeatModeNext);
-        } else if (mode == RepeatMode.next) {
-          m.repeatMode = RepeatMode.one;
-          toast(context.strings.repeatModeOne);
-        } else if (mode == RepeatMode.one) {
-          m.repeatMode = RepeatMode.none;
-          toast(context.strings.repeatModeNone);
-        } else if (mode == RepeatMode.none) {
-          m.repeatMode = RepeatMode.random;
-          toast(context.strings.repeatModeRandom);
-        }
-      },
-    );
-  }
-}
 
 class _PlayingListButton extends ConsumerWidget {
   const _PlayingListButton({Key? key}) : super(key: key);
