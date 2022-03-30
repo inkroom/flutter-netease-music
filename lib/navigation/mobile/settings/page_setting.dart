@@ -1,13 +1,12 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/component.dart';
-import 'package:quiet/providers/settings_provider.dart';
-import 'package:quiet/repository.dart';
-import 'package:update_app/update_app.dart';
+import 'package:quiet/navigation/common/update_dialog.dart';
 
 import '../../common/settings.dart';
 
@@ -33,49 +32,21 @@ class PageSettings extends StatelessWidget {
           const Divider(height: 20),
           if (!kReleaseMode) const _DebugNavigationPlatformSetting(),
           if (!kReleaseMode) const Divider(height: 20),
-          if (Platform.isAndroid)
-            SettingGroup(
-              children: [
-                ListTile(
-                  title: Text(context.strings.checkUpdate),
-                  onTap: () {
-                    /// 当前只支持android平台自动更新
-                    if (NetworkSingleton.instance.allowNetwork()) {
-                      networkRepository?.checkUpdate().then((value) {
-                        if (value != null && value['versionName'] != null) {
-                          PackageInfo.fromPlatform().then((info) {
-                            if (info.version != value['versionName']) {
-                              toast(context.strings
-                                  .updateTip(value['versionName']));
-                              return UpdateApp.updateApp(
-                                  url:
-                                      "http://minio.bcyunqian.com/temp/${value['outputFile']}",
-                                  appleId: "375380948",
-                                  title:
-                                      context.strings.updateTitle(info.appName),
-                                  description: context.strings
-                                      .updateTip(value['versionName']));
-                            } else {
-                              toast(context.strings.newestVersion);
-                            }
-                            return -2;
-                          }).then((value) {
-                            if (value == -1) {
-                              toast('更新失败');
-                            }
-                          });
-                        }
-                      }).catchError((error) {
-                        // showDialog(context: context, builder: (context) => Text('检查失败 $error'));
-                        toast('检查失败 $error');
-                      });
-                    } else {
-                      toast(context.strings.networkNotAllow);
+          // if (Platform.isAndroid)
+          SettingGroup(
+            children: [
+              ListTile(
+                title: Text(context.strings.checkUpdate),
+                onTap: () {
+                  updateApp(context, onCheckVersion: ((shouldUpdate) {
+                    if (!shouldUpdate) {
+                      toast(context.strings.newestVersion);
                     }
-                  },
-                )
-              ],
-            ),
+                  }));
+                },
+              )
+            ],
+          ),
           SettingGroup(
             children: [
               ListTile(

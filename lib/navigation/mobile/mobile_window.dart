@@ -4,12 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/extension.dart';
-import 'package:quiet/providers/settings_provider.dart';
-import 'package:quiet/repository.dart';
-import 'package:update_app/update_app.dart';
+import 'package:quiet/navigation/common/update_dialog.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../../providers/navigator_provider.dart';
@@ -26,33 +22,7 @@ class MobileWindow extends StatelessWidget {
         child: _MobileWindowLayout(),
       );
     }
-
-    /// 当前只支持android平台自动更新
-    if (Platform.isAndroid && NetworkSingleton.instance.allowNetwork()) {
-      networkRepository?.checkUpdate().then((value) {
-        if (value != null && value['versionName'] != null) {
-          PackageInfo.fromPlatform().then((info) {
-            if (info.version != value['versionName']) {
-              toast(context.strings.updateTip(value['versionName']));
-              return UpdateApp.updateApp(
-                  url: "http://minio.bcyunqian.com/temp/${value['outputFile']}",
-                  appleId: "375380948",
-                  title: context.strings.updateTitle(info.appName),
-                  description: context.strings.updateTip(value['versionName']));
-            }
-            return -2;
-          }).then((value) {
-            if (value == -1) {
-              toast('更新失败');
-            }
-          });
-        }
-      }).catchError((error) {
-        // showDialog(context: context, builder: (context) => Text('检查失败 $error'));
-        toast('检查失败 $error');
-      });
-    }
-
+    updateApp(context);
     return const _MobileWindowLayout();
   }
 }
