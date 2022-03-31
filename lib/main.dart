@@ -16,7 +16,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await loadFallbackFonts();
   NetworkRepository.initialize();
-  DartVLC.initialize();
+  if(Platform.isWindows || Platform.isLinux || Platform.isMacOS){
+    DartVLC.initialize();
+  }
   _initialDesktop();
   runZonedGuarded(() {
     runApp(ProviderScope(
