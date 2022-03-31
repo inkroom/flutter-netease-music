@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kugou_api/ku_api.dart';
 import 'package:kuwo_api/kuwo_api.dart';
+import 'package:migu_api/migu_api.dart';
 import 'package:netease_api/netease_api.dart' as netease_api;
 import 'package:path/path.dart' as p;
 import 'package:quiet/component/cache/cache.dart';
@@ -34,6 +35,7 @@ class NetworkRepository {
     MusicApiContainer.instance.regiester(KuApi(cookiePath));
     MusicApiContainer.instance.regiester(netease_api.Repository(cookiePath));
     MusicApiContainer.instance.regiester(KuWoApi(cookiePath));
+    MusicApiContainer.instance.regiester(MiGuApi(cookiePath));
 
     networkRepository = NetworkRepository(await getLyricDirectory());
   }

@@ -1,0 +1,27 @@
+name: migu_api
+description: 酷我的音乐api
+version: 0.0.1
+homepage: https://github.com/boyan01/flutter-netease-music
+
+publish_to: none
+
+environment:
+  sdk: ">=2.14.0 <3.0.0"
+  flutter: ">=2.5.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  track_music_api:
+    path: ../track_music_api
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.4
+  build_runner: ^2.1.5
+  json_serializable: ^6.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
