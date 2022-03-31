@@ -31,7 +31,7 @@ class PageMusicSearchResult extends ConsumerWidget {
         query: query,
         queryResultDescription: '',
         body: Center(
-          child: Text(context.formattedError(error)),
+          child: Text(context.formattedError(error,stacktrace: stacktrace)),
         ),
       ),
       loading: () => SearchResultScaffold(
