@@ -65,8 +65,11 @@ class _LyricViewLoader extends ConsumerWidget {
     return playingLyric.when(
       data: (lyric) {
         if (lyric == null) {
-          return Center(
-            child: Text(context.strings.noLyric, style: textStyle),
+          return InkWell(
+            child: Center(
+              child: Text(context.strings.noLyric, style: textStyle),
+            ),
+            onTap: onTap,
           );
         }
         return LayoutBuilder(builder: (context, constraints) {
@@ -80,8 +83,11 @@ class _LyricViewLoader extends ConsumerWidget {
           );
         });
       },
-      error: (error, stack) => Center(
-        child: Text(context.formattedError(error), style: textStyle),
+      error: (error, stack) => InkWell(
+        child: Center(
+          child: Text(context.formattedError(error), style: textStyle),
+        ),
+        onTap: onTap,
       ),
       loading: () => Center(
         child: SizedBox.square(
