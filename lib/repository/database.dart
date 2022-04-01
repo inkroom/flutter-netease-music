@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:quiet/repository/setting.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 
@@ -26,6 +27,11 @@ Future<Database> getApplicationDatabase() async {
 
 /// 获取二进制文件存储位置
 Future<String> getApplicationBin() {
+  final path = SettingKey.instance.savePath;
+  return Future.value(path);
+}
+
+Future<String> getApplicationBinDefault() {
   Future<Directory> p = getApplicationDocumentsDirectory();
   if (Platform.isAndroid) {
     p = getExternalStorageDirectory().then((value) => value == null
@@ -80,7 +86,7 @@ Future<String> getLyricDirectory() {
 /// 安装包下载位置
 ///
 Future<String> getApkDirectory() {
-  if(Platform.isWindows){
+  if (Platform.isWindows) {
     return getCacheDirectory();
   }
 
@@ -88,7 +94,8 @@ Future<String> getApkDirectory() {
       .then((value) => value == null
           ? getApplicationDocumentsDirectory()
           : Future.value(value))
-  /// 这里路径不能随便改，要改需要把 android/app/res/xml/update_path.xml 里的一起改了，否则软件包安装会失败
+
+      /// 这里路径不能随便改，要改需要把 android/app/res/xml/update_path.xml 里的一起改了，否则软件包安装会失败
       .then((value) => join(value.path, 'quiet', 'apks'))
       .then(_checkDir);
 }

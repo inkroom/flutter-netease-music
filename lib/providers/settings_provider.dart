@@ -4,86 +4,60 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-const String _prefix = 'quiet:settings:';
-
-const String _keyThemeMode = '$_prefix:themeMode';
-
-const String _keyNetworkMode = '$_prefix:networkMode';
-
-const String _keyCopyright = '$_prefix:copyright';
-
-const String _keySkipWelcomePage = '$_prefix:skipWelcomePage';
+import 'package:quiet/repository/setting.dart';
 
 final settingStateProvider =
     StateNotifierProvider<Settings, SettingState>((ref) {
   return Settings();
 });
 
-enum NetworkMode {
-  /// 仅使用wifi
-  WIFI,
-
-  /// wifi+流量
-  MOBILE,
-
-  /// 不联网
-  NONE
-}
-
 class SettingState with EquatableMixin {
   const SettingState({
     required this.networkMode,
     required this.themeMode,
     required this.skipWelcomePage,
-    required this.copyright,
     required this.skipAccompaniment,
+    required this.savePath,
   });
 
-  factory SettingState.fromPreference(SharedPreferences preference) {
-    final mode = preference.getInt(_keyThemeMode) ?? 0;
-    final networkMode =
-        preference.getInt(_keyNetworkMode) ?? NetworkMode.NONE.index;
-    assert(mode >= 0 && mode < ThemeMode.values.length, 'invalid theme mode');
+  factory SettingState.fromPreference(SettingKey preference) {
+    log("保存位置= ${preference.savePath}");
     return SettingState(
-      networkMode: NetworkMode
-          .values[networkMode.clamp(0, NetworkMode.values.length - 1)],
-      themeMode: ThemeMode.values[mode.clamp(0, ThemeMode.values.length - 1)],
-      skipWelcomePage: preference.getBool(_keySkipWelcomePage) ?? false,
-      copyright: preference.getBool(_keyCopyright) ?? true,
-      skipAccompaniment:
-          preference.getBool('$_prefix:skipAccompaniment') ?? false,
+      savePath: preference.savePath,
+      networkMode: preference.networkMode,
+      themeMode: preference.themeMode,
+      skipWelcomePage: false,
+      skipAccompaniment: preference.skipAccompaniment,
     );
   }
 
+  final String savePath;
   final NetworkMode networkMode;
   final ThemeMode themeMode;
   final bool skipWelcomePage;
-  final bool copyright;
   final bool skipAccompaniment;
 
   @override
   List<Object> get props => [
         themeMode,
         skipWelcomePage,
-        copyright,
         skipAccompaniment,
         networkMode,
+        savePath,
       ];
 
   SettingState copyWith({
+    String? savePath,
     NetworkMode? networkMode,
     ThemeMode? themeMode,
     bool? skipWelcomePage,
-    bool? copyright,
     bool? skipAccompaniment,
   }) =>
       SettingState(
+        savePath: savePath ?? this.savePath,
         networkMode: networkMode ?? this.networkMode,
         themeMode: themeMode ?? this.themeMode,
         skipWelcomePage: skipWelcomePage ?? this.skipWelcomePage,
-        copyright: copyright ?? this.copyright,
         skipAccompaniment: skipAccompaniment ?? this.skipAccompaniment,
       );
 }
@@ -93,38 +67,43 @@ class Settings extends StateNotifier<SettingState> {
       : super(const SettingState(
           networkMode: NetworkMode.NONE,
           themeMode: ThemeMode.system,
-          copyright: false,
           skipWelcomePage: true,
           skipAccompaniment: false,
+          savePath: '',
         ));
 
-  late final SharedPreferences _preferences;
+  late final SettingKey _preferences;
 
-  void attachPreference(SharedPreferences preference) {
+  void attachPreference(SettingKey preference) {
     _preferences = preference;
     state = SettingState.fromPreference(preference);
     NetworkSingleton.instance.setMode(state.networkMode);
   }
 
   void setThemeMode(ThemeMode themeMode) {
-    _preferences.setInt(_keyThemeMode, themeMode.index);
+    _preferences.themeMode = themeMode;
     state = state.copyWith(themeMode: themeMode);
+  }
+
+  void setSavePath(String path) {
+    _preferences.savePath = path;
+    state = state.copyWith(savePath: path);
   }
 
   void setNetworkMode(NetworkMode networkMode) {
     NetworkSingleton().setMode(networkMode);
     NetworkSingleton().updateNetwork();
-    _preferences.setInt(_keyNetworkMode, networkMode.index);
+    _preferences.networkMode = networkMode;
     state = state.copyWith(networkMode: networkMode);
   }
 
   void setSkipWelcomePage() {
-    _preferences.setBool(_keySkipWelcomePage, true);
-    state = state.copyWith(skipWelcomePage: true);
+    // _preferences.;
+    state = state.copyWith(skipWelcomePage: false);
   }
 
   void setSkipAccompaniment({required bool skip}) {
-    _preferences.setBool('$_prefix:skipAccompaniment', skip);
+    _preferences.skipAccompaniment = skip;
     state = state.copyWith(skipAccompaniment: skip);
   }
 }

@@ -50,6 +50,16 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `The File Save Path`
+  String get savePath {
+    return Intl.message(
+      'The File Save Path',
+      name: 'savePath',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Unsupported Origin`
   String get unsupportedOrigin {
     return Intl.message(
@@ -200,10 +210,10 @@ class S {
     );
   }
 
-  /// `use 3/4/5G`
+  /// `Use 3/4/5G`
   String get settingItemOnlyMobile {
     return Intl.message(
-      'use 3/4/5G',
+      'Use 3/4/5G',
       name: 'settingItemOnlyMobile',
       desc: '',
       args: [],

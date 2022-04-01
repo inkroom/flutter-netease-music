@@ -1,7 +1,7 @@
 name: quiet
 description: a music player
 
-version: 0.5.6
+version: 0.6.0
 publish_to: none
 
 environment:
@@ -59,6 +59,7 @@ dependencies:
     path: mobile_player/
   list_tile_more_customizable: ^2.0.1
   package_info_plus: ^1.4.0
+  file_picker: ^4.5.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

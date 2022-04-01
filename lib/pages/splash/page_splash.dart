@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quiet/repository/database.dart';
+import 'package:quiet/repository/setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/account_provider.dart';
@@ -34,8 +37,22 @@ class _PageSplashState extends ConsumerState<PageSplash> {
     final tasks = [
       ref.read(userProvider.notifier).initialize(),
       () async {
-        final preferences = await SharedPreferences.getInstance();
-        ref.read(settingStateProvider.notifier).attachPreference(preferences);
+        SettingKey.init().then((value) {
+          final p = SettingKey.instance.savePath;
+          log("上次保存的位置 $p");
+
+          /// 写入默认存储位置
+          getApplicationBinDefault().then((value) {
+            if (p.isEmpty) {
+              // 只有为空的情况下才写入
+              SettingKey.instance.savePath = value;
+            }
+
+            ref
+                .read(settingStateProvider.notifier)
+                .attachPreference(SettingKey.instance);
+          });
+        });
       }(),
     ];
     final start = DateTime.now().millisecondsSinceEpoch;
