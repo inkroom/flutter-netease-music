@@ -55,9 +55,9 @@ class _TrackTableContainer extends StatefulWidget {
 class _TrackTableContainerState extends State<_TrackTableContainer> {
   final int indexFlex = 9;
   final int likeFlex = 4;
-  final int nameFlex = 40;
+  final int nameFlex = 30;
   final int artistFlex = 18;
-  final int albumFlex = 28;
+  final int albumFlex = 20;
   final int durationFlex = 6;
   final int operatorFlex = 14;
 
