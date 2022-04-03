@@ -157,6 +157,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("stop after finish"),
         "repeatModeOne": MessageLookupByLibrary.simpleMessage("single repeat"),
         "repeatModeRandom": MessageLookupByLibrary.simpleMessage("random"),
+        "savePath": MessageLookupByLibrary.simpleMessage("The File Save Path"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "searchMusicResultCount": m11,
         "searchPlaylistSongs":
@@ -170,7 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "settingItemNoNetwork":
             MessageLookupByLibrary.simpleMessage("No Network"),
         "settingItemOnlyMobile":
-            MessageLookupByLibrary.simpleMessage("use 3/4/5G"),
+            MessageLookupByLibrary.simpleMessage("Use 3/4/5G"),
         "settingItemOnlyWIFI":
             MessageLookupByLibrary.simpleMessage("Only WIFI"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),

@@ -136,6 +136,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "repeatModeNone": MessageLookupByLibrary.simpleMessage("播放完停止"),
         "repeatModeOne": MessageLookupByLibrary.simpleMessage("单曲循环"),
         "repeatModeRandom": MessageLookupByLibrary.simpleMessage("随机播放"),
+        "savePath": MessageLookupByLibrary.simpleMessage("文件保存位置"),
         "search": MessageLookupByLibrary.simpleMessage("搜索"),
         "searchMusicResultCount": m11,
         "searchPlaylistSongs": MessageLookupByLibrary.simpleMessage("搜索歌单歌曲"),

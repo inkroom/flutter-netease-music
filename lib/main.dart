@@ -44,7 +44,7 @@ void _initialDesktop() async {
   await WindowManager.instance.ensureInitialized();
   if (Platform.isWindows) {
     // only Windows need this.
-    WindowManager.instance.setPosition(Offset(2100,300));
+    // WindowManager.instance.setPosition(Offset(2100,300));
     WindowManager.instance.setMinimumSize(const Size(960, 720));
     // setResizable windows下没有生效，就直接限制最大尺寸;其他平台未测试
     WindowManager.instance.setMaximumSize(const Size(960, 720));

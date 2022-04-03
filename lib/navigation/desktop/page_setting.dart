@@ -1,7 +1,12 @@
+import 'dart:developer';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/component/utils/scroll_controller.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/providers/settings_provider.dart';
 
 import '../common/settings.dart';
 
@@ -33,6 +38,9 @@ class PageSetting extends StatelessWidget {
                 style: context.textTheme.bodyMedium),
             const SizedBox(height: 12),
             const NetworkSwitchRadios(),
+            const Divider(height: 40),
+            Text(context.strings.savePath, style: context.textTheme.bodyMedium),
+            const _SavePathSetting(),
             const Divider(height: 40),
             if (!kReleaseMode) const _DebugSetting(),
             Text(context.strings.play, style: context.textTheme.bodyMedium),
@@ -169,6 +177,42 @@ class _DebugSetting extends StatelessWidget {
         const DebugPlatformNavigationRadios(),
         const Divider(height: 20),
       ],
+    );
+  }
+}
+
+class _SavePathSetting extends ConsumerWidget {
+  const _SavePathSetting({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final path = ref.watch(settingStateProvider).savePath;
+
+    /// 因为使用 TextForm 值不会有变化，所以使用 Text 自己绘制一个
+    return InkWell(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(
+                    width: 2,
+                    color: context.textTheme.caption?.color ??
+                        const Color(0xFF000000)))),
+        child: SizedBox(
+          child: Padding(
+            child: Text(path),
+            padding: const EdgeInsets.only(left: 10, top: 10),
+          ),
+          height: 40,
+        ),
+      ),
+      onTap: () {
+        FilePicker.platform.getDirectoryPath().then((value) {
+          if (value != null && value.isNotEmpty) {
+            log("选择的path=$value");
+            ref.read(settingStateProvider.notifier).setSavePath(value);
+          }
+        });
+      },
     );
   }
 }
