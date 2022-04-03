@@ -175,7 +175,7 @@ class _WindowCaptionButtonGroup extends HookWidget {
         isMaximized.value = true;
       }, onWindowRestored: () {
         isMaximized.value = false;
-      }, onWindowMoved: () {
+      }, onMoved: () {
         isMaximized.value = false;
       });
       WindowManager.instance.addListener(listener);
@@ -271,15 +271,15 @@ class _CallbackWindowListener extends WindowListener {
     this.onWindowMinimized,
     this.onWindowMaximized,
     this.onWindowRestored,
-    this.onWindowResized,
-    this.onWindowMoved,
+    this.onResized,
+    this.onMoved,
   });
 
   final VoidCallback? onWindowMinimized;
   final VoidCallback? onWindowMaximized;
   final VoidCallback? onWindowRestored;
-  final VoidCallback? onWindowResized;
-  final VoidCallback? onWindowMoved;
+  final VoidCallback? onResized;
+  final VoidCallback? onMoved;
 
   @override
   void onWindowMaximize() {
@@ -298,11 +298,11 @@ class _CallbackWindowListener extends WindowListener {
 
   @override
   void onWindowResize() {
-    onWindowResized?.call();
+    onResized?.call();
   }
 
   @override
   void onWindowMove() {
-    onWindowMoved?.call();
+    onMoved?.call();
   }
 }
