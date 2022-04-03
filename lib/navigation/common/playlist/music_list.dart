@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
-import 'package:quiet/extension.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:quiet/material.dart';
+import 'package:quiet/extension.dart';
 import 'package:quiet/media/tracks/track_list.dart';
 import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/navigation/common/navigation_target.dart';
@@ -613,11 +613,9 @@ class _IconMore extends ConsumerWidget {
             return;
           }
           if (succeed) {
-            showSimpleNotification(const Text("已添加到收藏"));
+            showToastWidget(const Text("已添加到收藏"));
           } else {
-            showSimpleNotification(const Text("收藏歌曲失败!"),
-                leading: const Icon(Icons.error),
-                background: Theme.of(context).errorColor);
+            showToastWidget(const Text("收藏歌曲失败!"));
           }
         }
         break;

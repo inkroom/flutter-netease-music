@@ -9,3 +9,4 @@ export 'material/player.dart';
 export 'material/tabs.dart';
 export 'material/tiles.dart';
 export 'material/user.dart';
+export 'material/toast.dart';

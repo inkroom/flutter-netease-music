@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/component.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
 import 'package:track_music_api/track_music_api.dart';
@@ -105,7 +106,7 @@ class PlaylistSelectionPageState extends State<PlaylistSelectionPage> {
               await Stream.fromIterable(selectedList).forEach((e) {
                 // TODO(bin): refactor
               });
-              showSimpleNotification(Text("已添加${selectedList.length}首歌曲"));
+              showToastWidget(Text("已添加${selectedList.length}首歌曲"));
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -124,11 +125,10 @@ class PlaylistSelectionPageState extends State<PlaylistSelectionPage> {
                 return;
               }
               if (succeed) {
-                showSimpleNotification(Text("已成功收藏${selectedList.length}首歌曲"));
+                showToastWidget(Text("已成功收藏${selectedList.length}首歌曲"));
               } else {
-                showSimpleNotification(
+                showToastWidget(
                   Text(context.strings.addToPlaylistFailed),
-                  background: Theme.of(context).errorColor,
                 );
               }
             },
@@ -153,13 +153,10 @@ class PlaylistSelectionPageState extends State<PlaylistSelectionPage> {
                   });
                 }
                 if (succeed) {
-                  showSimpleNotification(Text("已删除${selectedList.length}首歌曲"),
-                      background: Theme.of(context).errorColor);
+                  showToastWidget(Text("已删除${selectedList.length}首歌曲"));
                 } else {
-                  showSimpleNotification(
+                  showToastWidget(
                     Text(context.strings.failedToDelete),
-                    leading: const Icon(Icons.error),
-                    background: context.theme.errorColor,
                   );
                 }
               },

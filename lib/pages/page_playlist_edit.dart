@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:quiet/material.dart';
 import 'package:quiet/repository.dart';
 
@@ -32,8 +32,7 @@ class _PlaylistEditPageState extends State<PlaylistEditPage> {
             const SizedBox(height: 8),
             InkWell(
               onTap: () {
-                showSimpleNotification(const Text("Not implemented"),
-                    background: Theme.of(context).errorColor);
+                showToastWidget(const Text("Not implemented"));
               },
               child: Container(
                 height: 72,
@@ -69,8 +68,7 @@ class _PlaylistEditPageState extends State<PlaylistEditPage> {
             const Divider(height: 0, indent: 8),
             InkWell(
               onTap: () {
-                showSimpleNotification(const Text("Not implemented"),
-                    background: Theme.of(context).errorColor);
+                showToastWidget(const Text("Not implemented"));
               },
               child: Container(
                 height: 56,
@@ -86,8 +84,7 @@ class _PlaylistEditPageState extends State<PlaylistEditPage> {
             const Divider(height: 0, indent: 8),
             InkWell(
               onTap: () {
-                showSimpleNotification(const Text("Not implemented"),
-                    background: Theme.of(context).errorColor);
+                showToastWidget(const Text("Not implemented"));
               },
               child: Container(
                 height: 56,

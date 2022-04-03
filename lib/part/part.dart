@@ -2,7 +2,7 @@ library part;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:quiet/material.dart';
 
 // TODO remove this.
 void notImplemented(BuildContext context) {

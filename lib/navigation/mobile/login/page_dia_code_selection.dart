@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:quiet/component.dart';
 import 'package:quiet/model/region_flag.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -44,8 +44,6 @@ class _DiaCodeListState extends State<_DiaCodeList> {
   ItemScrollController? _scrollController;
 
   String _query = "";
-
-  OverlaySupportEntry? _currentShowingEntry;
 
   @override
   void initState() {
@@ -145,10 +143,7 @@ class _DiaCodeListState extends State<_DiaCodeList> {
             ),
           AZSelection(
             onSelection: (selection) {
-              _currentShowingEntry?.dismiss(animate: false);
-              _currentShowingEntry = showOverlay((_, progress) {
-                return _AzSelectionOverlay(content: selection);
-              }, duration: const Duration(milliseconds: 500));
+              showToastWidget(_AzSelectionOverlay(content: selection),dismissOtherToast: true, duration: const Duration(milliseconds: 500));
               _jumpToAlphabet(selection.toLowerCase());
             },
             textStyle: Theme.of(context).textTheme.bodyText1,

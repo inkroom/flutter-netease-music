@@ -1,14 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:quiet/component.dart';
 
 Future<bool> showNeedLoginToast(BuildContext context) async {
   final completer = Completer();
-  showOverlay((context, t) {
-    return Opacity(
-        opacity: t,
+  showToastWidget(Opacity(
+        opacity: 0.5,
         child: _Toast(
             child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -16,7 +15,7 @@ Future<bool> showNeedLoginToast(BuildContext context) async {
             Text(context.strings.needLogin),
             InkWell(
               onTap: () async {
-                OverlaySupportEntry.of(context)!.dismiss();
+                dismissAllToast();
                 final loginResult =
                     await Navigator.pushNamed(context, pageLogin);
                 completer.complete(loginResult == true);
@@ -30,10 +29,7 @@ Future<bool> showNeedLoginToast(BuildContext context) async {
               ),
             )
           ],
-        )));
-  },
-      curve: Curves.ease,
-      key: const ValueKey('overlay_need_login'),
+        ))),
       duration: const Duration(milliseconds: 2000));
   return await (completer.future as FutureOr<bool>);
 }

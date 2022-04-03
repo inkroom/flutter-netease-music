@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:quiet/extension.dart';
-import 'package:quiet/material/images.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/navigation/desktop/widgets/highlight_clickable_text.dart';
 import 'package:quiet/providers/album_detail_provider.dart';
 import 'package:quiet/repository.dart';
 
 import '../../../component/utils/scroll_controller.dart';
-import '../../../material/flexible_app_bar.dart';
 import '../../../providers/navigator_provider.dart';
 import '../../../providers/player_provider.dart';
 import '../../common/navigation_target.dart';

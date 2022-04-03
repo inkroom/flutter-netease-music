@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/mobile/playlists/dialog_selector.dart';
 import 'package:quiet/repository.dart';
@@ -148,11 +148,9 @@ class _Header extends ConsumerWidget {
                   return;
                 }
                 if (succeed) {
-                  showSimpleNotification(const Text("添加到收藏成功"));
+                  showToastWidget(const Text("添加到收藏成功"));
                 } else {
-                  showSimpleNotification(const Text("添加到收藏失败"),
-                      leading: const Icon(Icons.error),
-                      background: Theme.of(context).errorColor);
+                  showToastWidget(const Text("添加到收藏失败"));
                 }
               },
               icon: const Icon(Icons.add_box),

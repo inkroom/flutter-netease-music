@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/common/navigation_target.dart';
 import 'package:quiet/pages/page_playlist_edit.dart';

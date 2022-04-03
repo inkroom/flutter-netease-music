@@ -27,7 +27,6 @@ dependencies:
       url: https://gitee.com/inkroom/t1.git
       ref: e1ef2d9957bc8615c7f19f989d4fcfc142e20e93
   encrypt: ^5.0.0
-  overlay_support: ^1.2.1
   scrollable_positioned_list: ^0.2.0-nullsafety.0
   flutter_hooks: ^0.18.0
   equatable: ^2.0.3
@@ -59,6 +58,7 @@ dependencies:
     path: mobile_player/
   list_tile_more_customizable: ^2.0.1
   package_info_plus: ^1.4.0
+  oktoast: ^3.1.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

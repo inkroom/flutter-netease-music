@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
-import 'package:quiet/extension.dart';
 import 'package:quiet/material.dart';
+import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/common/player/lyric_view.dart';
 import 'package:quiet/navigation/common/player/player_actions.dart';
 import 'package:quiet/navigation/common/progress_track_container.dart';

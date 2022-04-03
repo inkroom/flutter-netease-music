@@ -1,15 +1,16 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:quiet/navigation/app.dart';
 import 'package:quiet/pages/splash/page_splash.dart';
 import 'package:quiet/repository.dart';
 import 'package:window_manager/window_manager.dart';
-
+import 'package:quiet/extension.dart';
 import 'utils/system/system_fonts.dart';
 
 void main() async {
@@ -78,8 +79,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const OverlaySupport(
-      child: QuietApp(),
-    );
+    log("body ${context.primaryTextTheme.bodyMedium?.fontFamily}  ${lightTheme.textTheme.bodyMedium}");
+    return OKToast(child: const QuietApp(),position:const ToastPosition(align: Alignment.bottomCenter, offset: -100.0),radius: 5,textStyle: lightTheme.textTheme.bodyMedium?.copyWith(color:Colors.white,));
   }
 }

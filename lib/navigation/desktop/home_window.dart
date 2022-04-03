@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:quiet/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository.dart';

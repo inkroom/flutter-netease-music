@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:music/music.dart' as player;
-import 'package:overlay_support/overlay_support.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/component/exceptions.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/providers/settings_provider.dart';

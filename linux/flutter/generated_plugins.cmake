@@ -5,7 +5,6 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   dart_vlc
   desktop_drop
-  system_clock
   url_launcher_linux
   window_manager
 )

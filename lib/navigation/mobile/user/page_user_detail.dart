@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/extension.dart';
-import 'package:quiet/material/flexible_app_bar.dart';
-import 'package:quiet/material/images.dart';
-import 'package:quiet/material/tabs.dart';
 import 'package:quiet/navigation/mobile/home/playlist_tile.dart';
 import 'package:quiet/providers/user_detail_provider.dart';
 import 'package:quiet/repository.dart';

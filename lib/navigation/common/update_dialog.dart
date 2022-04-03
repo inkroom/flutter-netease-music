@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:quiet/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository/database.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:overlay_support/overlay_support.dart';
-import 'package:quiet/extension.dart';
 import 'package:quiet/material.dart';
+import 'package:quiet/extension.dart';
 import 'package:quiet/repository.dart';
 
 class ArtistHeader extends StatelessWidget {
