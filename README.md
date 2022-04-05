@@ -38,12 +38,30 @@ debian:
 
 * Toast and InApp notification：
   [**overlay_support**](https://github.com/boyan01/overlay_support)
-* music player(mobile):
-  [**flutter-music-player**](https://github.com/boyan01/flutter-music-player)
 * music player(desktop):
   [**dart_vlc**](https://github.com/alexmercerind/dart_vlc)
 * netease api service:
   [**NeteaseCloudMusicApi**](https://github.com/ziming1/NeteaseCloudMusicApi)
+
+## package
+
+### windows
+
+```shell
+./w.bat 0.6.0
+```
+
+### linux
+
+```shell
+./deb.sh 0.6.0
+```
+
+### android
+
+```shell
+./a.bat 0.6.0
+```
 
 ## Desktop Preview
 
