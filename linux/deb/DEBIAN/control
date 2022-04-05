@@ -1,5 +1,6 @@
 Package: quiet
-Version: 0.6.0
+Version: _version_
+Installed-Size: _size_
 License: MIT
 Vendor: inkbox <enpassPixiv@protonmail.com>
 Architecture: amd64
