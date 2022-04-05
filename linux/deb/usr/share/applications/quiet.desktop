@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Quiet
+Comment=多来源音乐播放器
+Exec="/opt/quiet/quiet" %U
+Terminal=false
+Type=Application
+Icon=quiet
+StartupWMClass=多来源音乐播放器
+Categories=Utility;

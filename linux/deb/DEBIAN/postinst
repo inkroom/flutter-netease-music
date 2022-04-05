@@ -1,0 +1,1 @@
+ln -sf '/opt/quiet/quiet' '/usr/local/bin/quiet'

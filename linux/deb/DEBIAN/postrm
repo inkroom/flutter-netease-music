@@ -1,0 +1,4 @@
+rm -rf '/usr/local/bin/quiet'
+rm -rf ~/.local/share/tech.soit.quit.app.quiet
+rm -rf ~/文档/quiet
+rm -rf ~/Documents/quiet
