@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -64,7 +65,8 @@ class _LyricViewLoader extends ConsumerWidget {
     final playingLyric = ref.watch(lyricProvider(music));
     return playingLyric.when(
       data: (lyric) {
-        if (lyric == null) {
+        if (lyric == null || lyric.size <= 0) {
+          log('歌词size=${lyric?.size}');
           return InkWell(
             child: Center(
               child: Text(context.strings.noLyric, style: textStyle),
