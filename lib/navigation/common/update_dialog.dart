@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository/database.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/repository/netease.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // 软件更新dialog
 
@@ -17,38 +19,41 @@ typedef OnDownloadComplete = void Function(String path);
 typedef OnCheckVersion = void Function(bool shouldUpdate);
 
 void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
-  /// 当前只支持android平台自动更新
+  /// 当前只支持android平台自动更新，windows平台自动打开网页下载最新版
   if (NetworkSingleton.instance.allowNetwork()) {
     networkRepository?.checkUpdate().then((value) {
       if (value != null && value['versionName'] != null) {
         PackageInfo.fromPlatform().then((info) {
           if (info.version != value['versionName']) {
             toast(context.strings.updateTip(value['versionName']));
-
-            showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) {
-                  return _UpdateDialogContent(
-                    url:
-                        "http://minio.bcyunqian.com/temp/${value['outputFile']}",
-                    filename: value['outputFile'],
-                    version: value['versionName'],
-                    onDownloadComplete: (filePath) {
-                      log('下載的文件位置= $filePath');
-                      // 唤起安装
-                      MethodChannel("quiet.update.app.channel.name")
-                          .invokeMethod("installApk", {"path": filePath});
-
-                      // 关闭弹窗
-                      Navigator.pop(context, "");
-                    },
-                  );
-                }).then((value) {
-              log("dialog $value");
-            }).catchError((error, s) {
-              log("dialog $error $s");
-            });
+            if (Platform.isWindows) {
+              /// 打开网址
+              launch("http://minio.bcyunqian.com/temp/windows-v${value['versionName']}.zip");
+            } else if (Platform.isAndroid) {
+              showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    return _UpdateDialogContent(
+                      url:
+                          "http://minio.bcyunqian.com/temp/${value['outputFile']}",
+                      filename: value['outputFile'],
+                      version: value['versionName'],
+                      onDownloadComplete: (filePath) {
+                        log('下載的文件位置= $filePath');
+                        // 唤起安装
+                        MethodChannel("quiet.update.app.channel.name")
+                            .invokeMethod("installApk", {"path": filePath});
+                        // 关闭弹窗
+                        Navigator.pop(context, "");
+                      },
+                    );
+                  }).then((value) {
+                log("dialog $value");
+              }).catchError((error, s) {
+                log("dialog $error $s");
+              });
+            }
           } else {
             if (onCheckVersion != null) {
               onCheckVersion(false);
