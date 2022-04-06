@@ -87,15 +87,15 @@ class MiGuApi extends MusicApi {
           final s = value['musics'] as List;
           for (var e in s) {
             List<ArtistMini> arts = List.empty(growable: true);
-
-            final singerIds = e['singerId'].toString().split(", ");
-            final singerNames = e['artist'].toString().split(", ");
-
-            for (var i = 0; i < singerIds.length; i++) {
-              arts.add(ArtistMini(
-                  id: int.parse(singerIds[i].toString()),
-                  name: singerNames[i],
-                  imageUrl: ''));
+            if(e['singerId'] != null && e['singerId'].toString().isNotEmpty){
+              final singerIds = e['singerId'].toString().split(", ");
+              final singerNames = e['artist'].toString().split(", ");
+              for (var i = 0; i < singerIds.length; i++) {
+                arts.add(ArtistMini(
+                    id: int.parse(singerIds[i].toString()),
+                    name: singerNames[i],
+                    imageUrl: ''));
+              }
             }
 
             list.add(Track(
