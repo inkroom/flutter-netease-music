@@ -50,6 +50,36 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Show`
+  String get trayItemShow {
+    return Intl.message(
+      'Show',
+      name: 'trayItemShow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide`
+  String get trayItemHide {
+    return Intl.message(
+      'Hide',
+      name: 'trayItemHide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exit`
+  String get trayItemExit {
+    return Intl.message(
+      'Exit',
+      name: 'trayItemExit',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `The File Save Path`
   String get savePath {
     return Intl.message(

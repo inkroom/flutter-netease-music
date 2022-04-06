@@ -1,4 +1,7 @@
 {
+  "trayItemShow": "Show",
+  "trayItemHide": "Hide",
+  "trayItemExit": "Exit",
   "savePath": "The File Save Path",
   "unsupportedOrigin": "Unsupported Origin",
   "newestVersion": "Newest Version",

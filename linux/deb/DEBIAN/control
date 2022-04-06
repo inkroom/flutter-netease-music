@@ -4,7 +4,7 @@ License: MIT
 Vendor: inkbox <enpassPixiv@protonmail.com>
 Architecture: amd64
 Maintainer: inkbox <enpassPixiv@protonmail.com>
-Depends: gconf2, gconf-service, libnotify4, libappindicator1, libxtst6, libnss3, libxss1, libvlc-dev
+Depends: libvlc-dev, appindicator3-0.1, libappindicator3-dev
 Section: default
 Priority: extra
 Homepage: https://github.com/inkroom/wallpaper

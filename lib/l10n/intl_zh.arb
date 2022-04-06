@@ -1,4 +1,7 @@
 {
+  "trayItemShow": "显示窗口",
+  "trayItemHide": "隐藏窗口",
+  "trayItemExit": "退出程序",
   "savePath": "文件保存位置",
   "unsupportedOrigin": "不支持的来源",
   "newestVersion": "已是最新版本",

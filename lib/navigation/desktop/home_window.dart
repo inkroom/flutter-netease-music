@@ -1,9 +1,14 @@
+import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:quiet/navigation/common/update_dialog.dart';
+import 'package:quiet/providers/player_provider.dart';
+import 'package:system_tray/system_tray.dart';
+import 'package:window_manager/window_manager.dart';
 import '../../providers/navigator_provider.dart';
 import '../common/navigation_target.dart';
 import '../common/navigator.dart';
@@ -14,13 +19,87 @@ import 'player/page_playing.dart';
 import 'player/page_playing_list.dart';
 import 'widgets/hotkeys.dart';
 import 'widgets/windows_task_bar.dart';
+import 'package:quiet/extension.dart';
 
-class HomeWindow extends StatelessWidget {
+class HomeWindow extends ConsumerStatefulWidget {
   const HomeWindow({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomeWindowState();
+}
+
+class _HomeWindowState extends ConsumerState<HomeWindow> {
+  @override
+  void initState() {
+    super.initState();
     updateApp(context);
+
+    String path = Platform.isWindows
+        ? 'assets/icons/default_logo.ico'
+        : 'assets/app_icon.png';
+
+    final menu = [
+      MenuItem(
+          // 这里不能直接用 context.strings
+          label: S.current.skipToNext,
+          onClicked: () {
+            ref.read(playerProvider).skipToNext();
+          }),
+      MenuItem(
+          // 这里不能直接用 context.strings
+          label: S.current.trayItemShow,
+          onClicked: () {
+            WindowManager.instance.show(inactive: true);
+
+            // 手动触发重绘，避免窗口只显示边框，不显示主体内容
+            WindowManager.instance.getSize().then((value) {
+              WindowManager.instance
+                  .setSize(Size(value.width - 1, value.height - 1));
+              WindowManager.instance.setMaximumSize(const Size(960, 720));
+              WindowManager.instance.setResizable(false);
+            });
+          }),
+      MenuItem(
+          label: S.current.trayItemHide,
+          onClicked: () {
+            WindowManager.instance.getSize().then((value) {
+              WindowManager.instance.setMaximumSize(const Size(961, 721));
+              WindowManager.instance.setResizable(true);
+              WindowManager.instance
+                  .setSize(Size(value.width + 1, value.height + 1));
+              WindowManager.instance.hide();
+            });
+          }),
+      MenuItem(
+          label: S.current.trayItemExit,
+          onClicked: () {
+            WindowManager.instance.close();
+          }),
+    ];
+    SystemTray tray = SystemTray();
+    // We first init the systray menu and then add the menu entries
+    tray
+        .initSystemTray(
+          title: "system tray",
+          iconPath: path,
+        )
+        .then((value) => tray.setContextMenu(menu))
+        .then((value) {
+      tray.registerSystemTrayEventHandler((eventName) {
+        // debugPrint("eventName: $eventName");
+        if (eventName == "leftMouseDown") {
+        } else if (eventName == "leftMouseUp") {
+          tray.popUpContextMenu();
+        } else if (eventName == "rightMouseDown") {
+        } else if (eventName == "rightMouseUp") {
+          // _appWindow.show();
+        }
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       foregroundDecoration: const BoxDecoration(
           image: DecorationImage(
