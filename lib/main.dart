@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
@@ -17,10 +16,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await loadFallbackFonts();
   NetworkRepository.initialize();
-  if(Platform.isWindows || Platform.isLinux || Platform.isMacOS){
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     DartVLC.initialize();
+    _initialDesktop();
   }
-  _initialDesktop();
   runZonedGuarded(() {
     runApp(ProviderScope(
       child: PageSplash(
@@ -38,18 +37,14 @@ void main() async {
 }
 
 void _initialDesktop() async {
-  if (!(Platform.isMacOS || Platform.isLinux || Platform.isWindows)) {
-    return;
-  }
   await WindowManager.instance.ensureInitialized();
-  // if (Platform.isWindows) {
-    // only Windows need this.
-    // WindowManager.instance.setPosition(Offset(2100,300));
-    WindowManager.instance.setMinimumSize(const Size(960, 720));
-    // setResizable windows下没有生效，就直接限制最大尺寸;其他平台未测试
-    WindowManager.instance.setMaximumSize(const Size(960, 720));
-    WindowManager.instance.setResizable(false);
-  // }
+  // only Windows need this.
+  // WindowManager.instance.setPosition(Offset(2100,300));
+  WindowManager.instance.setMinimumSize(const Size(960, 720));
+  // setResizable windows下没有生效，就直接限制最大尺寸;其他平台未测试
+  WindowManager.instance.setMaximumSize(const Size(960, 720));
+  WindowManager.instance.setResizable(false);
+  await WindowManager.instance.setPreventClose(true);
 
   assert(() {
     scheduleMicrotask(() async {
@@ -79,7 +74,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("body ${context.primaryTextTheme.bodyMedium?.fontFamily}  ${lightTheme.textTheme.bodyMedium}");
-    return OKToast(child: const QuietApp(),position:const ToastPosition(align: Alignment.bottomCenter, offset: -100.0),radius: 5,textStyle: lightTheme.textTheme.bodyMedium?.copyWith(color:Colors.white,));
+    return OKToast(
+        child: const QuietApp(),
+        position:
+            const ToastPosition(align: Alignment.bottomCenter, offset: -100.0),
+        radius: 5,
+        textStyle: lightTheme.textTheme.bodyMedium?.copyWith(
+          color: Colors.white,
+        ));
   }
 }
