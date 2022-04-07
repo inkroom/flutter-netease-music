@@ -57,9 +57,9 @@ class SettingKey {
   }
 
   ThemeMode get themeMode {
-    final mode = preferences?.getInt(_keyNetworkMode);
+    final mode = preferences?.getInt(_keyThemeMode);
     if (mode != null) {
-      return ThemeMode.values[mode.clamp(0, NetworkMode.values.length - 1)];
+      return ThemeMode.values[mode.clamp(0, ThemeMode.values.length - 1)];
     }
     return ThemeMode.system;
   }
@@ -77,12 +77,10 @@ class SettingKey {
 
   // 此处的默认值不重要，因为程序启动之后会自动写入默认值，保证此处的默认值不会被返回
   String get savePath {
-    log("获取 $preferences ${preferences?.getString(_keySavePath)}");
     return preferences?.getString(_keySavePath) ?? '';
   }
 
   set savePath(String value) {
-    log("要写入了 $preferences $value");
     preferences?.setString(_keySavePath, value);
   }
 }
