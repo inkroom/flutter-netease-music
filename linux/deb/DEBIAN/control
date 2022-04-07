@@ -4,9 +4,9 @@ License: MIT
 Vendor: inkbox <enpassPixiv@protonmail.com>
 Architecture: amd64
 Maintainer: inkbox <enpassPixiv@protonmail.com>
-Depends: libvlc-dev, appindicator3-0.1, libappindicator3-dev
+Depends: vlc, libvlc-dev, appindicator3-0.1, libappindicator3-dev
 Section: default
 Priority: extra
-Homepage: https://github.com/inkroom/wallpaper
+Homepage: https://github.com/inkroom/flutter-netease-music
 Description: 
-  多来源音乐播放器
+  多源音乐播放器
