@@ -1,4 +1,6 @@
 {
+  "alterActionClose": "关闭",
+  "alertAppLaunched": "程序已运行",
   "trayItemShow": "显示窗口",
   "trayItemHide": "隐藏窗口",
   "trayItemExit": "退出程序",

@@ -1,4 +1,6 @@
 {
+  "alterActionClose": "Close",
+  "alertAppLaunched": "App Has Launched",
   "trayItemShow": "Show",
   "trayItemHide": "Hide",
   "trayItemExit": "Exit",

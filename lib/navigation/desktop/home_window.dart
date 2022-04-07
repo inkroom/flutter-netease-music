@@ -5,6 +5,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quiet/utils/single.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:quiet/navigation/common/update_dialog.dart';
 import 'package:quiet/providers/player_provider.dart';
@@ -91,9 +92,8 @@ class _HomeWindowState extends ConsumerState<HomeWindow>
 
   void _initTray() async {
     trayManager.addListener(this);
-    await trayManager.setIcon(Platform.isWindows
-        ? 'assets/icons/logo.ico'
-        : 'assets/logo.png');
+    await trayManager.setIcon(
+        Platform.isWindows ? 'assets/icons/logo.ico' : 'assets/logo.png');
 
     _initTrayMenu();
   }
@@ -157,6 +157,7 @@ class _HomeWindowState extends ConsumerState<HomeWindow>
             .destroy()
             .then((value) => windowManager.setPreventClose(false))
             .then((value) {
+          SingleApp.instance.release();
           if (Platform.isLinux) {
             //因为destroy方法不支持linux系统
             exit(0);

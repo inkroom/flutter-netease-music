@@ -50,6 +50,26 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Close`
+  String get alterActionClose {
+    return Intl.message(
+      'Close',
+      name: 'alterActionClose',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `App Has Launched`
+  String get alertAppLaunched {
+    return Intl.message(
+      'App Has Launched',
+      name: 'alertAppLaunched',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Show`
   String get trayItemShow {
     return Intl.message(

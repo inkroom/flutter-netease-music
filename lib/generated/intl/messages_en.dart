@@ -64,7 +64,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "album": MessageLookupByLibrary.simpleMessage("Album"),
         "albumCount": m0,
         "albumShareContent": m1,
+        "alertAppLaunched":
+            MessageLookupByLibrary.simpleMessage("App Has Launched"),
         "alreadyBuy": MessageLookupByLibrary.simpleMessage("Payed"),
+        "alterActionClose": MessageLookupByLibrary.simpleMessage("Close"),
         "applicationLegalese":
             MessageLookupByLibrary.simpleMessage("Only For Special Person"),
         "artistInfo": MessageLookupByLibrary.simpleMessage("Artist"),

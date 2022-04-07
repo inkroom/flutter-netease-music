@@ -8,6 +8,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:quiet/navigation/app.dart';
 import 'package:quiet/pages/splash/page_splash.dart';
 import 'package:quiet/repository.dart';
+import 'package:quiet/utils/single.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:quiet/extension.dart';
 import 'utils/system/system_fonts.dart';
@@ -17,23 +18,42 @@ void main() async {
   await loadFallbackFonts();
   NetworkRepository.initialize();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    DartVLC.initialize();
-    _initialDesktop();
+    /// 开始获取锁
+    SingleApp.instance.lock().then((value) {
+      if (value) {
+        DartVLC.initialize();
+        _initialDesktop();
+        runZonedGuarded(() {
+          runApp(ProviderScope(
+            child: PageSplash(
+              futures: const [],
+              builder: (BuildContext context, List<dynamic> data) {
+                return const MyApp();
+              },
+            ),
+          ));
+        }, (error, stack) {
+          debugPrint('uncaught error : $error $stack');
+        });
+      } else {
+        //获取失败
+        runApp(AlertApp());
+      }
+    });
+  } else {
+    runZonedGuarded(() {
+      runApp(ProviderScope(
+        child: PageSplash(
+          futures: const [],
+          builder: (BuildContext context, List<dynamic> data) {
+            return const MyApp();
+          },
+        ),
+      ));
+    }, (error, stack) {
+      debugPrint('uncaught error : $error $stack');
+    });
   }
-  runZonedGuarded(() {
-    runApp(ProviderScope(
-      child: PageSplash(
-        futures: const [
-        ],
-        builder: (BuildContext context, List<dynamic> data) {
-          return const MyApp(
-          );
-        },
-      ),
-    ));
-  }, (error, stack) {
-    debugPrint('uncaught error : $error $stack');
-  });
 }
 
 void _initialDesktop() async {
@@ -58,16 +78,6 @@ void _initialDesktop() async {
     return true;
   }());
 }
-
-/// The entry of dart background service
-/// NOTE: this method will be invoked by native (Android/iOS)
-// @pragma('vm:entry-point') // avoid Tree Shaking
-// void playerBackgroundService() {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   // 获取播放地址需要使用云音乐 API, 所以需要为此 isolate 初始化一个 repository.
-//   NetworkRepository.initialize();
-//   runMobileBackgroundService();
-// }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
