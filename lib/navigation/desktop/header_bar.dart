@@ -166,39 +166,11 @@ class _WindowCaptionButtonGroup extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMaximized = useState(false);
-    useMemoized(() async {
-      isMaximized.value = await WindowManager.instance.isMaximized();
-    });
-    useEffect(() {
-      final listener = _CallbackWindowListener(onWindowMaximized: () {
-        isMaximized.value = true;
-      }, onWindowRestored: () {
-        isMaximized.value = false;
-      }, onMoved: () {
-        isMaximized.value = false;
-      });
-      WindowManager.instance.addListener(listener);
-      return () => WindowManager.instance.removeListener(listener);
-    }, [WindowManager.instance]);
     return Row(children: [
       _WindowButton(
         icon: MinimizeIcon(color: context.iconTheme.color!),
         onTap: () {
           WindowManager.instance.minimize();
-        },
-      ),
-      _WindowButton(
-        icon: isMaximized.value
-            ? RestoreIcon(color: context.iconTheme.color!)
-            : MaximizeIcon(color: context.iconTheme.color!),
-        onTap: () {
-          if (isMaximized.value) {
-            WindowManager.instance.restore();
-          } else {
-            WindowManager.instance.maximize();
-          }
-          isMaximized.value = !isMaximized.value;
         },
       ),
       _WindowButton(
