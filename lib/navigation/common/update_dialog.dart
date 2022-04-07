@@ -25,7 +25,7 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
       if (value != null && value['versionName'] != null) {
         PackageInfo.fromPlatform().then((info) {
           if (info.version != value['versionName']) {
-            toast(context.strings.updateTip(value['versionName']));
+            toast(S.current.updateTip(value['versionName']));
             if (Platform.isWindows) {
               /// 打开网址
               launch("http://minio.bcyunqian.com/temp/windows-v${value['versionName']}.zip");
@@ -72,7 +72,7 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
       toast('检查失败 $error');
     });
   } else {
-    toast(context.strings.networkNotAllow);
+    toast(S.current.networkNotAllow);
   }
 }
 
