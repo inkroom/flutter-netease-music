@@ -1,13 +1,15 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
+import 'package:tray_manager/tray_manager.dart';
 import 'package:quiet/navigation/common/update_dialog.dart';
 import 'package:quiet/providers/player_provider.dart';
-import 'package:system_tray/system_tray.dart';
+
+// import 'package:system_tray/system_tray.dart';
 import 'package:window_manager/window_manager.dart';
 import '../../providers/navigator_provider.dart';
 import '../common/navigation_target.dart';
@@ -28,73 +30,179 @@ class HomeWindow extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeWindowState();
 }
 
-class _HomeWindowState extends ConsumerState<HomeWindow> {
+class _HomeWindowState extends ConsumerState<HomeWindow>
+    with WindowListener, TrayListener {
   @override
   void initState() {
     super.initState();
     updateApp(context);
 
-    String path = Platform.isWindows
-        ? 'assets/icons/default_logo.ico'
-        : 'assets/app_icon.png';
+    windowManager.addListener(this);
 
-    final menu = [
+    _initTray();
+
+    // String path = Platform.isWindows
+    //     ? 'assets/icons/default_logo.ico'
+    //     : 'assets/app_icon.png';
+    //
+    // final menu = [
+    //   MenuItem(
+    //       // 这里不能直接用 context.strings
+    //       label: S.current.skipToNext,
+    //       onClicked: () {
+    //         ref.read(playerProvider).skipToNext();
+    //       }),
+    //   MenuItem(
+    //       // 这里不能直接用 context.strings
+    //       label: S.current.trayItemShow,
+    //       onClicked: _show),
+    //   MenuItem(
+    //       label: S.current.trayItemHide,
+    //       onClicked: () {
+    //         WindowManager.instance.hide();
+    //       }),
+    //   MenuItem(
+    //       label: S.current.trayItemExit,
+    //       onClicked: () {
+    //         WindowManager.instance.close();
+    //       }),
+    // ];
+    // SystemTray tray = SystemTray();
+    // // We first init the systray menu and then add the menu entries
+    // tray
+    //     .initSystemTray(
+    //       title: "system tray",
+    //       iconPath: path,
+    //     )
+    //     .then((value) => tray.setContextMenu(menu))
+    //     .then((value) {
+    //   tray.registerSystemTrayEventHandler((eventName) {
+    //     debugPrint("eventName: $eventName");
+    //     if (eventName == "leftMouseDown") {
+    //     } else if (eventName == "leftMouseUp") {
+    //       tray.popUpContextMenu();
+    //     } else if (eventName == "rightMouseDown") {
+    //     } else if (eventName == "rightMouseUp") {
+    //       _show();
+    //     }
+    //   });
+    // });
+  }
+
+  void _initTray() async {
+    trayManager.addListener(this);
+    await trayManager.setIcon(Platform.isWindows
+        ? 'assets/icons/logo.ico'
+        : 'assets/logo.png');
+
+    _initTrayMenu();
+  }
+
+  void _initTrayMenu() async {
+    List<MenuItem> items = [
+      if (ref.read(playerStateProvider).isPlaying)
+        MenuItem(
+          // 这里不能直接用 context.strings
+          title: S.current.pause,
+          key: 'pause',
+        ),
+      if (!ref.read(playerStateProvider).isPlaying)
+        MenuItem(
+          // 这里不能直接用 context.strings
+          title: S.current.play,
+          key: 'play',
+        ),
+      MenuItem(
+        // 这里不能直接用 context.strings
+        title: S.current.skipToNext,
+        key: 'next',
+      ),
+      MenuItem.separator,
       MenuItem(
           // 这里不能直接用 context.strings
-          label: S.current.skipToNext,
-          onClicked: () {
-            ref.read(playerProvider).skipToNext();
-          }),
+          title: S.current.trayItemShow,
+          key: 'show'),
       MenuItem(
-          // 这里不能直接用 context.strings
-          label: S.current.trayItemShow,
-          onClicked: () {
-            WindowManager.instance.show(inactive: true);
-
-            // 手动触发重绘，避免窗口只显示边框，不显示主体内容
-            WindowManager.instance.getSize().then((value) {
-              WindowManager.instance
-                  .setSize(Size(value.width - 1, value.height - 1));
-              WindowManager.instance.setMaximumSize(const Size(960, 720));
-              WindowManager.instance.setResizable(false);
-            });
-          }),
+        title: S.current.trayItemHide,
+        key: 'hide',
+      ),
       MenuItem(
-          label: S.current.trayItemHide,
-          onClicked: () {
-            WindowManager.instance.getSize().then((value) {
-              WindowManager.instance.setMaximumSize(const Size(961, 721));
-              WindowManager.instance.setResizable(true);
-              WindowManager.instance
-                  .setSize(Size(value.width + 1, value.height + 1));
-              WindowManager.instance.hide();
-            });
-          }),
-      MenuItem(
-          label: S.current.trayItemExit,
-          onClicked: () {
-            WindowManager.instance.close();
-          }),
+        title: S.current.trayItemExit,
+        key: 'exit',
+      ),
     ];
-    SystemTray tray = SystemTray();
-    // We first init the systray menu and then add the menu entries
-    tray
-        .initSystemTray(
-          title: "system tray",
-          iconPath: path,
-        )
-        .then((value) => tray.setContextMenu(menu))
-        .then((value) {
-      tray.registerSystemTrayEventHandler((eventName) {
-        // debugPrint("eventName: $eventName");
-        if (eventName == "leftMouseDown") {
-        } else if (eventName == "leftMouseUp") {
-          tray.popUpContextMenu();
-        } else if (eventName == "rightMouseDown") {
-        } else if (eventName == "rightMouseUp") {
-          // _appWindow.show();
-        }
-      });
+    await trayManager.setContextMenu(items);
+  }
+
+  @override
+  void onTrayMenuItemClick(MenuItem menuItem) {
+    switch (menuItem.key) {
+      case 'play':
+        ref.read(playerProvider).play();
+        break;
+      case 'pause':
+        ref.read(playerProvider).pause();
+        break;
+      case 'next':
+        ref.read(playerProvider).skipToNext();
+        break;
+      case 'show':
+        _show();
+        break;
+      case 'hide':
+        windowManager.hide();
+        break;
+      case 'exit':
+        trayManager
+            .destroy()
+            .then((value) => windowManager.setPreventClose(false))
+            .then((value) {
+          if (Platform.isLinux) {
+            //因为destroy方法不支持linux系统
+            exit(0);
+          } else {
+            windowManager.destroy();
+          }
+        });
+        break;
+    }
+  }
+
+  @override
+  void onTrayIconMouseDown() async {
+    super.onTrayIconMouseDown();
+    _show();
+  }
+
+  @override
+  void onTrayIconRightMouseDown() {
+    super.onTrayIconRightMouseDown();
+    _initTrayMenu();
+    trayManager.popUpContextMenu();
+  }
+
+  void _show() {
+    windowManager.show();
+    // 手动触发重绘，避免只显示边框
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    trayManager.removeListener(this);
+    windowManager.removeListener(this);
+  }
+
+  @override
+  void onWindowClose() {
+    windowManager.isPreventClose().then((value) {
+      if (value) {
+        windowManager.hide();
+      } else {
+        trayManager.destroy();
+        exit(0);
+      }
     });
   }
 

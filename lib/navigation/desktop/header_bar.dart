@@ -204,7 +204,7 @@ class _WindowCaptionButtonGroup extends HookWidget {
       _WindowButton(
         icon: CloseIcon(color: context.iconTheme.color!),
         onTap: () {
-          exit(0);
+          WindowManager.instance.close();
         },
       ),
     ]);
