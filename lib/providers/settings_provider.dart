@@ -4,12 +4,35 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/repository/setting.dart';
 
 final settingStateProvider =
     StateNotifierProvider<Settings, SettingState>((ref) {
   return Settings();
 });
+
+final versionStateProvider =
+    StateNotifierProvider<VersionNotify, VersionState>((ref) {
+  return VersionNotify();
+});
+
+class VersionState with EquatableMixin {
+  VersionState({this.info});
+
+  PackageInfo? info;
+
+  @override
+  List<Object?> get props => [info];
+}
+
+class VersionNotify extends StateNotifier<VersionState> {
+  VersionNotify() : super(VersionState());
+
+  void setInfo(PackageInfo info) {
+    state = VersionState(info: info);
+  }
+}
 
 class SettingState with EquatableMixin {
   const SettingState({

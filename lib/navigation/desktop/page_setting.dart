@@ -4,17 +4,18 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/component/utils/scroll_controller.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/providers/settings_provider.dart';
 
 import '../common/settings.dart';
 
-class PageSetting extends StatelessWidget {
+class PageSetting extends ConsumerWidget {
   const PageSetting({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Material(
       color: context.colorScheme.background,
       child: ListTileTheme(
@@ -52,7 +53,7 @@ class PageSetting extends StatelessWidget {
             Text(context.strings.about, style: context.textTheme.bodyMedium),
             const SizedBox(height: 8),
             Text(
-              context.strings.projectDescription,
+              "${context.strings.projectDescription} ${ref.read(versionStateProvider).info?.version}",
               style: context.textTheme.caption,
             ),
             const SizedBox(height: 56),

@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/repository/database.dart';
 import 'package:quiet/repository/setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,9 @@ class _PageSplashState extends ConsumerState<PageSplash> {
     super.initState();
     final tasks = [
       ref.read(userProvider.notifier).initialize(),
+      PackageInfo.fromPlatform().then((value) {
+        ref.read(versionStateProvider.notifier).setInfo(value);
+      }),
       () async {
         SettingKey.init().then((value) {
           final p = SettingKey.instance.savePath;

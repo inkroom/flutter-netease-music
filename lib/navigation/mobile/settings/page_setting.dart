@@ -1,15 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/component.dart';
 import 'package:quiet/navigation/common/update_dialog.dart';
+import 'package:quiet/providers/settings_provider.dart';
 
 import '../../common/settings.dart';
 
-class PageSettings extends StatelessWidget {
+class PageSettings extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.strings.settings),
@@ -49,22 +51,21 @@ class PageSettings extends StatelessWidget {
               ListTile(
                 title: Text(context.strings.about),
                 onTap: () {
-                  PackageInfo.fromPlatform().then((value) {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AboutDialog(
-                            applicationIcon: Image.asset(
-                              "assets/logo.png",
-                              width: 50,
-                              height: 50,
-                            ),
-                            applicationVersion: value.version,
-                            applicationLegalese:
-                                context.strings.applicationLegalese,
-                          );
-                        });
-                  });
+                  final info = ref.read(versionStateProvider).info;
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AboutDialog(
+                          applicationIcon: Image.asset(
+                            "assets/logo.png",
+                            width: 50,
+                            height: 50,
+                          ),
+                          applicationVersion: info?.version,
+                          applicationLegalese:
+                              context.strings.applicationLegalese,
+                        );
+                      });
                 },
               )
             ],
