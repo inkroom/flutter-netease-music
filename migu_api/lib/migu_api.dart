@@ -84,10 +84,13 @@ class MiGuApi extends MusicApi {
           log('value=$value');
           final total = value['pgt'];
           List<Track> list = List.empty(growable: true);
+          if (value['musics'] == null) {
+            return PageResult(data: list, total: 0);
+          }
           final s = value['musics'] as List;
           for (var e in s) {
             List<ArtistMini> arts = List.empty(growable: true);
-            if(e['singerId'] != null && e['singerId'].toString().isNotEmpty){
+            if (e['singerId'] != null && e['singerId'].toString().isNotEmpty) {
               final singerIds = e['singerId'].toString().split(", ");
               final singerNames = e['artist'].toString().split(", ");
               for (var i = 0; i < singerIds.length; i++) {
