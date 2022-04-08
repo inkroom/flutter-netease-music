@@ -50,18 +50,6 @@ class TracksPlayerImplVlc extends TracksPlayer {
   @override
   Duration? get duration => _player.position.duration;
 
-  @override
-  Future<Track?> getPreviousTrack() async {
-    final index = _trackList.tracks.cast().indexOf(current);
-    if (index == -1) {
-      return _trackList.tracks.lastOrNull;
-    }
-    final previousIndex = index - 1;
-    if (previousIndex < 0) {
-      return null;
-    }
-    return _trackList.tracks[previousIndex];
-  }
 
   @override
   Future<void> insertToNext(Track track) async {
@@ -184,6 +172,10 @@ class TracksPlayerImplVlc extends TracksPlayer {
       _current = track;
       notifyPlayStateChanged();
       _player.open(Media.file(File(track.file!)), autoStart: true);
+
+      // 加入播放历史
+      played.add(track);
+
     } else {
       if (_current == track) {
         // skip play. since the track is changed.
@@ -199,18 +191,20 @@ class TracksPlayerImplVlc extends TracksPlayer {
             _current = track;
             notifyPlayStateChanged();
             _player.open(Media.network(value.mp3Url), autoStart: true);
+            // 加入播放历史
+            played.add(track);
             return value;
           }
-          toast(Intl.message('getPlayDetailFail'));
+          toast(S.current.getPlayDetailFail);
 
           return Future.error(PlayDetailException);
         }).catchError((onError) {
           if (onError is NetworkException) {
-            toast(Intl.message('networkNotAllow'));
+            toast(S.current.networkNotAllow);
             return Future.error(onError);
           }
           debugPrint('Failed to get play url: ${onError?.toString()}');
-          toast(Intl.message('getPlayDetailFail'));
+          toast(S.current.getPlayDetailFail);
           return Future.error(onError);
         });
       });

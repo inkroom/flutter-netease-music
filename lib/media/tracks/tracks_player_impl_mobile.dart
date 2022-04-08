@@ -128,6 +128,8 @@ class TracksPlayerImplMobile extends TracksPlayer {
         log("从文件播放= ${value.file}");
         _current = value;
         _player!.play(value.toMusic(), showNext: true, showPrevious: true);
+        // 加入播放历史
+        played.add(value);
         notifyPlayStateChanged();
         return Future.value();
       }
@@ -138,13 +140,16 @@ class TracksPlayerImplMobile extends TracksPlayer {
         _current = value;
         _player!.play(value.toMusic(), showNext: true, showPrevious: true);
         notifyPlayStateChanged();
+        // 加入播放历史
+        played.add(value);
       }).catchError((onError) {
         if (onError is NetworkException) {
-          toast(Intl.message('networkNotAllow'));
+          toast(S.current.networkNotAllow);
           // return Future.error(onError);
+        }else{
+          debugPrint('Failed to get play url: ${onError?.toString()}');
+          toast(S.current.getPlayDetailFail);
         }
-        debugPrint('Failed to get play url: ${onError?.toString()}');
-        toast(Intl.message('getPlayDetailFail'));
         // return Future.error(onError);
       });
       // } else {

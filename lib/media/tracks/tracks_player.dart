@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 
@@ -128,25 +129,15 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   }
 
   Future<Track?> getPreviousTrack() {
-    List<Track> list = trackList.tracks
-        .where((element) => element.type == TrackType.free)
-        .toList();
-
-    final index = list.cast().indexOf(current);
-    if (repeatMode == RepeatMode.next) {
-      // 直接播放上一首
-      if (index == -1 || index == 0) {
-        return Future.value(list.first);
-      }
-      return Future.value(list[index - 1]);
-    } else if (repeatMode == RepeatMode.random) {
-      // 随机播放
-      return Future.value(list[Random().nextInt(list.length)]);
-    } else if (repeatMode == RepeatMode.none) {
-      // 单曲循环
-      return Future.value(current);
+    if (played.isEmpty) {
+      return Future.value(null);
     }
-    return Future.value(null);
+    // 注意，队列中的最后一个可能是当前播放的歌曲，所以可能需要出两次
+    final r = played.removeLast();
+    if(r == current && played.isNotEmpty){
+      return Future.value(played.removeLast());
+    }
+    return Future.value(r);
   }
 
   Future<void> insertToNext(Track track);
@@ -176,11 +167,15 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
 
   double get playbackSpeed;
 
+  /// 已播放歌曲，用于上一曲。加入已播放由子类实现
+  List<Track> played = List.empty(growable: true);
+
   /// 标志是否播放出错
   bool get error;
 
   @protected
   void notifyPlayStateChanged() {
+    debugPrint("播放历史= $played");
     state = TracksPlayerState(
       isPlaying: isPlaying,
       isBuffering: isBuffering,

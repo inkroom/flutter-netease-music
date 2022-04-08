@@ -68,6 +68,17 @@ class Track with EquatableMixin {
   }
 
   @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Track &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          extra == other.extra;
+
+  @override
+  int get hashCode => id.hashCode ^ extra.hashCode;
+
+  @override
   List<Object?> get props => [
         id,
         uri,
@@ -82,6 +93,8 @@ class Track with EquatableMixin {
       ];
 
   Map<String, dynamic> toJson() => _$TrackToJson(this);
+
+
 }
 
 @JsonSerializable()

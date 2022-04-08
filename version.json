@@ -5,13 +5,13 @@
     "file": ""
   },
   "windows": {
-    "version": "0.7.2", 
+    "version": "0.7.3", 
     "description": "_desc_",
-    "file": "windows-v0.7.2.zip" 
+    "file": "windows-v0.7.3.zip" 
   },
   "android": {
-    "version": "0.7.2", 
+    "version": "0.7.4", 
     "description": "_desc_",
-    "file": "app-v0.7.2-release.apk" 
+    "file": "app-v0.7.4-release.apk" 
   }
 }
