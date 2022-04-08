@@ -9,7 +9,7 @@
 ## 更换版本号
  sed -i 's/_version_/'"$1"'/g' ~/deb/DEBIAN/control
   ## 处理更新信息
- sed '3c     "version": "'$1'",' version.json
+ sed '3c     "version": "'$1'",' version.jsonW
  sed '5c     "file": "quiet-'$1'.deb",' version.json
 
  dpkg-deb -b ~/deb build/linux/x64/release/quiet-$1.deb &&  mc build/linux/x64/release/quiet-$1.deb bc/temp &&  mc version.json bc/temp

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/extension.dart';
@@ -24,6 +26,11 @@ class LyricLayout extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SizedBox(height: 20),
+          if(Platform.isLinux)
+          Text(
+            track.name,
+          ),
+          if(Platform.isWindows || Platform.isWindows) 
           Text(
             track.name,
             style: context.textTheme.headline6.bold,
