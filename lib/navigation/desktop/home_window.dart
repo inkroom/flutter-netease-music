@@ -10,7 +10,6 @@ import 'package:tray_manager/tray_manager.dart';
 import 'package:quiet/navigation/common/update_dialog.dart';
 import 'package:quiet/providers/player_provider.dart';
 
-// import 'package:system_tray/system_tray.dart';
 import 'package:window_manager/window_manager.dart';
 import '../../providers/navigator_provider.dart';
 import '../common/navigation_target.dart';
@@ -41,53 +40,6 @@ class _HomeWindowState extends ConsumerState<HomeWindow>
     windowManager.addListener(this);
 
     _initTray();
-
-    // String path = Platform.isWindows
-    //     ? 'assets/icons/default_logo.ico'
-    //     : 'assets/app_icon.png';
-    //
-    // final menu = [
-    //   MenuItem(
-    //       // 这里不能直接用 context.strings
-    //       label: S.current.skipToNext,
-    //       onClicked: () {
-    //         ref.read(playerProvider).skipToNext();
-    //       }),
-    //   MenuItem(
-    //       // 这里不能直接用 context.strings
-    //       label: S.current.trayItemShow,
-    //       onClicked: _show),
-    //   MenuItem(
-    //       label: S.current.trayItemHide,
-    //       onClicked: () {
-    //         WindowManager.instance.hide();
-    //       }),
-    //   MenuItem(
-    //       label: S.current.trayItemExit,
-    //       onClicked: () {
-    //         WindowManager.instance.close();
-    //       }),
-    // ];
-    // SystemTray tray = SystemTray();
-    // // We first init the systray menu and then add the menu entries
-    // tray
-    //     .initSystemTray(
-    //       title: "system tray",
-    //       iconPath: path,
-    //     )
-    //     .then((value) => tray.setContextMenu(menu))
-    //     .then((value) {
-    //   tray.registerSystemTrayEventHandler((eventName) {
-    //     debugPrint("eventName: $eventName");
-    //     if (eventName == "leftMouseDown") {
-    //     } else if (eventName == "leftMouseUp") {
-    //       tray.popUpContextMenu();
-    //     } else if (eventName == "rightMouseDown") {
-    //     } else if (eventName == "rightMouseUp") {
-    //       _show();
-    //     }
-    //   });
-    // });
   }
 
   void _initTray() async {
@@ -153,8 +105,10 @@ class _HomeWindowState extends ConsumerState<HomeWindow>
         windowManager.hide();
         break;
       case 'exit':
-        trayManager
-            .destroy()
+        // 先把窗口隐藏再慢慢关闭，避免可能出现程序窗口半天才消失问题
+        windowManager
+            .hide()
+            .then((value) => trayManager.destroy())
             .then((value) => windowManager.setPreventClose(false))
             .then((value) {
           SingleApp.instance.release();
