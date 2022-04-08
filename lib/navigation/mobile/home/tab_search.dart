@@ -17,22 +17,24 @@ class HomeTabSearch extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchResult = ref.watch(searchMusicProvider(''));
-    log('查询数据了');
-
     return Scaffold(
       appBar: _SearchTextField(),
       body: searchResult.value.when(
-        data: (data) => TrackTileContainer.cloudTracks(
-            tracks: data,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (context, index) => TrackTile(
-                track: data[index],
-                index: index + 1,
-              ),
-              itemCount: data.length,
-            ),
-            player: ref.read(playerProvider)),
+        data: (data) => data.isEmpty
+            ? Center(
+                child: Text(context.strings.noMusic),
+              )
+            : TrackTileContainer.cloudTracks(
+                tracks: data,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => TrackTile(
+                    track: data[index],
+                    index: index + 1,
+                  ),
+                  itemCount: data.length,
+                ),
+                player: ref.read(playerProvider)),
         error: (error, stacktrace) => Center(
           child: Text(context.formattedError(error, stacktrace: stacktrace)),
         ),

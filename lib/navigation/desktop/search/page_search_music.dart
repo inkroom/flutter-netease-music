@@ -25,13 +25,17 @@ class PageMusicSearchResult extends ConsumerWidget {
         queryResultDescription: context.strings.searchMusicResultCount(
           searchResult.totalItemCount,
         ),
-        body: _TrackList(tracks: data),
+        body: data.isEmpty
+            ? Center(
+                child: Text(context.strings.noMusic),
+              )
+            : _TrackList(tracks: data),
       ),
       error: (error, stacktrace) => SearchResultScaffold(
         query: query,
         queryResultDescription: '',
         body: Center(
-          child: Text(context.formattedError(error,stacktrace: stacktrace)),
+          child: Text(context.formattedError(error, stacktrace: stacktrace)),
         ),
       ),
       loading: () => SearchResultScaffold(
