@@ -1,8 +1,8 @@
 {
   "linux": {
-    "version": "0.7.2",
+"version": "0.7.6",
     "description": "_desc_",
-    "file": ""
+"file": "quiet-linux-0.7.6.deb"
   },
   "windows": {
     "version": "0.7.5", 

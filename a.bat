@@ -8,7 +8,7 @@ set source1=_version_
 set source2=_file_
 
 set version=%1
-set out_file=app-v%1-release.apk
+set out_file=quiet-android-v%1.apk
 set isAndroid=false
 
 for /f "delims=" %%i in (%file%) do (
@@ -40,4 +40,4 @@ for /f "delims=" %%i in (%file%) do (
 move %file_tmp% %file%
 
 
-flutter build apk --target-platform android-arm && mc cp build\app\outputs\apk\release\app-v%1-release.apk bc/temp && mc cp build\app\outputs\apk\release\output-metadata.json bc/temp && mc cp %file% bc/temp
+flutter build apk --target-platform android-arm && mc cp build\app\outputs\apk\release\app-v%1-release.apk bc/temp/out_file && mc cp build\app\outputs\apk\release\output-metadata.json bc/temp && mc cp %file% bc/temp

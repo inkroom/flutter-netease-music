@@ -79,6 +79,6 @@ move %rc_file_tmp% %rc_file%
 
 
 @REM 开始构建
-flutter build windows && del %rc_file%  && move %rc_file_bak% %rc_file% && cd build\windows\runner\Release && Rar.exe a -r windows-v%1.zip *.* && mc cp windows-v%1.zip bc/temp && del windows-v%1.zip && cd ../../../../ && mc cp %file% bc/temp
+flutter build windows && del %rc_file%  && move %rc_file_bak% %rc_file% && cd build\windows\runner\Release && Rar.exe a -r quiet-windows-v%1.zip *.* && mc cp quiet-windows-v%1.zip bc/temp && mc cp quiet-windows-v%1.zip bc/temp/quiet-windows-latest.zip && del windows-v%1.zip && cd ../../../../ && mc cp %file% bc/temp
 
 
