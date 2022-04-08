@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -49,8 +51,8 @@ class NetworkRepository {
   Future<dynamic> checkUpdate() {
     // 获取网络版本
     return Dio()
-        .get("http://minio.bcyunqian.com/temp/output-metadata.json")
-        .then((value) => value.data['elements'][0]);
+        .get("http://minio.bcyunqian.com/temp/version.json")
+        .then((value) => value.data);
   }
 
   /// Fetch lyric by track id
