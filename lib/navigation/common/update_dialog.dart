@@ -22,10 +22,13 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
   /// 当前只支持android平台自动更新，windows平台自动打开网页下载最新版
   if (NetworkSingleton.instance.allowNetwork()) {
     networkRepository?.checkUpdate().then((value) {
-      if (value != null && value[Platform.operatingSystem] !=null && value[Platform.operatingSystem]['version'] != null) {
+      if (value != null &&
+          value[Platform.operatingSystem] != null &&
+          value[Platform.operatingSystem]['version'] != null) {
         PackageInfo.fromPlatform().then((info) {
           if (info.version != value[Platform.operatingSystem]['version']) {
-            toast(S.current.updateTip(value[Platform.operatingSystem]['version']));
+            toast(S.current
+                .updateTip(value[Platform.operatingSystem]['version']));
             if (Platform.isWindows || Platform.isLinux) {
               /// 打开网址
               launch(
@@ -35,20 +38,22 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
                   barrierDismissible: false,
                   context: context,
                   builder: (context) {
-                    return _UpdateDialogContent(
-                      url:
-                          "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}",
-                      filename: value[Platform.operatingSystem]['file'],
-                      version: value[Platform.operatingSystem]['version'],
-                      onDownloadComplete: (filePath) {
-                        log('下載的文件位置= $filePath');
-                        // 唤起安装
-                        MethodChannel("quiet.update.app.channel.name")
-                            .invokeMethod("installApk", {"path": filePath});
-                        // 关闭弹窗
-                        Navigator.pop(context, "");
-                      },
-                    );
+                    return WillPopScope(
+                        child: _UpdateDialogContent(
+                          url:
+                              "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}",
+                          filename: value[Platform.operatingSystem]['file'],
+                          version: value[Platform.operatingSystem]['version'],
+                          onDownloadComplete: (filePath) {
+                            log('下載的文件位置= $filePath');
+                            // 唤起安装
+                            MethodChannel("quiet.update.app.channel.name")
+                                .invokeMethod("installApk", {"path": filePath});
+                            // 关闭弹窗
+                            Navigator.pop(context, "");
+                          },
+                        ),
+                        onWillPop: () => Future.value(false));
                   }).then((value) {
                 log("dialog $value");
               }).catchError((error, s) {
