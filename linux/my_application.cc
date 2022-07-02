@@ -4,9 +4,11 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
-
+#include <signal.h>
+#include <iostream>
+#include <string.h>
 #include "flutter/generated_plugin_registrant.h"
-
+using namespace std;
 struct _MyApplication {
   GtkApplication parent_instance;
   char **dart_entrypoint_arguments;
@@ -14,11 +16,20 @@ struct _MyApplication {
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 
+GtkWindow *window;
+
+void windowSignal(int signal){
+  gtk_widget_show(GTK_WIDGET(window));
+}
+
+
+
 // Implements GApplication::activate.
 static void my_application_activate(GApplication *application) {
   MyApplication *self = MY_APPLICATION(application);
-  GtkWindow *window =
-      GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
+  window = GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
+  // 注册信号处理程序
+    signal(SIGUSR1,windowSignal);
 
   // Use a header bar when running in GNOME as this is the common style used
   // by applications and is the setup most users will be using (e.g. Ubuntu
