@@ -1,9 +1,6 @@
 # Quiet
 
-[![CI](https://github.com/boyan01/flutter-netease-music/workflows/CI/badge.svg)](https://github.com/boyan01/flutter-netease-music/actions)
-[![codecov](https://codecov.io/gh/boyan01/flutter-netease-music/branch/master/graph/badge.svg)](https://codecov.io/gh/boyan01/flutter-netease-music)
-
-仿[网易云音乐](https://music.163.com/#/download), 支持全平台。
+多源音乐播放器，基于 [https://github.com/inkroom/flutter-netease-music](https://github.com/inkroom/flutter-netease-music)，目前支持酷狗、网易云、酷我、咪咕
 
 A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 
@@ -12,7 +9,7 @@ A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 1. clone project to local
 
   ```bash
-  git clone https://github.com/boyan01/flutter-netease-music.git 
+  git clone https://github.com/inkroom/flutter-netease-music.git 
   ```
 
 2. install [Flutter](https://flutter.io/docs/get-started/install)
@@ -27,17 +24,18 @@ A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 
 ### Linux requirement.
 
+*appindicator3-0.1*
+
 debian:
 
    ```shell
-   sudo apt-get install vlc
-   sudo apt-get install libvlc-dev
+   sudo apt -y  install vlc libvlc-dev libappindicator3-dev
    ```
 
 ## Dependency backend
 
 * Toast and InApp notification：
-  [**overlay_support**](https://github.com/boyan01/overlay_support)
+  [**oktoast**](https://github.com/OpenFlutter/flutter_oktoast)
 * music player(desktop):
   [**dart_vlc**](https://github.com/alexmercerind/dart_vlc)
 * netease api service:
