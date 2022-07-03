@@ -5,9 +5,9 @@
 "file": "quiet-linux-0.7.7.deb"
   },
   "windows": {
-    "version": "0.7.5", 
+    "version": "0.7.7", 
     "description": "_desc_",
-    "file": "windows-v0.7.5.zip" 
+    "file": "windows-v0.7.7.zip" 
   },
   "android": {
     "version": "0.7.6", 
