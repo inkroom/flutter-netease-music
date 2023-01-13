@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,13 +55,13 @@ class NetworkRepository {
 
   /// Fetch lyric by track id
   Future<String?> lyric(Track id) {
-    if (!NetworkSingleton().allowNetwork()) {
-      return Future.error(NetworkException('网络设置不允许'));
-    }
     final key = CacheKey.fromString(id.id.toString() + id.extra);
     return _lyricCache.get(key).then((value) {
       if (value != null) {
         return Future.value(value.toString());
+      }
+      if (!NetworkSingleton().allowNetwork()) {
+        return Future.error(NetworkException('网络设置不允许'));
       }
       return MusicApiContainer.instance
           .getApi(id.origin)
