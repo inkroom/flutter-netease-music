@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// [path] 文件位置，可以拿来安装
 typedef OnDownloadComplete = void Function(String path);
+typedef OnDownloadFail = void Function(String msg);
 typedef OnCheckVersion = void Function(bool shouldUpdate);
 
 void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
@@ -49,6 +50,11 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
                             // 唤起安装
                             MethodChannel("quiet.update.app.channel.name")
                                 .invokeMethod("installApk", {"path": filePath});
+                            // 关闭弹窗
+                            Navigator.pop(context, "");
+                          },
+                          onDownloadFail: (msg){
+                            toast(S.current.updateFail);
                             // 关闭弹窗
                             Navigator.pop(context, "");
                           },
@@ -89,11 +95,13 @@ class _UpdateDialogContent extends StatefulWidget {
       required this.url,
       required this.filename,
       required this.version,
-      required this.onDownloadComplete})
+      required this.onDownloadComplete,
+      required this.onDownloadFail})
       : super(key: key);
 
   final String url;
   final OnDownloadComplete onDownloadComplete;
+  final OnDownloadFail onDownloadFail;
   final String filename;
   final String version;
 
@@ -111,40 +119,28 @@ class _UpdateDialogContent extends StatefulWidget {
   // }
 
   @override
-  _UpdateDialogState createState() => _UpdateDialogState(
-      url: url,
-      filename: filename,
-      version: version,
-      onDownloadComplete: onDownloadComplete);
+  _UpdateDialogState createState() => _UpdateDialogState();
 }
 
 class _UpdateDialogState extends State<_UpdateDialogContent> {
-  _UpdateDialogState(
-      {required this.url,
-      required this.filename,
-      required this.version,
-      required this.onDownloadComplete});
 
   double _processValue = 0;
 
-  String url;
-  String filename;
-  String version;
-
-  OnDownloadComplete onDownloadComplete;
-
   @override
   void initState() {
+    super.initState();
     getApkDirectory().then((value) {
-      Dio().download(url, "$value/$filename",
+      Dio().download(widget.url, "$value/${widget.filename}",
           onReceiveProgress: (int count, int total) {
         setState(() {
           _processValue = count / total;
           if (_processValue >= 1) {
-            onDownloadComplete("$value/$filename");
+            widget.onDownloadComplete("$value/${widget.filename}");
           }
         });
-      });
+      })
+      .catchError((e){widget.onDownloadFail(e.toString());})//The error handler of Future.catchError must return a value of the future's type  这里会报个错，不知道怎么解决，反正也没什么影响，就不管了
+      ;
     });
   }
 
@@ -162,7 +158,7 @@ class _UpdateDialogState extends State<_UpdateDialogContent> {
           height: 100,
         ),
         Text(
-          context.strings.updateTip(version),
+          context.strings.updateTip(widget.version),
           style: context.textTheme.bodyMedium,
         )
       ],

@@ -130,11 +130,21 @@ class S {
     );
   }
 
-  /// `Check Update`
+  /// `Checking Update`
   String get checkUpdate {
     return Intl.message(
-      'Check Update',
+      'Checking Update',
       name: 'checkUpdate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update Fail`
+  String get updateFail {
+    return Intl.message(
+      'Update Fail',
+      name: 'updateFail',
       desc: '',
       args: [],
     );

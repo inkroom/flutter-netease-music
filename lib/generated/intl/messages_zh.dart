@@ -178,6 +178,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "trayItemHide": MessageLookupByLibrary.simpleMessage("隐藏窗口"),
         "trayItemShow": MessageLookupByLibrary.simpleMessage("显示窗口"),
         "unsupportedOrigin": MessageLookupByLibrary.simpleMessage("不支持的来源"),
+        "updateFail": MessageLookupByLibrary.simpleMessage("更新失败"),
         "updateTip": m12,
         "updateTitle": m13,
         "videoCount": m14,

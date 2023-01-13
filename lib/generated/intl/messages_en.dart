@@ -72,7 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Only For Special Person"),
         "artistInfo": MessageLookupByLibrary.simpleMessage("Artist"),
         "artists": MessageLookupByLibrary.simpleMessage("Artists"),
-        "checkUpdate": MessageLookupByLibrary.simpleMessage("Check Update"),
+        "checkUpdate": MessageLookupByLibrary.simpleMessage("Checking Update"),
         "cloudMusic": MessageLookupByLibrary.simpleMessage("Music List"),
         "cloudMusicFileDropDescription": MessageLookupByLibrary.simpleMessage(
             "Drop your music file to here to upload."),
@@ -208,6 +208,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "trayItemShow": MessageLookupByLibrary.simpleMessage("Show"),
         "unsupportedOrigin":
             MessageLookupByLibrary.simpleMessage("Unsupported Origin"),
+        "updateFail": MessageLookupByLibrary.simpleMessage("Update Fail"),
         "updateTip": m12,
         "updateTitle": m13,
         "videoCount": m14,
