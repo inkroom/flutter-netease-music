@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quiet/material.dart';
@@ -20,6 +21,7 @@ typedef OnDownloadFail = void Function(String msg);
 typedef OnCheckVersion = void Function(bool shouldUpdate);
 
 void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
+  if(!kReleaseMode) return;
   /// 当前只支持android平台自动更新，windows平台自动打开网页下载最新版
   if (NetworkSingleton.instance.allowNetwork()) {
     networkRepository?.checkUpdate().then((value) {
