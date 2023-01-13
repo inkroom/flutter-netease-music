@@ -8,7 +8,7 @@ set file=version.json
 set file_tmp=version.json.tmp
 
 set version=%1
-set out_file=windows-v%1.zip
+set out_file=quiet/quiet-windows-v%1.zip
 set isWindows=false
 
 for /f "delims=" %%i in (%file%) do (

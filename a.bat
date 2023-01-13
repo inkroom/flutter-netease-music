@@ -8,7 +8,7 @@ set source1=_version_
 set source2=_file_
 
 set version=%1
-set out_file=quiet-android-v%1.apk
+set out_file=quiet/v%1/quiet-android-v%1.apk
 set isAndroid=false
 
 for /f "delims=" %%i in (%file%) do (

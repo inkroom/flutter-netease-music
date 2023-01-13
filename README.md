@@ -42,6 +42,20 @@ debian:
 * netease api service:
   [**NeteaseCloudMusicApi**](https://github.com/ziming1/NeteaseCloudMusicApi)
 
+## 更新国际化
+
+第一次需要执行
+
+```shell
+flutter pub global activate intl_utils
+```
+
+之后修改了 **lib/l10n/** 下的文件
+
+```shell
+flutter --no-color pub global run intl_utils:generate
+```
+
 ## package
 
 ### windows

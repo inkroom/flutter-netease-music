@@ -15,7 +15,7 @@ sed -i '4c     version: '"$1" pubspec.yaml
  sed -i 's/_version_/'"$1"'/g' ~/deb/DEBIAN/control
   ## 处理更新信息
  sed -i '3c     "version": "'$1'",' version.json
- sed -i '5c     "file": "quiet-linux-'$1'.deb"' version.json
+ sed -i '5c     "file": "quiet/v'$1'quiet-linux-v'$1'.deb"' version.json
   size=$(du ~/deb/opt/quiet/ --max-depth=0 | tr -cd "[0-9]")
   sed -i 's/_size_/'"$size"'/g' ~/deb/DEBIAN/control
 

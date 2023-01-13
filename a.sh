@@ -3,7 +3,7 @@
 ## 由于ubuntu双系统windows权限始终为777，所以需要换到linux目录下做操作
   ## 处理更新信息
  sed -i '13c     "version": "'$1'",' version.json
- sed -i '15c     "file": "quiet-android-'$1'.apk"' version.json
+ sed -i '15c     "file": "quiet/v'$1'quiet-android-'$1'.apk"' version.json
  sed -i '4c     version: '"$1" pubspec.yaml
 if [ -f mc ]
 then
