@@ -12,6 +12,6 @@ then
 fi
 
 ## linxu deb打包 ./deb.sh version
- flutter build apk && cp build/app/outputs/apk/release/app-v$1-release.apk quiet-android-v$1.apk && mc cp quiet-android-v$1.apk bc/temp/quiet && mc cp quiet-android-v$1.apk bc/temp/quiet/quiet-android-latest.apk && mc cp build/app/outputs/apk/release/output-metadata.json bc/temp/quiet && mc cp version.json bc/temp
+ flutter build apk && cp build/app/outputs/apk/release/app-v$1-release.apk quiet-android-v$1.apk && mc cp quiet-android-v$1.apk bc/temp/quiet/v$1 && mc cp quiet-android-v$1.apk bc/temp/quiet/quiet-android-latest.apk && mc cp build/app/outputs/apk/release/output-metadata.json bc/temp/quiet && mc cp version.json bc/temp
 
 

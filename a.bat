@@ -40,4 +40,4 @@ for /f "delims=" %%i in (%file%) do (
 move %file_tmp% %file%
 
 
-flutter build apk --target-platform android-arm && mc cp build\app\outputs\apk\release\app-v%1-release.apk bc/temp/out_file && mc cp build\app\outputs\apk\release\output-metadata.json bc/temp && mc cp %file% bc/temp
+flutter build apk --target-platform android-arm && mc cp build\app\outputs\apk\release\app-v%1-release.apk bc/temp/quiet/v%1/quiet-android-v%1.apk && mc cp build\app\outputs\apk\release\app-v%1-release.apk bc/temp/quiet/quiet-android-latest.apk && mc cp build\app\outputs\apk\release\output-metadata.json bc/temp && mc cp %file% bc/temp
