@@ -2,53 +2,178 @@ name: CI
 
 on:
   push:
-  pull_request:
+    tags:
+      - 'v*'
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
+  linux:
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-java@v1
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
         with:
-          java-version: '12.x'
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: 'master'
-
-      - run: flutter config --enable-linux-desktop
-
+          flutter-version: '3.3.10'
+          channel: 'stable'
+          cache: false
+      - name: Flutter Config
+        run: flutter config --enable-linux-desktop
+#   github 的机器居然也会出现 镜像连不上问题，不知道是哪边的问题
+          # sudo sed -i "s@http://.*archive.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@g" /etc/apt/sources.list
+          # sudo sed -i "s@http://.*security.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@g" /etc/apt/sources.list
       - name: Patch for linux build
         run: |
-          sudo apt-get update -y
+          sudo sed -i "s@http://.*archive.ubuntu.com@http://repo.huaweicloud.com@g" /etc/apt/sources.list
+          sudo sed -i "s@http://.*security.ubuntu.com@http://repo.huaweicloud.com@g" /etc/apt/sources.list
+          sudo apt update -y
+      - name: Patch for linux build
+        run: |
           sudo apt-get install -y ninja-build libgtk-3-dev
-          sudo apt-get install vlc
-          sudo apt-get install libvlc-dev
-          flutter doctor
-
-      - run: flutter pub get
-      - run: flutter pub run build_runner build --delete-conflicting-outputs
-
-      # verify the use of 'dart format' on each commit.
-      - name: Verify formatting
-        run: flutter format --set-exit-if-changed .
-
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
-      - name: Analyze project source
-        run: flutter analyze
-
-      - name: Flutter unit test
-        run: flutter test --coverage --coverage-path=lcov.info
-
-      - name: Report CodeCov
-        uses: codecov/codecov-action@v1.0.2
+      - name: Patch for linux build
+        run: |
+          sudo apt install -y vlc
+      - name: Patch for linux build
+        run: |
+          sudo apt install -y libvlc-dev
+      - name: Patch for linux build
+        run: |
+          sudo apt install -y libayatana-appindicator3-dev
+      - name: Install Minio
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
+          ./mc alias set bc ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
+      - name: Dependency
+        run: flutter pub get
+      - name: Build
+        run: sh deb.sh ${GITHUB_REF_NAME:1}
+      - name: Release
+        uses: ncipollo/release-action@v1
         with:
-          token: ${{secrets.CODECOV_TOKEN}}
-          flags: unittests
-
-      - name: Build APP
-        run: flutter build linux
-    
+          artifacts: "build/linux/x64/release/quiet-linux-${{ github.ref_name }}.deb"
+          draft: true
+          allowUpdates: true
+  windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.3.10'
+          channel: 'stable'
+          cache: false
+      - name: Install Minio
+        run: |
+          npm install --global download-cli
+          download https://dl.min.io/client/mc/release/windows-amd64/mc.exe > mc.exe
+          setx "Path" "%Path%;%RUNNER_WORKSPACE%" /m
+#          .\mc.exe alias set bc ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
+      - name: Dependency
+        run: flutter pub get
+      - name: Build
+        run: .\w.bat %GITHUB_REF_NAME:~1%
+      - name: Zip
+        uses: vimtor/action-zip@v1
+        with:
+          files: build/windows/runner/Release/
+          dest: quiet-windows-${{ github.ref_name }}.zip
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "quiet-windows-${{ github.ref_name }}.zip"
+          draft: true
+          allowUpdates: true
+  android:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.3.10'
+          channel: 'stable'
+          cache: false
+      - name: Install Minio
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
+          ./mc alias set bc ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
+      - name: Dependency
+        run: flutter pub get
+      - name: Build
+        run:  sh a.sh ${GITHUB_REF_NAME:1}
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "quiet-android-${{  github.ref_name }}.apk,build/app/outputs/apk/release/output-metadata.json"
+          draft: true
+          allowUpdates: true
+  release:
+    runs-on: ubuntu-20.04
+    needs: [linux, android, windows]
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Update version
+      #  windows 暂时没想好 怎么 发布 构建，暂时不修改版本号 
+          #       echo "update windows version"
+          # sed -i '8c     "version": "'${GITHUB_REF_NAME:1}'",' version.json
+          # sed -i '10c     "file": "quiet-windows-'$GITHUB_REF_NAME'.zip"' version.json
+        run: |
+          echo "update android version"
+          sed -i '13c     "version": "'${GITHUB_REF_NAME:1}'",' version.json
+          sed -i '15c     "file": "quiet-android-'$GITHUB_REF_NAME'.apk"' version.json
+          echo "update linux version"
+          sed -i '3c     "version": "'${GITHUB_REF_NAME:1}'",' version.json
+          sed -i '5c     "file": "quiet-linux-'$GITHUB_REF_NAME'.deb"' version.json
+      - name: Install Minio
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
+          ./mc alias set bc ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
+          ./mc cp version.json bc/temp
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "version.json"
+          allowUpdates: true
+          draft: false
+      - name: Notify
+        if: failure()
+        run: |
+          curl -d "${{ github.repository }}  ${{ github.ref_name  }}  上传构建失败" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox
+  fail:
+    runs-on: ubuntu-20.04
+    needs: [linux, android, windows] # 最好是在 release 也失败后执行 ，但是如果前置任务失败， release直接不执行，导致fail 也不会执行
+    if: failure()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Notify
+        continue-on-error: true
+        run: |
+          curl -d "${{ github.repository }}  ${{ github.ref_name  }}  构建失败" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox
+      - name: Delete tag
+        uses: pr-mpt/actions-delete-tag@v1
+        continue-on-error: true
+      - name: Delete Release 
+        run: gh release delete ${{ github.ref_name  }}
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  success:
+    runs-on: ubuntu-20.04
+    needs: [release]
+    steps:
+      - name: Notify
+        run: |
+          curl -d "${{ github.repository }}  ${{ github.ref_name  }}  构建成功" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox

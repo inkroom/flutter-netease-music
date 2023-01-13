@@ -15,6 +15,7 @@ A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 2. install [Flutter](https://flutter.io/docs/get-started/install)
 
     * require latest flutter master channel.
+    * 最新构建基于 3.3.10
 
 3. build & run
 
@@ -24,7 +25,7 @@ A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 
 ### Linux requirement.
 
-*appindicator3-0.1*
+**appindicator3-0.1**
 
 debian:
 
@@ -59,6 +60,19 @@ debian:
 
 ```shell
 ./a.bat 0.6.0
+```
+
+### github action
+
+ 注意：action会将**所有平台**一起构建
+
+ 构建成功或失败，将会通过 ntfy 通知
+
+```shell
+
+git tag v0.6.0 # 前缀 v 不能少
+git push --tags
+
 ```
 
 ## Desktop Preview

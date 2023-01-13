@@ -2,11 +2,11 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide MenuItem;
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/utils/single.dart';
-import 'package:tray_manager/tray_manager.dart';
+import 'package:tray_manager/tray_manager.dart' as tray;
 import 'package:quiet/navigation/common/update_dialog.dart';
 import 'package:quiet/providers/player_provider.dart';
 
@@ -31,7 +31,7 @@ class HomeWindow extends ConsumerStatefulWidget {
 }
 
 class _HomeWindowState extends ConsumerState<HomeWindow>
-    with WindowListener, TrayListener {
+    with WindowListener, tray.TrayListener {
   @override
   void initState() {
     super.initState();
@@ -43,51 +43,52 @@ class _HomeWindowState extends ConsumerState<HomeWindow>
   }
 
   void _initTray() async {
-    trayManager.addListener(this);
-    await trayManager.setIcon(
+    tray.trayManager.addListener(this);
+    await tray.trayManager.setIcon(
         Platform.isWindows ? 'assets/icons/logo.ico' : 'assets/logo.png');
 
     _initTrayMenu();
   }
 
   void _initTrayMenu() async {
-    List<MenuItem> items = [
+    tray.Menu menu = tray.Menu(
+        items: [
       if (ref.read(playerStateProvider).isPlaying)
-        MenuItem(
+        tray.MenuItem(
           // 这里不能直接用 context.strings
-          title: S.current.pause,
+          label: S.current.pause,
           key: 'pause',
         ),
       if (!ref.read(playerStateProvider).isPlaying)
-        MenuItem(
+        tray.MenuItem(
           // 这里不能直接用 context.strings
-          title: S.current.play,
+          label: S.current.play,
           key: 'play',
         ),
-      MenuItem(
+      tray.MenuItem(
         // 这里不能直接用 context.strings
-        title: S.current.skipToNext,
+        label: S.current.skipToNext,
         key: 'next',
       ),
-      MenuItem.separator,
-      MenuItem(
+      tray.MenuItem.separator(),
+      tray.MenuItem(
           // 这里不能直接用 context.strings
-          title: S.current.trayItemShow,
+          label: S.current.trayItemShow,
           key: 'show'),
-      MenuItem(
-        title: S.current.trayItemHide,
+      tray.MenuItem(
+        label: S.current.trayItemHide,
         key: 'hide',
       ),
-      MenuItem(
-        title: S.current.trayItemExit,
+      tray.MenuItem(
+        label: S.current.trayItemExit,
         key: 'exit',
       ),
-    ];
-    await trayManager.setContextMenu(items);
+    ]);
+    await tray.trayManager.setContextMenu(menu);
   }
 
   @override
-  void onTrayMenuItemClick(MenuItem menuItem) {
+  void onTrayMenuItemClick(tray.MenuItem menuItem) {
     switch (menuItem.key) {
       case 'play':
         ref.read(playerProvider).play();
@@ -108,7 +109,7 @@ class _HomeWindowState extends ConsumerState<HomeWindow>
         // 先把窗口隐藏再慢慢关闭，避免可能出现程序窗口半天才消失问题
         windowManager
             .hide()
-            .then((value) => trayManager.destroy())
+            .then((value) => tray.trayManager.destroy())
             .then((value) => windowManager.setPreventClose(false))
             .then((value) {
           SingleApp.instance.release();
@@ -133,7 +134,7 @@ class _HomeWindowState extends ConsumerState<HomeWindow>
   void onTrayIconRightMouseDown() {
     super.onTrayIconRightMouseDown();
     _initTrayMenu();
-    trayManager.popUpContextMenu();
+    tray.trayManager.popUpContextMenu();
   }
 
   void _show() {
@@ -145,7 +146,7 @@ class _HomeWindowState extends ConsumerState<HomeWindow>
   @override
   void dispose() {
     super.dispose();
-    trayManager.removeListener(this);
+    tray.trayManager.removeListener(this);
     windowManager.removeListener(this);
   }
 
@@ -155,7 +156,7 @@ class _HomeWindowState extends ConsumerState<HomeWindow>
       if (value) {
         windowManager.hide();
       } else {
-        trayManager.destroy();
+        tray.trayManager.destroy();
         exit(0);
       }
     });
