@@ -16,5 +16,6 @@ public class Music {
     boolean showNext = false;
     boolean isPlaying = false;
     boolean isLoading = false;
+    boolean autoStart = true;
     MediaSessionCompat session;
 }

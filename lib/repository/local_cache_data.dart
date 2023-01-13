@@ -14,7 +14,7 @@ LocalData neteaseLocalData = LocalData._();
 class LocalData {
   LocalData._();
 
-  final Dio dio = Dio();
+  final Dio _dio = Dio();
 
   ///netData 类型必须是可以放入 [store] 中的类型
   static Stream<T> withData<T>(
@@ -65,7 +65,6 @@ class LocalData {
     final Database db = await getApplicationDatabase();
     final r = StoreRef.main().record(key);
     r.delete(db);
-    log('保存数据$key $value');
     return r.put(db, value);
   }
 
@@ -102,8 +101,16 @@ class LocalData {
     log('文件下载，url=$url 文件名=$name');
     return getApplicationBin().then((value) {
       final path = join(value.toString(), name);
-      return dio.download(url, path).then((value) => path);
+      return _dio.download(url, path).then((value) => path);
     });
+  }
+
+  Future<Map<String, dynamic>?> getPlaying() {
+    return get<Map<String, dynamic>>("_playing_track_");
+  }
+
+  void savePlaying(Map<String, dynamic> json) {
+    _put(json, "_playing_track_");
   }
 
   /// 获取文件名

@@ -4,10 +4,9 @@ import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
-import 'package:quiet/material.dart';
 import 'package:quiet/component/exceptions.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/repository.dart';
 
 import 'track_list.dart';
@@ -28,8 +27,12 @@ class TracksPlayerImplVlc extends TracksPlayer {
       notifyPlayStateChanged();
     });
     _player.generalStream.listen((event) => notifyPlayStateChanged());
+    _player.positionStream.listen((event) {
+      notifyPlayStateChanged();
+    });
   }
 
+// playbackStream -> positionStream ->  generalStream -> currentStream | positionStream ->  playbackStream
   final _player = Player(
     id: 0,
     commandlineArguments: ['--no-video'],
@@ -48,15 +51,17 @@ class TracksPlayerImplVlc extends TracksPlayer {
   Track? get current => _current;
 
   @override
-  Duration? get duration => _player.position.duration;
-
+  Duration? get duration {
+    if (_current != null && _current!.duration.inSeconds != 0) {
+      /// 考虑到部分数据源可能没有时长数据，因此不能完全依靠该字段
+      return _current!.duration;
+    }
+    return _player.position.duration;
+  }
 
   @override
   Future<void> insertToNext(Track track) async {
     final index = _trackList.tracks.cast().indexOf(current);
-    // if (index == -1) {
-    // return;
-    // }
     final nextIndex = index + 1;
     if (nextIndex >= _trackList.tracks.length) {
       _trackList.tracks.add(track);
@@ -97,8 +102,19 @@ class TracksPlayerImplVlc extends TracksPlayer {
   @override
   double get playbackSpeed => _player.general.rate;
 
+  Duration? _startPosition;
+
   @override
-  Duration? get position => _player.position.position;
+  Duration? get position {
+    // 当开始位置不为0，且player获取的位置为0时，返回开始位置；一旦player的位置不为0，那就直接丢弃开始位置，以player位置为准；因为一旦不为0，说明音乐已经播放过了，最开始的播放位置已经没有用了
+    if (_startPosition != null &&
+        _player.position.position != null &&
+        _player.position.position!.inSeconds == 0) {
+      return _startPosition;
+    }
+    _startPosition = null;
+    return _player.position.position;
+  }
 
   @override
   RepeatMode get repeatMode => _mode;
@@ -165,17 +181,17 @@ class TracksPlayerImplVlc extends TracksPlayer {
   @override
   double get volume => _player.general.volume;
 
-  void _playTrack(Track track) {
+  void _playTrack(Track track, {bool autoStart = true, Duration? position}) {
     // scheduleMicrotask(() {
     if (track.file != null) {
       log('从文件播放${track.file}');
       _current = track;
+      _player.open(
+          Media.file(File(track.file!), startTime: position ?? Duration.zero),
+          autoStart: autoStart);
       notifyPlayStateChanged();
-      _player.open(Media.file(File(track.file!)), autoStart: true);
-
       // 加入播放历史
       played.add(track);
-
     } else {
       if (_current == track) {
         // skip play. since the track is changed.
@@ -190,7 +206,12 @@ class TracksPlayerImplVlc extends TracksPlayer {
             log('url=${value.mp3Url}');
             _current = track;
             notifyPlayStateChanged();
-            _player.open(Media.network(value.mp3Url), autoStart: true);
+
+            /// startTime 参数可以设置开始播放位置，但是不会更新 player 的position，还需要自己设置
+            _player.open(
+                Media.network(value.mp3Url,
+                    startTime: position ?? Duration.zero),
+                autoStart: autoStart);
             // 加入播放历史
             played.add(track);
             return value;
@@ -208,6 +229,20 @@ class TracksPlayerImplVlc extends TracksPlayer {
           return Future.error(onError);
         });
       });
+    }
+  }
+
+  @override
+  void load(TracksPlayerState state) {
+    if (state.playingTrack != null) {
+      setTrackList(state.playingList);
+      setVolume(state.volume);
+      repeatMode = state.mode;
+      _startPosition = state.position;
+
+      /// 根据配置处理项
+      _playTrack(state.playingTrack!,
+          autoStart: false, position: state.position);
     }
   }
 

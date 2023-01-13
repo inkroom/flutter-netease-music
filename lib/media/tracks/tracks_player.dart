@@ -1,15 +1,21 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:quiet/repository.dart';
 import 'package:track_music_api/track_music_api.dart';
 
 import 'track_list.dart';
 import 'tracks_player_impl_mobile.dart';
 import 'tracks_player_impl_vlc.dart';
+
+part 'tracks_player.g.dart';
+
+final String _kPlayList = "_play_list_";
+final String _kPlayingTrack = "_playing_track_";
 
 enum RepeatMode {
   /// Repeat all the tracks.
@@ -28,6 +34,7 @@ enum RepeatMode {
   next,
 }
 
+@JsonSerializable()
 class TracksPlayerState with EquatableMixin {
   const TracksPlayerState(
       {required this.isBuffering,
@@ -40,6 +47,9 @@ class TracksPlayerState with EquatableMixin {
       required this.error,
       this.position});
 
+  factory TracksPlayerState.fromJson(Map json) =>
+      _$TracksPlayerStateFromJson(json);
+
   final bool isBuffering;
   final bool isPlaying;
   final Track? playingTrack;
@@ -51,6 +61,8 @@ class TracksPlayerState with EquatableMixin {
 
   /// 标志是否播放出错
   final bool error;
+
+  Map<String, dynamic> toJson() => _$TracksPlayerStateToJson(this);
 
   @override
   List<Object?> get props => [
@@ -134,7 +146,7 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
     }
     // 注意，队列中的最后一个可能是当前播放的歌曲，所以可能需要出两次
     final r = played.removeLast();
-    if(r == current && played.isNotEmpty){
+    if (r == current && played.isNotEmpty) {
       return Future.value(played.removeLast());
     }
     return Future.value(r);
@@ -175,7 +187,7 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
 
   @protected
   void notifyPlayStateChanged() {
-    debugPrint("播放历史= $played");
+    // 持久化
     state = TracksPlayerState(
       isPlaying: isPlaying,
       isBuffering: isBuffering,
@@ -187,5 +199,9 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
       error: error,
       position: position,
     );
+    neteaseLocalData.savePlaying(state.toJson());
   }
+
+  /// 用来初始化，子类应该继承该类，重写方法
+  void load(TracksPlayerState state);
 }

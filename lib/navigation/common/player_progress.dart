@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiet/component/utils/utils.dart';
+import 'package:quiet/extension.dart';
 import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/navigation/common/progress_track_container.dart';
 import 'package:quiet/providers/player_provider.dart';
-import 'package:quiet/extension.dart';
 
 /// A seek bar for current position.
 /// 带有文字的
@@ -14,7 +14,7 @@ class DurationProgressBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final player = ref.watch(playerProvider);
+    final player = ref.watch(playerStateProvider);
 
     return SliderTheme(
       data: const SliderThemeData(

@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
 import 'package:music/music.dart' as player;
-import 'package:quiet/material.dart';
 import 'package:quiet/component/exceptions.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/providers/settings_provider.dart';
 
 import '../../repository.dart';
@@ -122,12 +121,20 @@ class TracksPlayerImplMobile extends TracksPlayer {
     await _player?.pause();
   }
 
-  Future<void> _play(Track? value) {
+  Future<void> _play(Track? value,
+      {bool autostart = true, Duration? position}) {
     if (value != null) {
       if (value.file != null) {
         log("从文件播放= ${value.file}");
         _current = value;
-        _player!.play(value.toMusic(), showNext: true, showPrevious: true);
+        if (autostart) {
+          _player!.play(value.toMusic(), showNext: true, showPrevious: true);
+        } else {
+          _player!.prepare(value.toMusic());
+        }
+        if (position != null) {
+          _player!.seek(position);
+        }
         // 加入播放历史
         played.add(value);
         notifyPlayStateChanged();
@@ -138,7 +145,14 @@ class TracksPlayerImplMobile extends TracksPlayer {
         value.mp3Url = v.mp3Url;
         log('播放器播放的url=${v.mp3Url.toString()} file=${v.file} ${value.toMusic()}');
         _current = value;
-        _player!.play(value.toMusic(), showNext: true, showPrevious: true);
+        if (autostart) {
+          _player!.play(value.toMusic(), showNext: true, showPrevious: true);
+        } else {
+          _player!.prepare(value.toMusic());
+        }
+        if (position != null) {
+          _player!.seek(position);
+        }
         notifyPlayStateChanged();
         // 加入播放历史
         played.add(value);
@@ -146,7 +160,7 @@ class TracksPlayerImplMobile extends TracksPlayer {
         if (onError is NetworkException) {
           toast(S.current.networkNotAllow);
           // return Future.error(onError);
-        }else{
+        } else {
           debugPrint('Failed to get play url: ${onError?.toString()}');
           toast(S.current.getPlayDetailFail);
         }
@@ -233,6 +247,19 @@ class TracksPlayerImplMobile extends TracksPlayer {
   @override
   Future<void> skipToPrevious() {
     return getPreviousTrack().then((value) => _play(value));
+  }
+
+  @override
+  void load(TracksPlayerState state) {
+    setTrackList(state.playingList);
+    _position = state.position;
+    setVolume(state.volume);
+    repeatMode = state.mode;
+    _duration = state.duration;
+    _isBuffing = false;
+    _isPlaying = false;
+    _error = false;
+    _play(state.playingTrack, autostart: false, position: state.position);
   }
 
   @override

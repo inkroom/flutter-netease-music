@@ -4,9 +4,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:quiet/media/tracks/tracks_player.dart';
+import 'package:quiet/providers/player_provider.dart';
+import 'package:quiet/repository.dart';
 import 'package:quiet/repository/database.dart';
 import 'package:quiet/repository/setting.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/account_provider.dart';
 import '../../providers/settings_provider.dart';
@@ -40,7 +42,7 @@ class _PageSplashState extends ConsumerState<PageSplash> {
       PackageInfo.fromPlatform().then((value) {
         ref.read(versionStateProvider.notifier).setInfo(value);
       }),
-      () async {
+          () async {
         SettingKey.init().then((value) {
           final p = SettingKey.instance.savePath;
           log("上次保存的位置 $p");
@@ -58,6 +60,13 @@ class _PageSplashState extends ConsumerState<PageSplash> {
           });
         });
       }(),
+
+      /// 读取配置文件加载播放记录
+      neteaseLocalData.getPlaying().then((value) {
+        if (value != null) {
+          ref.read(playerProvider).load(TracksPlayerState.fromJson(value));
+        }
+      })
     ];
     final start = DateTime.now().millisecondsSinceEpoch;
     Future.wait([

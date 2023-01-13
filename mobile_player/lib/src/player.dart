@@ -99,6 +99,7 @@ class MusicPlayer {
     onDuration?.call(Duration(milliseconds: 0));
     onPosition?.call(Duration(milliseconds: 0));
     await channel.invokeMethod('prepare', <String, dynamic>{
+      'autoStart': false,
       'id': music.id,
       'title': music.title,
       'url': music.url,
@@ -112,7 +113,9 @@ class MusicPlayer {
 
   /// Play the music
   Future<void> play(Music music,
-      {bool showPrevious = false, bool showNext = false}) async {
+      {bool showPrevious = false,
+      bool showNext = false,
+      bool autoStart = true}) async {
     onDuration?.call(Duration(milliseconds: 0));
     onPosition?.call(Duration(milliseconds: 0));
     await channel.invokeMethod('play', <String, dynamic>{
@@ -126,6 +129,7 @@ class MusicPlayer {
       'image': music.image == null ? null : await download(music.image!),
       'showPrevious': showPrevious,
       'showNext': showNext,
+      'autoStart': autoStart,
     });
   }
 

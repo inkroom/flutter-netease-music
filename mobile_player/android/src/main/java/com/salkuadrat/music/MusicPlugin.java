@@ -230,6 +230,7 @@ public class MusicPlugin extends BroadcastReceiver implements
         Integer duration = call.argument("duration");
         Boolean sp = call.argument("showPrevious");
         Boolean sn = call.argument("showNext");
+        Boolean autoStart = call.argument("autostart");
 
         music.id = call.argument("id");
         music.title = call.argument("title");
@@ -242,7 +243,7 @@ public class MusicPlugin extends BroadcastReceiver implements
         music.isLoading = true;
         music.isPlaying = false;
         music.position = 0;
-
+        music.autoStart = autoStart !=null && autoStart;
         if (service != null) {
             service.showNotification(music);
         }
@@ -267,6 +268,7 @@ public class MusicPlugin extends BroadcastReceiver implements
         Integer duration = call.argument("duration");
         Boolean sp = call.argument("showPrevious");
         Boolean sn = call.argument("showNext");
+        Boolean autoStart = call.argument("autoStart");
 
         music.id = call.argument("id");
         music.title = call.argument("title");
@@ -279,7 +281,7 @@ public class MusicPlugin extends BroadcastReceiver implements
         music.isLoading = false;
         music.isPlaying = true;
 
-        player.play(url);
+        player.play(url,  autoStart != null && autoStart);
 
         if (service != null) {
             service.showNotification(music);

@@ -26,6 +26,8 @@ public class MusicPlayer implements MediaPlayer.OnPreparedListener,
     private final Runnable onPositionUpdated;
     private HttpProxyCacheServer proxy;
 
+    private boolean autoStart = true;
+
     MusicPlayer(MethodChannel channel, Activity context, Runnable onPositionUpdated) {
         this.channel = channel;
         this.context = context;
@@ -51,11 +53,13 @@ public class MusicPlayer implements MediaPlayer.OnPreparedListener,
         //player.setOnBufferingUpdateListener(this);
     }
 
-    public void play(String url) {
+    public void play(String url, boolean autoStart) {
         //Log.v("MusicPlayer", "play " + url);
         player.reset();
         channel.invokeMethod("onLoading", true);
         channel.invokeMethod("onPosition", 0);
+
+        this.autoStart = autoStart;
 
         if (proxy == null) {
             proxy = new HttpProxyCacheServer
@@ -181,9 +185,14 @@ public class MusicPlayer implements MediaPlayer.OnPreparedListener,
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        // The media player is done preparing.
-        // That means we can start playing if we have audio focus.
-        player.start();
+
+        if(autoStart){
+            // The media player is done preparing.
+            // That means we can start playing if we have audio focus.
+            player.start();
+        }else {// 暂时这个参数就只需要起一次作用就行了，避免后续自动切换不自动播放
+            autoStart = true;
+        }
 
         // call flutter channel to update duration & playing status
         channel.invokeMethod("onDuration", player.getDuration());
