@@ -72,6 +72,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Only For Special Person"),
         "artistInfo": MessageLookupByLibrary.simpleMessage("Artist"),
         "artists": MessageLookupByLibrary.simpleMessage("Artists"),
+        "autoPlayOnStart":
+            MessageLookupByLibrary.simpleMessage("auto play after start"),
         "checkUpdate": MessageLookupByLibrary.simpleMessage("Checking Update"),
         "cloudMusic": MessageLookupByLibrary.simpleMessage("Music List"),
         "cloudMusicFileDropDescription": MessageLookupByLibrary.simpleMessage(
@@ -128,8 +130,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "myDjs": MessageLookupByLibrary.simpleMessage("Dj"),
         "myMusic": MessageLookupByLibrary.simpleMessage("My Music"),
         "needLogin": MessageLookupByLibrary.simpleMessage("Login First"),
-        "networkNotAllow": MessageLookupByLibrary.simpleMessage(
-            "The Network Setting Not Allow"),
+        "networkNotAllow":
+            MessageLookupByLibrary.simpleMessage("Network Setting"),
         "newestVersion": MessageLookupByLibrary.simpleMessage("Newest Version"),
         "nextStep": MessageLookupByLibrary.simpleMessage("next step"),
         "noLyric": MessageLookupByLibrary.simpleMessage("No Lyric"),

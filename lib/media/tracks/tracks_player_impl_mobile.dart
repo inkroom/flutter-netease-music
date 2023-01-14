@@ -250,7 +250,7 @@ class TracksPlayerImplMobile extends TracksPlayer {
   }
 
   @override
-  void load(TracksPlayerState state) {
+  void load(TracksPlayerState state, {bool autoStart = false}) {
     setTrackList(state.playingList);
     _position = state.position;
     setVolume(state.volume);
@@ -259,7 +259,7 @@ class TracksPlayerImplMobile extends TracksPlayer {
     _isBuffing = false;
     _isPlaying = false;
     _error = false;
-    _play(state.playingTrack, autostart: false, position: state.position);
+    _play(state.playingTrack, autostart: autoStart, position: state.position);
   }
 
   @override

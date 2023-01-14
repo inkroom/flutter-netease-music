@@ -233,7 +233,7 @@ class TracksPlayerImplVlc extends TracksPlayer {
   }
 
   @override
-  void load(TracksPlayerState state) {
+  void load(TracksPlayerState state, {bool autoStart = false}) {
     if (state.playingTrack != null) {
       setTrackList(state.playingList);
       setVolume(state.volume);
@@ -242,7 +242,7 @@ class TracksPlayerImplVlc extends TracksPlayer {
 
       /// 根据配置处理项
       _playTrack(state.playingTrack!,
-          autoStart: false, position: state.position);
+          autoStart: autoStart, position: state.position);
     }
   }
 

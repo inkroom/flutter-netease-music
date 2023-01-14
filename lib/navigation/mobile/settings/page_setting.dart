@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quiet/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/component.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/navigation/common/update_dialog.dart';
 import 'package:quiet/providers/settings_provider.dart';
 
@@ -27,6 +26,10 @@ class PageSettings extends ConsumerWidget {
           SettingGroup(
             title: context.strings.settingItemNoNetwork,
             children: const [NetworkSwitchRadios()],
+          ),
+          SettingGroup(
+            title: context.strings.play,
+            children: const [AutoPlayOnStart()],
           ),
           const Divider(height: 20),
           if (!kReleaseMode) const _DebugNavigationPlatformSetting(),

@@ -203,5 +203,5 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   }
 
   /// 用来初始化，子类应该继承该类，重写方法
-  void load(TracksPlayerState state);
+  void load(TracksPlayerState state, {bool autoStart = false});
 }

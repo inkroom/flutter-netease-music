@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,6 +39,8 @@ class SettingKey {
 
   final String _keySkipWelcomePage = '$_prefix:skipWelcomePage';
 
+  final String _keyAutoPlayOnStart = '$_prefix:autoPlayOnStart';
+
   final String _keySavePath = '$_prefix:savePath';
 
   SharedPreferences? preferences;
@@ -73,6 +74,12 @@ class SettingKey {
 
   set skipAccompaniment(bool value) {
     preferences?.setBool(_keySkipWelcomePage, value);
+  }
+
+  bool get autoPlayOnStart => preferences?.getBool(_keyAutoPlayOnStart) ?? true;
+
+  set autoPlayOnStart(bool value) {
+    preferences?.setBool(_keyAutoPlayOnStart, value);
   }
 
   // 此处的默认值不重要，因为程序启动之后会自动写入默认值，保证此处的默认值不会被返回

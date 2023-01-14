@@ -67,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "applicationLegalese": MessageLookupByLibrary.simpleMessage("仅供个人使用"),
         "artistInfo": MessageLookupByLibrary.simpleMessage("艺人信息"),
         "artists": MessageLookupByLibrary.simpleMessage("歌手"),
+        "autoPlayOnStart": MessageLookupByLibrary.simpleMessage("启动后自动播放"),
         "checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
         "cloudMusic": MessageLookupByLibrary.simpleMessage("歌单"),
         "cloudMusicFileDropDescription":
@@ -145,7 +146,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectRegionDiaCode": MessageLookupByLibrary.simpleMessage("选择地区号码"),
         "selectTheArtist": MessageLookupByLibrary.simpleMessage("请选择要查看的歌手"),
         "settingItemGroupNetwork": MessageLookupByLibrary.simpleMessage("网络"),
-        "settingItemNoNetwork": MessageLookupByLibrary.simpleMessage("不可联网"),
+        "settingItemNoNetwork": MessageLookupByLibrary.simpleMessage("联网设置"),
         "settingItemOnlyMobile":
             MessageLookupByLibrary.simpleMessage("可使用流量网络"),
         "settingItemOnlyWIFI":

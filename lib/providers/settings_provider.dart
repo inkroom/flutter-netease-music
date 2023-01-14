@@ -40,6 +40,7 @@ class SettingState with EquatableMixin {
     required this.themeMode,
     required this.skipWelcomePage,
     required this.skipAccompaniment,
+    required this.autoPlayOnStart,
     required this.savePath,
   });
 
@@ -51,6 +52,7 @@ class SettingState with EquatableMixin {
       themeMode: preference.themeMode,
       skipWelcomePage: false,
       skipAccompaniment: preference.skipAccompaniment,
+      autoPlayOnStart: preference.autoPlayOnStart,
     );
   }
 
@@ -59,6 +61,7 @@ class SettingState with EquatableMixin {
   final ThemeMode themeMode;
   final bool skipWelcomePage;
   final bool skipAccompaniment;
+  final bool autoPlayOnStart;
 
   @override
   List<Object> get props => [
@@ -67,6 +70,7 @@ class SettingState with EquatableMixin {
         skipAccompaniment,
         networkMode,
         savePath,
+        autoPlayOnStart
       ];
 
   SettingState copyWith({
@@ -75,6 +79,7 @@ class SettingState with EquatableMixin {
     ThemeMode? themeMode,
     bool? skipWelcomePage,
     bool? skipAccompaniment,
+    bool? autoPlayOnStart,
   }) =>
       SettingState(
         savePath: savePath ?? this.savePath,
@@ -82,17 +87,19 @@ class SettingState with EquatableMixin {
         themeMode: themeMode ?? this.themeMode,
         skipWelcomePage: skipWelcomePage ?? this.skipWelcomePage,
         skipAccompaniment: skipAccompaniment ?? this.skipAccompaniment,
+        autoPlayOnStart: autoPlayOnStart ?? this.autoPlayOnStart,
       );
 }
 
 class Settings extends StateNotifier<SettingState> {
   Settings()
       : super(const SettingState(
-          networkMode: NetworkMode.NONE,
+    networkMode: NetworkMode.NONE,
           themeMode: ThemeMode.system,
           skipWelcomePage: true,
           skipAccompaniment: false,
           savePath: '',
+          autoPlayOnStart: true,
         ));
 
   late final SettingKey _preferences;
@@ -128,6 +135,11 @@ class Settings extends StateNotifier<SettingState> {
   void setSkipAccompaniment({required bool skip}) {
     _preferences.skipAccompaniment = skip;
     state = state.copyWith(skipAccompaniment: skip);
+  }
+
+  void setAutoPlayOnStart({required bool value}) {
+    _preferences.autoPlayOnStart = value;
+    state = state.copyWith(autoPlayOnStart: value);
   }
 }
 

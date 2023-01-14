@@ -70,6 +70,25 @@ class DebugPlatformNavigationRadios extends ConsumerWidget {
   }
 }
 
+// 启动播放设置项
+class AutoPlayOnStart extends ConsumerWidget {
+  const AutoPlayOnStart({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CheckboxListTile(
+      value: ref.watch(
+        settingStateProvider.select((value) => value.autoPlayOnStart),
+      ),
+      onChanged: (value) => ref
+          .read(settingStateProvider.notifier)
+          .setAutoPlayOnStart(value: value ?? false),
+      controlAffinity: ListTileControlAffinity.leading,
+      title: Text(context.strings.autoPlayOnStart),
+    );
+  }
+}
+
 class SkipAccompanimentCheckBox extends ConsumerWidget {
   const SkipAccompanimentCheckBox({Key? key}) : super(key: key);
 

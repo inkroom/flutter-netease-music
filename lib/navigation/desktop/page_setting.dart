@@ -4,7 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quiet/component/utils/scroll_controller.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/providers/settings_provider.dart';
@@ -47,6 +46,7 @@ class PageSetting extends ConsumerWidget {
             Text(context.strings.play, style: context.textTheme.bodyMedium),
             const SizedBox(height: 12),
             const SkipAccompanimentCheckBox(),
+            const AutoPlayOnStart(),
             const Divider(height: 40),
             const _HotkeyLayout(),
             const Divider(height: 40),
