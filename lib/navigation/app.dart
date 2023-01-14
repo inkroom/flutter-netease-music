@@ -7,7 +7,7 @@ import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/desktop/home_window.dart';
 import 'package:quiet/providers/navigator_provider.dart';
 import 'package:window_manager/window_manager.dart';
-
+import 'desktop/widgets/hotkeys.dart';
 import '../providers/settings_provider.dart';
 import 'mobile/mobile_window.dart';
 
@@ -28,7 +28,8 @@ class QuietApp extends ConsumerWidget {
         break;
     }
 
-    return MaterialApp(
+    return GlobalHotkeys(
+        child: MaterialApp(
       title: 'Quiet',
       supportedLocales: const [Locale("en"), Locale("zh")],
       localizationsDelegates: const [
@@ -44,7 +45,7 @@ class QuietApp extends ConsumerWidget {
       ),
       home: home,
       debugShowCheckedModeBanner: false,
-    );
+    ));
   }
 }
 

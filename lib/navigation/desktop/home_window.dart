@@ -170,7 +170,7 @@ class _HomeWindowState extends ConsumerState<HomeWindow>
               fit: BoxFit.cover,
               opacity: 0.2,
               image: AssetImage('assets/desktop_bg.jpg'))),
-      child: const WindowsTaskBar(child: GlobalHotkeys(child: _WindowLayout())),
+      child: const WindowsTaskBar(child: _WindowLayout()),
     );
   }
 }
