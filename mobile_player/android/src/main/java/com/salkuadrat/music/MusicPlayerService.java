@@ -238,11 +238,9 @@ public class MusicPlayerService extends Service implements AudioManager.OnAudioF
         // with ACTION_PAUSE.
         builder.setDeleteIntent(pendingIntent(2, MusicAction.stop));
 
-        Intent notificationIntent = new Intent(getApplicationContext(), FlutterActivity.class);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        Intent notificationIntent = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getPackageName());
         builder.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0,
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
         Notification n = builder.build();
 
         if (manager != null) {
