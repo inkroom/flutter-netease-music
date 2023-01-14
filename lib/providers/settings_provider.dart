@@ -183,7 +183,8 @@ class NetworkSingleton {
     if (_mode == NetworkMode.NONE) {
       return false;
     } else if (_mode == NetworkMode.MOBILE) {
-      return _now == ConnectivityResult.mobile;
+      return _now == ConnectivityResult.mobile || _now == ConnectivityResult.wifi ||
+          _now == ConnectivityResult.ethernet;
     } else if (_mode == NetworkMode.WIFI) {
       return _now == ConnectivityResult.wifi ||
           _now == ConnectivityResult.ethernet;
