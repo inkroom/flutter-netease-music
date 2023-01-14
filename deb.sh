@@ -25,6 +25,6 @@ then
   alias mc="`pwd`/mc"
 fi
 
- dpkg-deb -b ~/deb build/linux/x64/release/quiet-linux-v$1.deb &&  mc cp build/linux/x64/release/quiet-linux-v$1.deb bc/temp/quiet/v$1 && mc cp build/linux/x64/release/quiet-linux-v$1.deb bc/temp/quiet/quiet-linux-latest.deb &&  mc cp version.json bc/temp
+ dpkg-deb -b ~/deb build/linux/x64/release/quiet-linux-v$1.deb &&  mc cp build/linux/x64/release/quiet-linux-v$1.deb bc/temp/quiet/v$1/quiet-linux-v$1.deb && mc cp build/linux/x64/release/quiet-linux-v$1.deb bc/temp/quiet/quiet-linux-latest.deb &&  mc cp version.json bc/temp
 ## 删除目录
  # rm -rf ~/deb
