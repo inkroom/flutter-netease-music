@@ -222,11 +222,11 @@ class TracksPlayerImplVlc extends TracksPlayer {
         }).catchError((onError) {
           if (onError is NetworkException) {
             toast(S.current.networkNotAllow);
-            return Future.error(onError);
+            return Future.value(onError);// 调用 Future.error 会提示 Unhandled，，不返回又要提示 需要一个返回值。
           }
           debugPrint('Failed to get play url: ${onError?.toString()}');
           toast(S.current.getPlayDetailFail);
-          return Future.error(onError);
+          return Future.value(onError);// 调用 Future.error 会提示 Unhandled，，不返回又要提示 需要一个返回值。
         });
       });
     }
