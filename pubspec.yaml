@@ -1,7 +1,7 @@
 name: quiet
 description: 多源音乐播放器
 
-version: 0.7.9
+version: 0.7.12
 publish_to: none
 
 environment:
@@ -43,7 +43,7 @@ dependencies:
   riverpod: ^1.0.3
   flutter_riverpod: ^1.0.3
   hooks_riverpod: ^1.0.3
-  dart_vlc: ^0.1.8
+  dart_vlc: ^0.4.0
   collection: ^1.15.0
   window_manager: ^0.2.0
   lpinyin: ^2.0.3
@@ -52,15 +52,16 @@ dependencies:
   filesize: ^2.0.1
   desktop_drop: ^0.3.0
   dotted_border: ^2.0.0+2
-  permission_handler: ^9.2.0
+  permission_handler: ^10.2.0
   connectivity_plus: ^2.2.1
   music:
     path: mobile_player/
   list_tile_more_customizable: ^3.0.0
   package_info_plus: ^1.4.0
   oktoast: ^3.1.5
-  file_picker: ^4.5.1
+  file_picker: ^5.2.5
   tray_manager: ^0.2.0
+  archive: ^3.3.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

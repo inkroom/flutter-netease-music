@@ -24,7 +24,7 @@ class PageSettings extends ConsumerWidget {
           ),
           const Divider(height: 20),
           SettingGroup(
-            title: context.strings.settingItemNoNetwork,
+            title: context.strings.settingNetwork,
             children: const [NetworkSwitchRadios()],
           ),
           SettingGroup(
@@ -34,6 +34,7 @@ class PageSettings extends ConsumerWidget {
           const Divider(height: 20),
           if (!kReleaseMode) const _DebugNavigationPlatformSetting(),
           if (!kReleaseMode) const Divider(height: 20),
+          const ImportAndExportSetting(),
           // if (Platform.isAndroid)
           SettingGroup(
             children: [

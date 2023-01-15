@@ -33,6 +33,13 @@ debian:
    sudo apt -y  install vlc libvlc-dev libappindicator3-dev
    ```
 
+如果是deepin还需要以下命令
+
+```shell
+# 用于打开文件选择框
+sudo apt install -y zenity
+```
+
 ## Dependency backend
 
 * Toast and InApp notification：

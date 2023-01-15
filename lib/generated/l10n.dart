@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -286,6 +285,56 @@ class S {
     return Intl.message(
       'No Network',
       name: 'settingItemNoNetwork',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Network Setting`
+  String get settingNetwork {
+    return Intl.message(
+      'Network Setting',
+      name: 'settingNetwork',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import`
+  String get settingImport {
+    return Intl.message(
+      'Import',
+      name: 'settingImport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Importing`
+  String get settingImportIng {
+    return Intl.message(
+      'Importing',
+      name: 'settingImportIng',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export`
+  String get settingExport {
+    return Intl.message(
+      'Export',
+      name: 'settingExport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exporting`
+  String get settingExportIng {
+    return Intl.message(
+      'Exporting',
+      name: 'settingExportIng',
       desc: '',
       args: [],
     );

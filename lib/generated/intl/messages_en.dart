@@ -171,6 +171,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("select region code"),
         "selectTheArtist":
             MessageLookupByLibrary.simpleMessage("Select the artist"),
+        "settingExport": MessageLookupByLibrary.simpleMessage("Export"),
+        "settingExportIng": MessageLookupByLibrary.simpleMessage("Exporting"),
+        "settingImport": MessageLookupByLibrary.simpleMessage("Import"),
+        "settingImportIng": MessageLookupByLibrary.simpleMessage("Importing"),
         "settingItemGroupNetwork":
             MessageLookupByLibrary.simpleMessage("Network"),
         "settingItemNoNetwork":
@@ -179,6 +183,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Use 3/4/5G"),
         "settingItemOnlyWIFI":
             MessageLookupByLibrary.simpleMessage("Only WIFI"),
+        "settingNetwork":
+            MessageLookupByLibrary.simpleMessage("Network Setting"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
         "shareContentCopied": MessageLookupByLibrary.simpleMessage(

@@ -42,6 +42,8 @@ class SettingState with EquatableMixin {
     required this.skipAccompaniment,
     required this.autoPlayOnStart,
     required this.savePath,
+    required this.exporting,
+    required this.importing,
   });
 
   factory SettingState.fromPreference(SettingKey preference) {
@@ -53,6 +55,8 @@ class SettingState with EquatableMixin {
       skipWelcomePage: false,
       skipAccompaniment: preference.skipAccompaniment,
       autoPlayOnStart: preference.autoPlayOnStart,
+      exporting: false,
+      importing: false,
     );
   }
 
@@ -62,6 +66,8 @@ class SettingState with EquatableMixin {
   final bool skipWelcomePage;
   final bool skipAccompaniment;
   final bool autoPlayOnStart;
+  final bool exporting;
+  final bool importing;
 
   @override
   List<Object> get props => [
@@ -70,7 +76,9 @@ class SettingState with EquatableMixin {
         skipAccompaniment,
         networkMode,
         savePath,
-        autoPlayOnStart
+        autoPlayOnStart,
+        exporting,
+        importing,
       ];
 
   SettingState copyWith({
@@ -80,6 +88,8 @@ class SettingState with EquatableMixin {
     bool? skipWelcomePage,
     bool? skipAccompaniment,
     bool? autoPlayOnStart,
+    bool? exporting,
+    bool? importing,
   }) =>
       SettingState(
         savePath: savePath ?? this.savePath,
@@ -88,6 +98,8 @@ class SettingState with EquatableMixin {
         skipWelcomePage: skipWelcomePage ?? this.skipWelcomePage,
         skipAccompaniment: skipAccompaniment ?? this.skipAccompaniment,
         autoPlayOnStart: autoPlayOnStart ?? this.autoPlayOnStart,
+        exporting: exporting ?? this.exporting,
+        importing: importing ?? this.importing,
       );
 }
 
@@ -100,6 +112,8 @@ class Settings extends StateNotifier<SettingState> {
           skipAccompaniment: false,
           savePath: '',
           autoPlayOnStart: true,
+          exporting: false,
+          importing: false,
         ));
 
   late final SettingKey _preferences;
@@ -140,6 +154,14 @@ class Settings extends StateNotifier<SettingState> {
   void setAutoPlayOnStart({required bool value}) {
     _preferences.autoPlayOnStart = value;
     state = state.copyWith(autoPlayOnStart: value);
+  }
+
+  void setExporting(bool value) {
+    state = state.copyWith(exporting: value);
+  }
+
+  void setImport(bool value) {
+    state = state.copyWith(importing: value);
   }
 }
 
@@ -195,7 +217,8 @@ class NetworkSingleton {
     if (_mode == NetworkMode.NONE) {
       return false;
     } else if (_mode == NetworkMode.MOBILE) {
-      return _now == ConnectivityResult.mobile || _now == ConnectivityResult.wifi ||
+      return _now == ConnectivityResult.mobile ||
+          _now == ConnectivityResult.wifi ||
           _now == ConnectivityResult.ethernet;
     } else if (_mode == NetworkMode.WIFI) {
       return _now == ConnectivityResult.wifi ||
