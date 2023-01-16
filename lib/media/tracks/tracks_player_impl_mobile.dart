@@ -125,15 +125,12 @@ class TracksPlayerImplMobile extends TracksPlayer {
       {bool autostart = true, Duration? position}) {
     if (value != null) {
       if (value.file != null) {
-        log("从文件播放= ${value.file}");
+        log("从文件播放= ${value.file} auto ${autostart}");
         _current = value;
         if (autostart) {
           _player!.play(value.toMusic(), showNext: true, showPrevious: true);
         } else {
           _player!.prepare(value.toMusic());
-        }
-        if (position != null) {
-          _player!.seek(position);
         }
         // 加入播放历史
         played.add(value);
@@ -143,15 +140,12 @@ class TracksPlayerImplMobile extends TracksPlayer {
       // if (value.mp3Url == null || value.mp3Url!.isEmpty) {
       return networkRepository!.getPlayUrl(value).then((v) {
         value.mp3Url = v.mp3Url;
-        log('播放器播放的url=${v.mp3Url.toString()} file=${v.file} ${value.toMusic()}');
+        log('播放器播放的url=${v.mp3Url.toString()} file=${v.file} ${value.toMusic().id} ${value.toMusic().title} auto $autostart}');
         _current = value;
         if (autostart) {
           _player!.play(value.toMusic(), showNext: true, showPrevious: true);
         } else {
           _player!.prepare(value.toMusic());
-        }
-        if (position != null) {
-          _player!.seek(position);
         }
         notifyPlayStateChanged();
         // 加入播放历史

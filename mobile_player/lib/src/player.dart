@@ -98,7 +98,7 @@ class MusicPlayer {
   Future<void> prepare(Music music) async {
     onDuration?.call(Duration(milliseconds: 0));
     onPosition?.call(Duration(milliseconds: 0));
-    await channel.invokeMethod('prepare', <String, dynamic>{
+    await channel.invokeMethod('play', <String, dynamic>{
       'autoStart': false,
       'id': music.id,
       'title': music.title,
