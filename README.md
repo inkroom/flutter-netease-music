@@ -1,6 +1,7 @@
 # Quiet
 
-多源音乐播放器，基于 [https://github.com/inkroom/flutter-netease-music](https://github.com/inkroom/flutter-netease-music)，目前支持酷狗、网易云、酷我、咪咕
+多源音乐播放器，基于 [https://github.com/boyan01/flutter-netease-music](https://github.com/boyan01/flutter-netease-music)
+，目前支持酷狗、网易云、酷我、咪咕
 
 A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 
@@ -27,7 +28,6 @@ A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 
 **appindicator3-0.1**
 
-debian:
 
    ```shell
    sudo apt -y  install vlc libvlc-dev libappindicator3-dev
@@ -48,20 +48,6 @@ sudo apt install -y zenity
   [**dart_vlc**](https://github.com/alexmercerind/dart_vlc)
 * netease api service:
   [**NeteaseCloudMusicApi**](https://github.com/ziming1/NeteaseCloudMusicApi)
-
-## 更新国际化
-
-第一次需要执行
-
-```shell
-flutter pub global activate intl_utils
-```
-
-之后修改了 **lib/l10n/** 下的文件
-
-```shell
-flutter --no-color pub global run intl_utils:generate
-```
 
 ## package
 
@@ -111,3 +97,32 @@ git push --tags
 | ![music_selection](https://boyan01.github.io/quiet/music_selection.png) | ![playlist_selector](https://boyan01.github.io/quiet/playlist_selector.jpg) |                                                               |     ![每日推荐](https://boyan01.github.io/quiet/daily_playlist.png)     |
 |     ![ios](https://boyan01.github.io/quiet/ios_playlist_detail.jpg)     |           ![ios](https://boyan01.github.io/quiet/user_detail.png)           |                                                               |                                                                     |
 
+## FAQ
+
+#### 1. deepin无法自定义存储路径
+
+```shell
+# 用于打开文件选择框
+sudo apt install -y zenity
+```
+
+#### 2. 修改pubspec.yaml后，windows的版本号没有变
+
+>
+> 这是flutter早期模板的[bug](https://github.com/flutter/flutter/issues/73652)
+> 需要修改 **windows/runner/Runner.rc** 的第66行和第72行
+>
+
+#### 4. 修改了国际化文件
+
+第一次需要执行
+
+```shell
+flutter pub global activate intl_utils
+```
+
+之后修改了 **lib/l10n/** 下的文件
+
+```shell
+flutter --no-color pub global run intl_utils:generate
+```
