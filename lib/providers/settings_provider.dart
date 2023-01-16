@@ -106,7 +106,7 @@ class SettingState with EquatableMixin {
 class Settings extends StateNotifier<SettingState> {
   Settings()
       : super(const SettingState(
-    networkMode: NetworkMode.NONE,
+          networkMode: NetworkMode.NONE,
           themeMode: ThemeMode.system,
           skipWelcomePage: true,
           skipAccompaniment: false,
@@ -203,9 +203,10 @@ class NetworkSingleton {
   }
 
   /// 主动更新网络，用于部分情况下监听网络变化失效问题
-  void updateNetwork() {
-    f.checkConnectivity().then((value) {
+  Future<ConnectivityResult> updateNetwork() {
+    return f.checkConnectivity().then((value) {
       _now = value;
+      return value;
     }).catchError((onError) {
       log('网络状态error,$onError');
     });

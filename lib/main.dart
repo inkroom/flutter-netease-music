@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:quiet/navigation/app.dart';
 import 'package:quiet/pages/splash/page_splash.dart';
+import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository.dart';
 import 'package:quiet/utils/single.dart';
 import 'package:window_manager/window_manager.dart';
@@ -26,7 +27,7 @@ void main() async {
         runZonedGuarded(() {
           runApp(ProviderScope(
             child: PageSplash(
-              futures: const [],
+              futures: [NetworkSingleton().updateNetwork()],
               builder: (BuildContext context, List<dynamic> data) {
                 return const MyApp();
               },
@@ -44,7 +45,7 @@ void main() async {
     runZonedGuarded(() {
       runApp(ProviderScope(
         child: PageSplash(
-          futures: const [],
+          futures: [NetworkSingleton().updateNetwork()],
           builder: (BuildContext context, List<dynamic> data) {
             return const MyApp();
           },
