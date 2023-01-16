@@ -1,5 +1,9 @@
 import com.android.build.OutputFile
-
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -64,6 +68,12 @@ android {
             keyAlias 'github'
             keyPassword 'boyan01'
         }
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
     }
 
     applicationVariants.all { variant ->
@@ -79,16 +89,19 @@ android {
         }
     }
 
-//    buildTypes {
-//        debug {
-//            applicationIdSuffix ".debug"
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
 //            ndk {
 //                //这里配置开发调试时的，根据个人需要增减少，x86建议加上不然部分模拟器会报错
 //                abiFilters "armeabi-v7a"
 ////                abiFilters  "armeabi-v7a","arm64-v8a", "x86"
 //            }
-//        }
-//    }
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
     splits {
 
         // 基于不同的abi架构配置不同的apk
@@ -108,8 +121,6 @@ android {
             universalApk true
         }
     }
-
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

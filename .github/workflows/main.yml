@@ -107,10 +107,19 @@ jobs:
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           ./mc alias set bc ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
+      - name: Create the Keystore
+        env:
+          APK_KEY_STORE_BASE64: ${{ secrets.APK_KEY_STORE_BASE64 }}
+          APK_KEY_PROPERTIES_BASE64: ${{ secrets.APK_KEY_PROPERTIES_BASE64 }}
+        run: |
+          # import keystore from secrets
+          ls -all
+          echo $APK_KEY_STORE_BASE64 | base64 -di > android/app/upload-keystore.jks
+          echo $APK_KEY_PROPERTIES_BASE64 | base64 -di > android/key.properties
       - name: Dependency
         run: flutter pub get
       - name: Build
-        run:  sh a.sh ${GITHUB_REF_NAME:1}
+        run: sh a.sh ${GITHUB_REF_NAME:1}
       - name: Release
         uses: ncipollo/release-action@v1
         with:
