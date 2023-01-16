@@ -100,6 +100,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please login first."),
         "errorToFetchData":
             MessageLookupByLibrary.simpleMessage("error to fetch data."),
+        "exportFail": MessageLookupByLibrary.simpleMessage("export fail"),
+        "exported": MessageLookupByLibrary.simpleMessage("export success"),
         "failedToDelete": MessageLookupByLibrary.simpleMessage("delete failed"),
         "failedToLoad": MessageLookupByLibrary.simpleMessage("failed to load"),
         "failedToPlayMusic":
@@ -112,6 +114,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "getPlayDetailFail":
             MessageLookupByLibrary.simpleMessage("Fetch Music Failed"),
         "hotSong": MessageLookupByLibrary.simpleMessage("Hot Song"),
+        "importFail": MessageLookupByLibrary.simpleMessage("import fail"),
+        "imported": MessageLookupByLibrary.simpleMessage("import success"),
         "keySpace": MessageLookupByLibrary.simpleMessage("Space"),
         "latestPlayHistory":
             MessageLookupByLibrary.simpleMessage("Play History"),

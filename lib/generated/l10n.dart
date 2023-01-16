@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -335,6 +336,46 @@ class S {
     return Intl.message(
       'Exporting',
       name: 'settingExportIng',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `export success`
+  String get exported {
+    return Intl.message(
+      'export success',
+      name: 'exported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `export fail`
+  String get exportFail {
+    return Intl.message(
+      'export fail',
+      name: 'exportFail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `import success`
+  String get imported {
+    return Intl.message(
+      'import success',
+      name: 'imported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `import fail`
+  String get importFail {
+    return Intl.message(
+      'import fail',
+      name: 'importFail',
       desc: '',
       args: [],
     );
