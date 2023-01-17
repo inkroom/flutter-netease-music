@@ -3,15 +3,17 @@ import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:quiet/extension.dart';
 import 'package:quiet/navigation/app.dart';
 import 'package:quiet/pages/splash/page_splash.dart';
 import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository.dart';
 import 'package:quiet/utils/single.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:quiet/extension.dart';
+
 import 'utils/system/system_fonts.dart';
 
 void main() async {
@@ -43,6 +45,12 @@ void main() async {
     });
   } else {
     runZonedGuarded(() {
+      SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+      // SystemChrome.setPreferredOrientations([ 	 //强制横屏
+      //   DeviceOrientation.landscapeLeft,
+      //   DeviceOrientation.landscapeRight
+      // ]);
       runApp(ProviderScope(
         child: PageSplash(
           futures: [NetworkSingleton().updateNetwork()],
