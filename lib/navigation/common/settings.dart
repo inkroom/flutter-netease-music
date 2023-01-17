@@ -240,34 +240,51 @@ class ImportAndExportSetting extends ConsumerWidget {
                 allow = ["quiet"];
               }
 
-              FilePicker.platform
-                  .pickFiles(allowedExtensions: allow)
-                  .then((value) async {
-                if (value != null &&
-                    value.count == 1 &&
-                    value.files[0].extension == 'quiet') {
+              Future f = Future.value(true);
+              if (Platform.isAndroid) {
+                f = f
+                    .then((value) => Permission.storage.request())
+                    .then((value) => value.isGranted);
+              }
+              f.then((value) {
+                if (value == true) {
+                  return FilePicker.platform
+                      .pickFiles(
+                          allowedExtensions: allow,
+                          onFileLoading: (FilePickerStatus status) {
+                            ref
+                                .read(settingStateProvider.notifier)
+                                .setImport(true);
+                          })
+                      .then((FilePickerResult? value) => (value != null &&
+                              value.count == 1 &&
+                              value.files.single.extension == "quiet")
+                          ? value.files.single.path
+                          : null);
+                }
+                return null;
+              }).then((exportPath) async {
+                if (exportPath != null) {
                   ref.read(settingStateProvider.notifier).setImport(true);
 
-                  CloudTracksDetail c = await compute(_unzipOnIsolate, [
-                    value.files[0].path,
-                    ref.read(settingStateProvider).savePath
-                  ]);
+                  debugPrint("选择的文件路径  =${exportPath}  ");
+
+                  CloudTracksDetail c = await compute(_unzipOnIsolate,
+                      [exportPath, ref.read(settingStateProvider).savePath]);
                   for (var element in c.tracks) {
                     ref.read(cloudTracksProvider.notifier).add(element);
                   }
                   debugPrint("结果= $c");
-                  return value;
+                  return exportPath;
                 }
                 return null;
               }).then((value) {
                 ref.read(settingStateProvider.notifier).setImport(false);
-                toast(context.strings.imported);
+                if (value != null) toast(context.strings.imported);
                 return value;
               }).catchError((error, s) {
                 debugPrint('$error $s');
-                debugPrint(error);
                 toast(context.strings.importFail);
-
                 ref.read(settingStateProvider.notifier).setImport(false);
               });
             },
