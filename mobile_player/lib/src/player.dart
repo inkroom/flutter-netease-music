@@ -106,6 +106,8 @@ class MusicPlayer {
       'album': music.album,
       'artist': music.artist,
       'duration': music.duration?.inMilliseconds ?? 0,
+      'showPrevious': false,
+      'showNext': true,
       'imageUrl': music.image,
       'image': music.image == null ? null : await download(music.image!),
     });
