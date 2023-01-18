@@ -30,7 +30,7 @@ A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 
 
    ```shell
-   sudo apt -y  install vlc libvlc-dev libappindicator3-dev
+   sudo apt -y  install libappindicator3-dev
    ```
 
 如果是deepin还需要以下命令
@@ -45,7 +45,7 @@ sudo apt install -y zenity
 * Toast and InApp notification：
   [**oktoast**](https://github.com/OpenFlutter/flutter_oktoast)
 * music player(desktop):
-  [**dart_vlc**](https://github.com/alexmercerind/dart_vlc)
+  [**audioplayers**](https://github.com/bluefireteam/audioplayers)
 * netease api service:
   [**NeteaseCloudMusicApi**](https://github.com/ziming1/NeteaseCloudMusicApi)
 
