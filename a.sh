@@ -3,7 +3,6 @@
  sed -i '4c version: '$1'' pubspec.yaml
   ## 处理更新信息
  sed -i '15c     "version": "'$1'",' version.json
- sed -i '17c     "file": "quiet/v'$1'quiet-android-'$1'.apk"' version.json
  sed -i '4c     version: '"$1" pubspec.yaml
 if [ -f mc ]
 then
