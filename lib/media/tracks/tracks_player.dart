@@ -5,12 +5,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:quiet/media/tracks/tracks_player_impl_audioplayers.dart';
 import 'package:quiet/repository.dart';
 import 'package:track_music_api/track_music_api.dart';
 
 import 'track_list.dart';
 import 'tracks_player_impl_mobile.dart';
-import 'tracks_player_impl_vlc.dart';
 
 part 'tracks_player.g.dart';
 
@@ -90,7 +90,7 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
 
   factory TracksPlayer.platform() {
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      return TracksPlayerImplVlc();
+      return TracksPlayerImplAudioPlayer();
     }
     return TracksPlayerImplMobile();
   }

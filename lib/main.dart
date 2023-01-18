@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +23,7 @@ void main() async {
     /// 开始获取锁
     SingleApp.instance.lock().then((value) {
       if (value) {
-        DartVLC.initialize();
+        // DartVLC.initialize();
         _initialDesktop();
         runZonedGuarded(() {
           runApp(ProviderScope(

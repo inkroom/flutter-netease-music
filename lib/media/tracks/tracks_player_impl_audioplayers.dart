@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
-import 'package:dart_vlc/dart_vlc.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:quiet/component/exceptions.dart';
 import 'package:quiet/extension.dart';
@@ -18,34 +17,42 @@ extension _SecondsToDuration on double {
   }
 }
 
-class TracksPlayerImplVlc extends TracksPlayer {
-  TracksPlayerImplVlc() {
-    _player.playbackStream.listen((event) {
-      if (event.isCompleted) {
-        skipToNext();
-      }
+class TracksPlayerImplAudioPlayer extends TracksPlayer {
+  TracksPlayerImplAudioPlayer() {
+    _player.onDurationChanged.listen((Duration event) {
+      _duration = event;
       notifyPlayStateChanged();
     });
-    _player.generalStream.listen((event) => notifyPlayStateChanged());
-    _player.positionStream.listen((event) {
+    _player.onPlayerStateChanged.listen((PlayerState s) {
+      _playerState = s;
+      notifyPlayStateChanged();
+    });
+    _player.onPlayerComplete.listen((event) {
+      skipToNext();
+    });
+    _player.onPositionChanged.listen((Duration d) {
+      _position = d;
       notifyPlayStateChanged();
     });
   }
 
 // playbackStream -> positionStream ->  generalStream -> currentStream | positionStream ->  playbackStream
-  final _player = Player(
-    id: 0,
-    commandlineArguments: ['--no-video'],
-  );
+  final _player = AudioPlayer();
 
   var _trackList = TrackList.empty();
 
   Track? _current;
 
+  Duration? _duration;
+  Duration? _position;
+  double _volume = 1;
+
+  PlayerState? _playerState;
+
   RepeatMode _mode = RepeatMode.random;
 
   @override
-  Duration? get bufferedPosition => _player.bufferingProgress.toDuration();
+  Duration? get bufferedPosition => const Duration();
 
   @override
   Track? get current => _current;
@@ -56,7 +63,7 @@ class TracksPlayerImplVlc extends TracksPlayer {
       /// 考虑到部分数据源可能没有时长数据，因此不能完全依靠该字段
       return _current!.duration;
     }
-    return _player.position.duration;
+    return _duration;
   }
 
   @override
@@ -78,7 +85,7 @@ class TracksPlayerImplVlc extends TracksPlayer {
   bool get isBuffering => false;
 
   @override
-  bool get isPlaying => _player.playback.isPlaying;
+  bool get isPlaying => _playerState == PlayerState.playing;
 
   @override
   Future<void> pause() async {
@@ -87,7 +94,7 @@ class TracksPlayerImplVlc extends TracksPlayer {
 
   @override
   Future<void> play() async {
-    _player.play();
+    _player.resume();
   }
 
   @override
@@ -99,8 +106,10 @@ class TracksPlayerImplVlc extends TracksPlayer {
     }
   }
 
+  double _playbackSpeed = 1;
+
   @override
-  double get playbackSpeed => _player.general.rate;
+  double get playbackSpeed => _playbackSpeed;
 
   Duration? _startPosition;
 
@@ -108,12 +117,12 @@ class TracksPlayerImplVlc extends TracksPlayer {
   Duration? get position {
     // 当开始位置不为0，且player获取的位置为0时，返回开始位置；一旦player的位置不为0，那就直接丢弃开始位置，以player位置为准；因为一旦不为0，说明音乐已经播放过了，最开始的播放位置已经没有用了
     if (_startPosition != null &&
-        _player.position.position != null &&
-        _player.position.position!.inSeconds == 0) {
+        _position != null &&
+        _position!.inSeconds == 0) {
       return _startPosition;
     }
     _startPosition = null;
-    return _player.position.position;
+    return _position;
   }
 
   @override
@@ -132,7 +141,8 @@ class TracksPlayerImplVlc extends TracksPlayer {
 
   @override
   Future<void> setPlaybackSpeed(double speed) async {
-    _player.setRate(speed);
+    _playbackSpeed = speed;
+    _player.setPlaybackRate(speed);
   }
 
   @override
@@ -149,6 +159,7 @@ class TracksPlayerImplVlc extends TracksPlayer {
   @override
   Future<void> setVolume(double volume) async {
     _player.setVolume(volume);
+    _volume = volume;
     notifyPlayStateChanged();
   }
 
@@ -179,16 +190,21 @@ class TracksPlayerImplVlc extends TracksPlayer {
   TrackList get trackList => _trackList;
 
   @override
-  double get volume => _player.general.volume;
+  double get volume => _volume;
 
   void _playTrack(Track track, {bool autoStart = true, Duration? position}) {
     // scheduleMicrotask(() {
     if (track.file != null) {
       log('从文件播放${track.file}');
       _current = track;
-      _player.open(
-          Media.file(File(track.file!), startTime: position ?? Duration.zero),
-          autoStart: autoStart);
+      if (autoStart) {
+        _player.play(DeviceFileSource(track.file!), position: position);
+      } else {
+        _player.setSourceDeviceFile(track.file!).then((value) {
+          if (_position != null) _player.seek(position!);
+          return value;
+        });
+      }
       notifyPlayStateChanged();
       // 加入播放历史
       played.add(track);
@@ -208,25 +224,30 @@ class TracksPlayerImplVlc extends TracksPlayer {
             notifyPlayStateChanged();
 
             /// startTime 参数可以设置开始播放位置，但是不会更新 player 的position，还需要自己设置
-            _player.open(
-                Media.network(value.mp3Url,
-                    startTime: position ?? Duration.zero),
-                autoStart: autoStart);
+            if (autoStart) {
+              _player.play(UrlSource(value.mp3Url!), position: position);
+            } else {
+              _player.setSourceUrl(value.mp3Url!).then((value) {
+                if (_position != null) _player.seek(position!);
+                return value;
+              });
+            }
             // 加入播放历史
             played.add(track);
             return value;
           }
           toast(S.current.getPlayDetailFail);
-
           return Future.error(PlayDetailException);
         }).catchError((onError) {
           if (onError is NetworkException) {
             toast(S.current.networkNotAllow);
-            return Future.value(onError);// 调用 Future.error 会提示 Unhandled，，不返回又要提示 需要一个返回值。
+            return Future.value(
+                onError); // 调用 Future.error 会提示 Unhandled，，不返回又要提示 需要一个返回值。
           }
           debugPrint('Failed to get play url: ${onError?.toString()}');
           toast(S.current.getPlayDetailFail);
-          return Future.value(onError);// 调用 Future.error 会提示 Unhandled，，不返回又要提示 需要一个返回值。
+          return Future.value(
+              onError); // 调用 Future.error 会提示 Unhandled，，不返回又要提示 需要一个返回值。
         });
       });
     }
