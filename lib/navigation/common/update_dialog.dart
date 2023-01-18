@@ -21,7 +21,8 @@ typedef OnDownloadFail = void Function(String msg);
 typedef OnCheckVersion = void Function(bool shouldUpdate);
 
 void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
-  if(!kReleaseMode) return;
+  // if (!kReleaseMode) return;
+
   /// 当前只支持android平台自动更新，windows平台自动打开网页下载最新版
   if (NetworkSingleton.instance.allowNetwork()) {
     networkRepository?.checkUpdate().then((value) {
@@ -33,9 +34,15 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
             toast(S.current
                 .updateTip(value[Platform.operatingSystem]['version']));
             if (Platform.isWindows || Platform.isLinux) {
-              /// 打开网址
-              launch(
-                  "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}");
+              if (value[Platform.operatingSystem]['url'] != null &&
+                  value[Platform.operatingSystem]['url'] != '') {
+                launchUrl(
+                    Uri.parse("${value[Platform.operatingSystem]['url']}"));
+              } else {
+                /// 打开网址
+                launchUrl(Uri.parse(
+                    "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}"));
+              }
             } else if (Platform.isAndroid) {
               showDialog(
                   barrierDismissible: false,
@@ -43,7 +50,7 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
                   builder: (context) {
                     return WillPopScope(
                         child: _UpdateDialogContent(
-                          url:
+                          url: value[Platform.operatingSystem]['url'] ??
                               "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}",
                           filename: value[Platform.operatingSystem]['file'],
                           version: value[Platform.operatingSystem]['version'],
@@ -55,7 +62,7 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
                             // 关闭弹窗
                             Navigator.pop(context, "");
                           },
-                          onDownloadFail: (msg){
+                          onDownloadFail: (msg) {
                             toast(S.current.updateFail);
                             // 关闭弹窗
                             Navigator.pop(context, "");
@@ -125,7 +132,6 @@ class _UpdateDialogContent extends StatefulWidget {
 }
 
 class _UpdateDialogState extends State<_UpdateDialogContent> {
-
   double _processValue = 0;
 
   @override
@@ -133,16 +139,17 @@ class _UpdateDialogState extends State<_UpdateDialogContent> {
     super.initState();
     getApkDirectory().then((value) {
       Dio().download(widget.url, "$value/${widget.filename}",
-          onReceiveProgress: (int count, int total) {
+              onReceiveProgress: (int count, int total) {
         setState(() {
           _processValue = count / total;
           if (_processValue >= 1) {
             widget.onDownloadComplete("$value/${widget.filename}");
           }
         });
-      })
-      .catchError((e){widget.onDownloadFail(e.toString());})//The error handler of Future.catchError must return a value of the future's type  这里会报个错，不知道怎么解决，反正也没什么影响，就不管了
-      ;
+      }).catchError((e) {
+        widget.onDownloadFail(e.toString());
+      }) //The error handler of Future.catchError must return a value of the future's type  这里会报个错，不知道怎么解决，反正也没什么影响，就不管了
+          ;
     });
   }
 

@@ -133,23 +133,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Update version
-      #  windows 暂时没想好 怎么 发布 构建，暂时不修改版本号 
-          #       echo "update windows version"
-          # sed -i '8c     "version": "'${GITHUB_REF_NAME:1}'",' version.json
-          # sed -i '10c     "file": "quiet/'$GITHUB_REF_NAME'/quiet-windows-'$GITHUB_REF_NAME'.zip"' version.json
         run: |
           echo "update android version"
-          sed -i '13c     "version": "'${GITHUB_REF_NAME:1}'",' version.json
-          sed -i '15c     "file": "quiet/'$GITHUB_REF_NAME'/quiet-android-'$GITHUB_REF_NAME'.apk"' version.json
+          sed -i '15c     "version": "'${GITHUB_REF_NAME:1}'",' version.json
+          sed -i '17c     "file": "quiet/'$GITHUB_REF_NAME'/quiet-android-'$GITHUB_REF_NAME'.apk"' version.json
           echo "update linux version"
           sed -i '3c     "version": "'${GITHUB_REF_NAME:1}'",' version.json
           sed -i '5c     "file": "quiet/'$GITHUB_REF_NAME'/quiet-linux-'$GITHUB_REF_NAME'.deb"' version.json
+          echo "update windows version"
+          sed -i '9c     "version": "'${GITHUB_REF_NAME:1}'",' version.json
+          sed -i '11c     "file": "quiet/'$GITHUB_REF_NAME'/quiet-windows-'$GITHUB_REF_NAME'.zip"' version.json
+          sed -i '12c     "url":"https://github.com/inkroom/flutter-netease-music/releases/download/'$GITHUB_REF_NAME'/quiet-windows-'$GITHUB_REF_NAME'.zip"'
       - name: Install Minio
         run: |
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           ./mc alias set bc ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
           ./mc cp version.json bc/temp
+          ./mc cp version.json bc/temp/quiet
       - name: Release
         uses: ncipollo/release-action@v1
         with:

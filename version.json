@@ -1,17 +1,20 @@
 {
   "linux": {
-"version": "0.7.7",
+    "version": "0.8.8",
     "description": "_desc_",
-"file": "quiet-linux-0.7.7.deb"
+    "file": "quiet/quiet-linux-latest.deb",
+    "url": "http://minio.bcyunqian.com/minio/download/temp/quiet/quiet-linux-latest.deb"
   },
   "windows": {
-    "version": "0.7.7", 
+    "version": "0.8.8",
     "description": "_desc_",
-    "file": "windows-v0.7.7.zip" 
+    "file": "quiet/quiet-windows-latest.zip",
+    "url": "http://minio.bcyunqian.com/minio/download/temp/quiet/quiet-windows-latest.zip"
   },
   "android": {
-    "version": "0.7.6", 
+    "version": "0.8.8",
     "description": "_desc_",
-    "file": "app-v0.7.6-release.apk" 
+    "file": "quiet/quiet-android-latest.apk",
+    "url": "http://minio.bcyunqian.com/minio/download/temp/quiet/quiet-android-latest.apk"
   }
 }

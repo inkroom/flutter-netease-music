@@ -2,8 +2,8 @@
 
  sed -i '4c version: '$1'' pubspec.yaml
   ## 处理更新信息
- sed -i '13c     "version": "'$1'",' version.json
- sed -i '15c     "file": "quiet/v'$1'quiet-android-'$1'.apk"' version.json
+ sed -i '15c     "version": "'$1'",' version.json
+ sed -i '17c     "file": "quiet/v'$1'quiet-android-'$1'.apk"' version.json
  sed -i '4c     version: '"$1" pubspec.yaml
 if [ -f mc ]
 then
@@ -12,6 +12,6 @@ then
 fi
 
 ## linxu deb打包 ./deb.sh version
-flutter build apk --split-per-abi --release && mc cp --recursive build/app/outputs/apk/release/ bc/temp/quiet/v$1/ && mc cp build/app/outputs/apk/release/quiet-android-v$1.apk bc/temp/quiet/quiet-android-latest.apk && mc cp build/app/outputs/apk/release/output-metadata.json bc/temp/quiet && mc cp version.json bc/temp
+flutter build apk --split-per-abi --release && mc cp --recursive build/app/outputs/apk/release/ bc/temp/quiet/v$1/ && mc cp build/app/outputs/apk/release/quiet-android-v$1.apk bc/temp/quiet/quiet-android-latest.apk && mc cp build/app/outputs/apk/release/output-metadata.json bc/temp/quiet && mc cp version.json bc/temp && mc cp version.json bc/temp/quiet
 
 

@@ -49,7 +49,7 @@ class NetworkRepository {
   Future<dynamic> checkUpdate() {
     // 获取网络版本
     return Dio()
-        .get("http://minio.bcyunqian.com/temp/version.json")
+        .get("http://minio.bcyunqian.com/temp/quiet/version.json")
         .then((value) => value.data);
   }
 
