@@ -80,6 +80,26 @@ jobs:
           artifacts: "quiet-windows-${{ github.ref_name }}.zip"
           draft: true
           allowUpdates: true
+      - name: Minio
+        uses: ./.github/actions/minio
+        with:
+          endpoint: ${{ secrets.MINIO_SITE}}
+          access_key: ${{ secrets.MINIO_USER }}
+          secret_key: ${{ secrets.MINIO_PASSWORD }}
+          api: s3v2
+          bucket: 'temp'
+          source_dir: 'quiet-windows-${{ github.ref_name }}.zip'
+          target_dir: '/quiet/${{ github.ref_name }}/'
+      - name: Minio
+        uses: ./.github/actions/minio
+        with:
+          endpoint: ${{ secrets.MINIO_SITE}}
+          access_key: ${{ secrets.MINIO_USER }}
+          secret_key: ${{ secrets.MINIO_PASSWORD }}
+          api: s3v2
+          bucket: 'temp'
+          source_dir: 'quiet-windows-${{ github.ref_name }}.zip'
+          target_dir: '/quiet/quiet-windows-latest.zip'
   android:
     runs-on: ubuntu-20.04
     steps:
