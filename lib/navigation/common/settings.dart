@@ -13,6 +13,7 @@ import 'package:quiet/extension.dart';
 import 'package:quiet/material.dart';
 import 'package:quiet/providers/cloud_tracks_provider.dart';
 import 'package:quiet/repository.dart';
+import 'package:quiet/repository/database.dart';
 import 'package:quiet/repository/setting.dart';
 
 import '../../providers/navigator_provider.dart';
@@ -161,10 +162,11 @@ class ImportAndExportSetting extends ConsumerWidget {
   static const String _listName = "list.txt";
   static const String _exportFileName = "export.quiet";
   static const String _trackDir = "tracks";
+  static const String _lyricDir = "lyric";
 
-  static void _zipOnIsolate(List<dynamic> params) {
+  static void _zipOnIsolate(List<dynamic> params) async {
     debugPrint("异步 $params");
-
+    String lyricDir = params[3] as String;
     Archive ar = Archive();
     for (var track in params[1]) {
       if (track.file != null && track.file!.isNotEmpty) {
@@ -176,6 +178,28 @@ class ImportAndExportSetting extends ConsumerWidget {
         ar.addFile(file);
         // debugPrint(
         //     '文件路径=${track.file} 文件名 ${track.file!.substring(track.file!.lastIndexOf("/") + 1)}');
+      }
+      // 添加歌词
+      // 导出歌词时是按照当前的歌单来查询歌词缓存，可能存在已经移除的歌曲的歌词缓存不会被导入
+      try {
+        File file =
+            File(lyricDir + separator + track.id.toString() + track.extra);
+        debugPrint("歌词文件 = ${file.path}");
+        if (file.existsSync()) {
+          ar.addFile(ArchiveFile(
+              "$_lyricDir/${track.id}", 0, InputFileStream(file.path)));
+        }
+        // debugPrint("歌词1 ${net == null}  $track ");
+        // String? lyric = await net!.lyric(track, onlyCache: true);
+        // if (lyric != null) {
+        //   debugPrint("歌词 $lyric");
+        //   ar.addFile(
+        //       ArchiveFile("$_lyricDir/${track.id}", 0, utf8.encode(lyric)));
+        // } else {
+        //   debugPrint("没有歌词 $track");
+        // }
+      } catch (e) {
+        debugPrint(e.toString());
       }
     }
     String list = params[2];
@@ -189,6 +213,7 @@ class ImportAndExportSetting extends ConsumerWidget {
   static Future<CloudTracksDetail> _unzipOnIsolate(List<dynamic> params) {
     String zipPath = params[0];
     String savePath = params[1];
+    String lyricDir = params[2];
     final inputStream = InputFileStream(zipPath);
     // Decode the zip from the InputFileStream. The archive will have the contents of the
     // zip, without having stored the data in memory.
@@ -214,6 +239,16 @@ class ImportAndExportSetting extends ConsumerWidget {
             element.name.startsWith(_trackDir)) {
           final outputStream = OutputFileStream(
               '$savePath$separator${element.name.replaceFirst(_trackDir + '/', '')}');
+          // The writeContent method will decompress the file content directly to disk without
+          // storing the decompressed data in memory.
+          element.writeContent(outputStream);
+          // Make sure to close the output stream so the File is closed.
+          outputStream.close();
+        } else if (element.isFile &&
+            element.name != _listName &&
+            element.name.startsWith(_lyricDir)) {
+          final outputStream = OutputFileStream(
+              '$lyricDir$separator${element.name.replaceFirst(_lyricDir + '/', '')}');
           // The writeContent method will decompress the file content directly to disk without
           // storing the decompressed data in memory.
           element.writeContent(outputStream);
@@ -269,8 +304,11 @@ class ImportAndExportSetting extends ConsumerWidget {
 
                   debugPrint("选择的文件路径  =${exportPath}  ");
 
-                  CloudTracksDetail c = await compute(_unzipOnIsolate,
-                      [exportPath, ref.read(settingStateProvider).savePath]);
+                  CloudTracksDetail c = await compute(_unzipOnIsolate, [
+                    exportPath,
+                    ref.read(settingStateProvider).savePath,
+                    await getLyricDirectory()
+                  ]);
                   for (var element in c.tracks) {
                     ref.read(cloudTracksProvider.notifier).add(element);
                   }
@@ -318,12 +356,13 @@ class ImportAndExportSetting extends ConsumerWidget {
                     maxSize: state.maxSize,
                     trackCount: state.trackCount);
                 String json = convert.jsonEncode(d.toJson());
-                return Future(() {
+                return Future(() async {
                   debugPrint("开始打包");
                   return compute(_zipOnIsolate, [
                     saveDir,
                     tracks,
-                    json
+                    json,
+                    await getLyricDirectory()
                   ]); // 因为不能直接传递 Archive 参数，只能放到异步任务里去 构建
                 }).then((value) => saveDir).then((value) {
                   debugPrint("输出完成");

@@ -55,7 +55,8 @@ class NetworkRepository {
 
   /// Fetch lyric by track id
   Future<String?> lyric(Track id) {
-    final key = CacheKey.fromString(id.id.toString() + id.extra);
+    final key = CacheKey.fromString(
+        id.id.toString() + id.extra); // 如果修改歌词文件缓存位置，注意调整导出功能
     return _lyricCache.get(key).then((value) {
       if (value != null) {
         return Future.value(value.toString());
