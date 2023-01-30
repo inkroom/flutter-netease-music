@@ -9,7 +9,7 @@ import audioplayers_darwin
 import connectivity_plus_macos
 import desktop_drop
 import package_info_plus_macos
-import path_provider_macos
+import path_provider_foundation
 import screen_retriever
 import shared_preferences_foundation
 import sqflite

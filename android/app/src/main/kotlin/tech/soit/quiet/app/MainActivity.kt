@@ -1,12 +1,8 @@
 package tech.soit.quiet.app
 
 import UpdateAppPlugin
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import androidx.annotation.NonNull
-import androidx.core.content.FileProvider
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugins.GeneratedPluginRegistrant
@@ -38,6 +34,7 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine)
         flutterEngine.plugins.add(UpdateAppPlugin())
+        flutterEngine.plugins.add(MusicPlugin())
     }
 
 }

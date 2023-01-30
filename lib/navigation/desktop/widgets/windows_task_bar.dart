@@ -34,7 +34,9 @@ class _WindowsTaskBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<TracksPlayerState>(playerStateProvider, (previous, next) {
       if (next.playingTrack == null) {
-        WindowsTaskbar.resetThumbnailToolbar();
+        WindowsTaskbar.resetThumbnailToolbar().catchError((error, s) {
+          debugPrint("WindowsTaskbar.resetThumbnailToolbar $error $s");
+        });
       } else {
         WindowsTaskbar.setThumbnailToolbar([
           ThumbnailToolbarButton(
@@ -74,7 +76,9 @@ class _WindowsTaskBar extends ConsumerWidget {
               ref.read(playerProvider).skipToNext();
             },
           ),
-        ]);
+        ]).catchError((error, s) {
+          debugPrint("WindowsTaskbar.setThumbnailToolbar $error $s");
+        });
       }
     });
     return child;

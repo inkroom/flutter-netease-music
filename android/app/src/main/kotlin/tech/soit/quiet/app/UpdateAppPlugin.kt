@@ -30,7 +30,7 @@ class UpdateAppPlugin() : FlutterPlugin, MethodChannel.MethodCallHandler, Parcel
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(
-            flutterPluginBinding.flutterEngine.dartExecutor,
+            flutterPluginBinding.binaryMessenger,
             "quiet.update.app.channel.name"
         )
         context = flutterPluginBinding.applicationContext

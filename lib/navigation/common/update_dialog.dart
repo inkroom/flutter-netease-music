@@ -21,7 +21,7 @@ typedef OnDownloadFail = void Function(String msg);
 typedef OnCheckVersion = void Function(bool shouldUpdate);
 
 void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
-  // if (!kReleaseMode) return;
+  if (!kReleaseMode) return;
 
   /// 当前只支持android平台自动更新，windows平台自动打开网页下载最新版
   if (NetworkSingleton.instance.allowNetwork()) {
@@ -91,10 +91,8 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
     }).catchError((error) {
       log("$error");
       // showDialog(context: context, builder: (context) => Text('检查失败 $error'));
-      toast('检查失败 $error');
+      toast(S.current.updateFail);
     });
-  } else {
-    toast(S.current.networkNotAllow);
   }
 }
 

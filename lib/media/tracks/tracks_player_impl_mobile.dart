@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
-import 'package:music/music.dart' as player;
+import 'package:quiet/plugins/music_player/music.dart' as player;
 import 'package:quiet/component/exceptions.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/material.dart';

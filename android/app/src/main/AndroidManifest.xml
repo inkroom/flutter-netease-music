@@ -37,7 +37,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <service
-            android:name="com.salkuadrat.music.MusicPlayerService"
+            android:name=".MusicPlayerService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
