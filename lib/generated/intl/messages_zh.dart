@@ -182,6 +182,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("未注册手机号登陆后将自动创建账号"),
         "toLoginPage": MessageLookupByLibrary.simpleMessage("前往登录界面"),
         "todo": MessageLookupByLibrary.simpleMessage("TBD"),
+        "trackFlagSetting": MessageLookupByLibrary.simpleMessage("歌曲标记"),
         "trackNoCopyright": MessageLookupByLibrary.simpleMessage("此音乐暂无版权"),
         "trackVIP": MessageLookupByLibrary.simpleMessage("此音乐为VIP"),
         "trayItemExit": MessageLookupByLibrary.simpleMessage("退出程序"),

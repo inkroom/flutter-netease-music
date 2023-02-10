@@ -113,6 +113,12 @@ sudo apt install -y zenity
 > 需要修改 **windows/runner/Runner.rc** 的第66行和第72行
 >
 
+#### 3. 修改了实体
+
+```shell
+flutter packages pub run build_runner build --delete-conflicting-outputs
+```
+
 #### 4. 修改了国际化文件
 
 第一次需要执行

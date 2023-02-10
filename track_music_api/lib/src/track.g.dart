@@ -23,6 +23,7 @@ Track _$TrackFromJson(Map<String, dynamic> json) => Track(
       mp3Url: json['mp3Url'] as String?,
       extra: json['extra'] as String? ?? '',
       origin: json['origin'] as int? ?? -1,
+      flag: json['flag'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$TrackToJson(Track instance) => <String, dynamic>{
@@ -38,6 +39,7 @@ Map<String, dynamic> _$TrackToJson(Track instance) => <String, dynamic>{
       'file': instance.file,
       'mp3Url': instance.mp3Url,
       'extra': instance.extra,
+      'flag': instance.flag,
     };
 
 const _$TrackTypeEnumMap = {

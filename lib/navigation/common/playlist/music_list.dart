@@ -102,6 +102,10 @@ class TrackOperator {
     //   toast(context.strings.failedToPlayMusic);
     // });
   }
+
+  void flag(Track track) {
+    ref.read(cloudTracksProvider.notifier).add(track);
+  }
 }
 
 enum PlayResult {

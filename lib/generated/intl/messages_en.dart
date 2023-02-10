@@ -212,6 +212,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "auto register if phone not exist"),
         "toLoginPage": MessageLookupByLibrary.simpleMessage("To Login Page"),
         "todo": MessageLookupByLibrary.simpleMessage("TBD"),
+        "trackFlagSetting":
+            MessageLookupByLibrary.simpleMessage("Set Track Flag"),
         "trackNoCopyright":
             MessageLookupByLibrary.simpleMessage("Track No Copyright"),
         "trackVIP": MessageLookupByLibrary.simpleMessage("Track only for VIP"),

@@ -35,6 +35,7 @@
   "autoPlayOnStart":"启动后自动播放",
   "networkNotAllow": "当前网络设置不允许",
   "addToMusicList": "加入歌单",
+  "trackFlagSetting":"歌曲标记",
   "removeFromMusicList": "移除歌单",
   "downloadMusic": "下载歌曲",
   "recommendPlayLists": "推荐歌单",

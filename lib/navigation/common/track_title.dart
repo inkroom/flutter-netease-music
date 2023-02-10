@@ -81,3 +81,47 @@ class IndexOrPlayIcon extends ConsumerWidget {
     }
   }
 }
+
+class FlagCheckbox extends StatefulWidget {
+  const FlagCheckbox(this.operator, this.bit, this.track, this.color);
+
+  final TrackOperator operator;
+  final int bit;
+  final Track track;
+  final Color color;
+
+  @override
+  State<StatefulWidget> createState() => _FlagCheckboxState();
+}
+
+class _FlagCheckboxState extends State<FlagCheckbox> {
+  bool _value = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.track.flag & widget.bit == widget.bit;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+        value: _value,
+        activeColor: widget.color,
+        side: BorderSide(color: widget.color),
+        onChanged: (bool? value) {
+          debugPrint("之前的flag=${widget.track.flag}");
+          if (value == true) {
+            widget.track.flag = widget.track.flag | widget.bit;
+          } else if (value == false) {
+            widget.track.flag = (widget.track.flag | widget.bit) ^ widget.bit;
+          }
+          _value = widget.track.flag & widget.bit == widget.bit;
+          debugPrint("之后的flag=${widget.track.flag}");
+          widget.operator.flag(widget.track);
+          setState(() {
+            _value = widget.track.flag & widget.bit == widget.bit;
+          });
+        });
+  }
+}

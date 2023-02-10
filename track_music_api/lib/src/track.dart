@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'track.g.dart';
@@ -13,6 +14,28 @@ enum TrackType {
   noCopyright,
 }
 
+enum TrackFlag { red, blue }
+
+extension TrackFlagExtension on TrackFlag {
+  Color get color {
+    switch (this) {
+      case TrackFlag.red:
+        return Colors.red;
+      case TrackFlag.blue:
+        return Colors.blue;
+    }
+  }
+
+  int get bit {
+    switch (this) {
+      case TrackFlag.red:
+        return 1;
+      case TrackFlag.blue:
+        return 2;
+    }
+  }
+}
+
 @JsonSerializable()
 class Track with EquatableMixin {
   Track(
@@ -24,6 +47,7 @@ class Track with EquatableMixin {
       required this.imageUrl,
       required this.duration,
       required this.type,
+      this.flag = 0,
       this.file,
       this.mp3Url,
       this.extra = '',
@@ -59,6 +83,9 @@ class Track with EquatableMixin {
   /// 额外的数据，用于不同的插件扩展
   String extra;
 
+  /// 歌曲标记，每一bit代表不同类型，类型用户自己决定
+  int flag;
+
   String get displaySubtitle {
     final artist = artists.map((artist) => artist.name).join('/');
     if (album != null && album!.name.isNotEmpty) {
@@ -90,11 +117,10 @@ class Track with EquatableMixin {
         type,
         file,
         origin,
+        flag,
       ];
 
   Map<String, dynamic> toJson() => _$TrackToJson(this);
-
-
 }
 
 @JsonSerializable()

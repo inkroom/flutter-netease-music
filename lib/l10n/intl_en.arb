@@ -35,6 +35,7 @@
   "networkNotAllow": "Network Setting",
   "autoPlayOnStart":"auto play after start",
   "addToMusicList": "Add To Music List",
+  "trackFlagSetting":"Set Track Flag",
   "removeFromMusicList": "Remove From Music List",
   "downloadMusic": "Download Music",
   "my": "My",

@@ -335,6 +335,20 @@ class TrackTile extends ConsumerWidget {
                           onTap: () => operator.deleteOperator(track),
                           child: const Icon(Icons.delete_outline),
                         ),
+                        InkWell(
+                          onTap: () => showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    content: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: TrackFlag.values
+                                            .map((e) => FlagCheckbox(operator,
+                                                e.bit, track, e.color))
+                                            .toList(growable: false)),
+                                  )),
+                          child: const Icon(Icons.flag),
+                        ),
+
                         // AppIconButton(
                         //     padding: EdgeInsets.zero,
                         //     onPressed: () => operator.downloadOperator(track),

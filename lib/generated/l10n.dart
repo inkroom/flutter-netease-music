@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -406,6 +405,16 @@ class S {
     return Intl.message(
       'Add To Music List',
       name: 'addToMusicList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set Track Flag`
+  String get trackFlagSetting {
+    return Intl.message(
+      'Set Track Flag',
+      name: 'trackFlagSetting',
       desc: '',
       args: [],
     );

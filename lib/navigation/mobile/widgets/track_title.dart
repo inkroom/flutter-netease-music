@@ -101,6 +101,10 @@ class TrackTile extends ConsumerWidget {
                   child: Text(context.strings.downloadMusic),
                   value: 3,
                 ),
+                PopupMenuItem(
+                  child: Text(context.strings.trackFlagSetting),
+                  value: 4,
+                ),
               ],
               icon: const Icon(Icons.more_vert),
               onSelected: (value) {
@@ -110,6 +114,46 @@ class TrackTile extends ConsumerWidget {
                   operator.deleteOperator(track);
                 } else if (value == 3) {
                   operator.downloadOperator(track);
+                } else if (value == 4) {
+                  //标记歌曲
+
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            content: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: TrackFlag.values
+                                    .map((e) => FlagCheckbox(
+                                        operator, e.bit, track, e.color))
+                                    .toList(growable: false)),
+                          ));
+
+                  // showDialog(
+                  //     barrierDismissible: false,
+                  //     context: context,
+                  //     builder: (BuildContext context) => SizedBox(
+                  //           height: 200,
+                  //           width: 400,
+                  //           // constraints:const BoxConstraints(maxHeight: 200,maxWidth: 400),
+                  //           child: Container(
+                  //             alignment: Alignment.center,
+                  //             child: Row(
+                  //               mainAxisSize: MainAxisSize.min,
+                  //               children: [
+                  //
+                  //                 // Checkbox(
+                  //                 //     value: track.flag & 1 == 1,
+                  //                 //     side: const BorderSide(color: Colors.red),
+                  //                 //     onChanged: (bool? value) {}),
+                  //                 // Checkbox(
+                  //                 //     value: track.flag & 2 == 2,
+                  //                 //     side:
+                  //                 //         const BorderSide(color: Colors.blue),
+                  //                 //     onChanged: (bool? value) {}),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         ));
                 }
                 debugPrint('v=$value');
               },
