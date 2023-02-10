@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quiet/navigation/common/settings.dart';
 import 'package:quiet/navigation/mobile/home/local_music_list.dart';
 import 'package:quiet/navigation/mobile/home/main_page_discover.dart';
 import 'package:quiet/navigation/mobile/home/main_page_my.dart';
@@ -55,6 +56,8 @@ class _AppBar extends ConsumerWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBar(
+      title: const PlayListFlag(),
+      centerTitle: true,
       actions: [
         IconButton(
           onPressed: () => ref

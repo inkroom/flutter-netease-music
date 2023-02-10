@@ -44,6 +44,7 @@ class SettingState with EquatableMixin {
     required this.savePath,
     required this.exporting,
     required this.importing,
+    required this.playFlag,
   });
 
   factory SettingState.fromPreference(SettingKey preference) {
@@ -57,6 +58,7 @@ class SettingState with EquatableMixin {
       autoPlayOnStart: preference.autoPlayOnStart,
       exporting: false,
       importing: false,
+      playFlag: preference.playFlag,
     );
   }
 
@@ -68,6 +70,7 @@ class SettingState with EquatableMixin {
   final bool autoPlayOnStart;
   final bool exporting;
   final bool importing;
+  final int playFlag;
 
   @override
   List<Object> get props => [
@@ -79,6 +82,7 @@ class SettingState with EquatableMixin {
         autoPlayOnStart,
         exporting,
         importing,
+        playFlag,
       ];
 
   SettingState copyWith({
@@ -90,23 +94,24 @@ class SettingState with EquatableMixin {
     bool? autoPlayOnStart,
     bool? exporting,
     bool? importing,
+    int? playFlag,
   }) =>
       SettingState(
-        savePath: savePath ?? this.savePath,
-        networkMode: networkMode ?? this.networkMode,
-        themeMode: themeMode ?? this.themeMode,
-        skipWelcomePage: skipWelcomePage ?? this.skipWelcomePage,
-        skipAccompaniment: skipAccompaniment ?? this.skipAccompaniment,
-        autoPlayOnStart: autoPlayOnStart ?? this.autoPlayOnStart,
-        exporting: exporting ?? this.exporting,
-        importing: importing ?? this.importing,
-      );
+          savePath: savePath ?? this.savePath,
+          networkMode: networkMode ?? this.networkMode,
+          themeMode: themeMode ?? this.themeMode,
+          skipWelcomePage: skipWelcomePage ?? this.skipWelcomePage,
+          skipAccompaniment: skipAccompaniment ?? this.skipAccompaniment,
+          autoPlayOnStart: autoPlayOnStart ?? this.autoPlayOnStart,
+          exporting: exporting ?? this.exporting,
+          importing: importing ?? this.importing,
+          playFlag: playFlag ?? this.playFlag);
 }
 
 class Settings extends StateNotifier<SettingState> {
   Settings()
       : super(const SettingState(
-          networkMode: NetworkMode.NONE,
+    networkMode: NetworkMode.NONE,
           themeMode: ThemeMode.system,
           skipWelcomePage: true,
           skipAccompaniment: false,
@@ -114,6 +119,7 @@ class Settings extends StateNotifier<SettingState> {
           autoPlayOnStart: true,
           exporting: false,
           importing: false,
+          playFlag: 0,
         ));
 
   late final SettingKey _preferences;
@@ -154,6 +160,11 @@ class Settings extends StateNotifier<SettingState> {
   void setAutoPlayOnStart({required bool value}) {
     _preferences.autoPlayOnStart = value;
     state = state.copyWith(autoPlayOnStart: value);
+  }
+
+  void setPlayFlag({required int value}) {
+    _preferences.playFlag = value;
+    state = state.copyWith(playFlag: value);
   }
 
   void setExporting(bool value) {

@@ -189,6 +189,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Only WIFI"),
         "settingNetwork":
             MessageLookupByLibrary.simpleMessage("Network Setting"),
+        "settingPlayFlagTitle":
+            MessageLookupByLibrary.simpleMessage("Play Track With Flag"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
         "shareContentCopied": MessageLookupByLibrary.simpleMessage(

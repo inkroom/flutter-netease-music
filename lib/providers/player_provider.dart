@@ -4,7 +4,7 @@ import '../media/tracks/tracks_player.dart';
 
 final playerStateProvider =
     StateNotifierProvider<TracksPlayer, TracksPlayerState>(
-  (ref) => TracksPlayer.platform(),
+  (ref) => TracksPlayer.platform(ref),
 );
 
 final playerProvider = playerStateProvider.notifier;

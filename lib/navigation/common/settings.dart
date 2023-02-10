@@ -102,6 +102,38 @@ class AutoPlayOnStart extends ConsumerWidget {
   }
 }
 
+/// 播放本地音乐时的标记
+class PlayListFlag extends ConsumerWidget {
+  const PlayListFlag({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    debugPrint(
+        "播放设置 ${ref.watch(settingStateProvider.select((value) => value.playFlag))}");
+    return Row(
+      children: TrackFlag.values
+          .map((e) => Checkbox(
+              value: ref.watch(settingStateProvider
+                          .select((value) => value.playFlag)) &
+                      e.bit ==
+                  e.bit,
+              activeColor: e.color,
+              side: BorderSide(color: e.color),
+              onChanged: (bool? value) {
+                if (value == true) {
+                  ref.read(settingStateProvider.notifier).setPlayFlag(
+                      value: ref.read(settingStateProvider).playFlag | e.bit);
+                } else {
+                  ref.read(settingStateProvider.notifier).setPlayFlag(
+                      value: (ref.read(settingStateProvider).playFlag | e.bit) ^
+                          e.bit);
+                }
+              }))
+          .toList(),
+    );
+  }
+}
+
 class SkipAccompanimentCheckBox extends ConsumerWidget {
   const SkipAccompanimentCheckBox({Key? key}) : super(key: key);
 

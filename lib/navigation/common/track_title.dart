@@ -82,8 +82,9 @@ class IndexOrPlayIcon extends ConsumerWidget {
   }
 }
 
-class FlagCheckbox extends StatefulWidget {
-  const FlagCheckbox(this.operator, this.bit, this.track, this.color);
+/// 歌曲标记复选框
+class TrackFlagCheckbox extends StatefulWidget {
+  const TrackFlagCheckbox(this.operator, this.bit, this.track, this.color);
 
   final TrackOperator operator;
   final int bit;
@@ -94,7 +95,7 @@ class FlagCheckbox extends StatefulWidget {
   State<StatefulWidget> createState() => _FlagCheckboxState();
 }
 
-class _FlagCheckboxState extends State<FlagCheckbox> {
+class _FlagCheckboxState extends State<TrackFlagCheckbox> {
   bool _value = false;
 
   @override

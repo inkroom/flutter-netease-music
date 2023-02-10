@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:quiet/media/tracks/tracks_player_impl_audioplayers.dart';
+import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository.dart';
 import 'package:track_music_api/track_music_api.dart';
 
@@ -77,7 +78,7 @@ class TracksPlayerState with EquatableMixin {
 }
 
 abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
-  TracksPlayer()
+  TracksPlayer(this.ref)
       : super(TracksPlayerState(
             isPlaying: false,
             isBuffering: false,
@@ -88,11 +89,12 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
             error: false,
             mode: RepeatMode.random));
 
-  factory TracksPlayer.platform() {
+  factory TracksPlayer.platform(
+      StateNotifierProviderRef<TracksPlayer, TracksPlayerState> ref) {
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      return TracksPlayerImplAudioPlayer();
+      return TracksPlayerImplAudioPlayer(ref);
     }
-    return TracksPlayerImplMobile();
+    return TracksPlayerImplMobile(ref);
   }
 
   Future<void> play();
@@ -118,9 +120,12 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   /// 获取要播放的下一首音乐
   /// 如果返回了null，代表不能或者不需要继续播放
   Future<Track?> getNextTrack() {
-    List<Track> list = trackList.tracks
-        .where((element) => element.type == TrackType.free)
-        .toList();
+    final int flag = ref.read(settingStateProvider).playFlag; //这是一个多位bit
+    List<Track> list = trackList.tracks.where((element) {
+      if (element.type != TrackType.free) return false;
+      if (flag == 0) return true;
+      return flag & element.flag > 0; // 只要有任意一个bit满足都可以播放
+    }).toList();
     final index = list.cast().indexOf(current);
     if (repeatMode == RepeatMode.next) {
       /// 直接播放下一首
@@ -151,6 +156,8 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
     }
     return Future.value(r);
   }
+
+  StateNotifierProviderRef ref;
 
   Future<void> insertToNext(Track track);
 

@@ -32,6 +32,11 @@ class PageSettings extends ConsumerWidget {
             children: const [AutoPlayOnStart()],
           ),
           const Divider(height: 20),
+          SettingGroup(
+            title: context.strings.settingPlayFlagTitle,
+            children: const [PlayListFlag()],
+          ),
+          const Divider(height: 20),
           if (!kReleaseMode) const _DebugNavigationPlatformSetting(),
           if (!kReleaseMode) const Divider(height: 20),
           const ImportAndExportSetting(),

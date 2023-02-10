@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/plugins/music_player/music.dart' as player;
 import 'package:quiet/component/exceptions.dart';
 import 'package:quiet/extension.dart';
@@ -31,7 +32,7 @@ extension _Track on Track {
 }
 
 class TracksPlayerImplMobile extends TracksPlayer {
-  TracksPlayerImplMobile() {
+  TracksPlayerImplMobile(StateNotifierProviderRef ref) : super(ref) {
     // _player.metadataListenable.addListener(notifyPlayStateChanged);
     // _player.playbackStateListenable.addListener(notifyPlayStateChanged);
     _player = player.MusicPlayer(

@@ -41,6 +41,8 @@ class SettingKey {
 
   final String _keyAutoPlayOnStart = '$_prefix:autoPlayOnStart';
 
+  final String _keyPlayFlag = '$_prefix:playFlag';
+
   final String _keySavePath = '$_prefix:savePath';
 
   SharedPreferences? preferences;
@@ -80,6 +82,12 @@ class SettingKey {
 
   set autoPlayOnStart(bool value) {
     preferences?.setBool(_keyAutoPlayOnStart, value);
+  }
+
+  int get playFlag => preferences?.getInt(_keyPlayFlag) ?? 0;
+
+  set playFlag(int value) {
+    preferences?.setInt(_keyPlayFlag, value);
   }
 
   // 此处的默认值不重要，因为程序启动之后会自动写入默认值，保证此处的默认值不会被返回

@@ -342,8 +342,11 @@ class TrackTile extends ConsumerWidget {
                                     content: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: TrackFlag.values
-                                            .map((e) => FlagCheckbox(operator,
-                                                e.bit, track, e.color))
+                                            .map((e) => TrackFlagCheckbox(
+                                                operator,
+                                                e.bit,
+                                                track,
+                                                e.color))
                                             .toList(growable: false)),
                                   )),
                           child: const Icon(Icons.flag),

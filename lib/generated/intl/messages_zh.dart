@@ -160,6 +160,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "settingItemOnlyWIFI":
             MessageLookupByLibrary.simpleMessage("仅使用WIFI网络"),
         "settingNetwork": MessageLookupByLibrary.simpleMessage("联网设置"),
+        "settingPlayFlagTitle":
+            MessageLookupByLibrary.simpleMessage("可播放的歌曲标记"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
         "share": MessageLookupByLibrary.simpleMessage("分享"),
         "shareContentCopied":

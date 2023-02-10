@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiet/component/exceptions.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/material.dart';
@@ -18,7 +19,7 @@ extension _SecondsToDuration on double {
 }
 
 class TracksPlayerImplAudioPlayer extends TracksPlayer {
-  TracksPlayerImplAudioPlayer() {
+  TracksPlayerImplAudioPlayer(StateNotifierProviderRef ref) : super(ref) {
     _player.onDurationChanged.listen((Duration event) {
       _duration = event;
       notifyPlayStateChanged();

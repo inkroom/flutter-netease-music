@@ -90,6 +90,7 @@
   "themeLight": "Light",
   "themeAuto": "Follow System",
   "settings": "Settings",
+  "settingPlayFlagTitle":"Play Track With Flag",
   "about": "About",
   "trackNoCopyright": "Track No Copyright",
   "trackVIP": "Track only for VIP",

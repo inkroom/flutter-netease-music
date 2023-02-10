@@ -962,6 +962,16 @@ class S {
     );
   }
 
+  /// `Play Track With Flag`
+  String get settingPlayFlagTitle {
+    return Intl.message(
+      'Play Track With Flag',
+      name: 'settingPlayFlagTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `About`
   String get about {
     return Intl.message(
