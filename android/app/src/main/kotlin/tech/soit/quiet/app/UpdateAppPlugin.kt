@@ -31,7 +31,7 @@ class UpdateAppPlugin() : FlutterPlugin, MethodChannel.MethodCallHandler, Parcel
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(
             flutterPluginBinding.binaryMessenger,
-            "quiet.update.app.channel.name"
+            "quiet.update.app.channel.install_app"
         )
         context = flutterPluginBinding.applicationContext
         channel.setMethodCallHandler(this)
@@ -40,7 +40,8 @@ class UpdateAppPlugin() : FlutterPlugin, MethodChannel.MethodCallHandler, Parcel
     companion object {
         @JvmStatic
         fun registerWith(registrar: PluginRegistry.Registrar) {
-            val channel = MethodChannel(registrar.messenger(), "quiet.update.app.channel.name")
+            val channel =
+                MethodChannel(registrar.messenger(), "quiet.update.app.channel.install_app")
             val updateAppPlugin = UpdateAppPlugin()
             //初始化上下文
             updateAppPlugin.context = registrar.context()

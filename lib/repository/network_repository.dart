@@ -46,7 +46,13 @@ class NetworkRepository {
 
   /// 检查是否需要更新
   /// 需要更新返回新的版本号，否则返回null
-  Future<dynamic> checkUpdate() {
+  Future<dynamic> checkUpdate(bool github) {
+    if (github) {
+      return Dio()
+          .get(
+              "https://api.github.com/repos/inkroom/flutter-netease-music/releases/latest")
+          .then((value) => value.data);
+    }
     // 获取网络版本
     return Dio()
         .get("http://minio.bcyunqian.com/temp/quiet/version.json")

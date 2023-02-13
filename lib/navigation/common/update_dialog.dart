@@ -25,75 +25,129 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
 
   /// 当前只支持android平台自动更新，windows平台自动打开网页下载最新版
   if (NetworkSingleton.instance.allowNetwork()) {
-    networkRepository?.checkUpdate().then((value) {
-      if (value != null &&
-          value[Platform.operatingSystem] != null &&
-          value[Platform.operatingSystem]['version'] != null) {
-        PackageInfo.fromPlatform().then((info) {
-          if (info.version != value[Platform.operatingSystem]['version']) {
-            toast(S.current
-                .updateTip(value[Platform.operatingSystem]['version']));
-            if (Platform.isWindows || Platform.isLinux) {
-              if (value[Platform.operatingSystem]['url'] != null &&
-                  value[Platform.operatingSystem]['url'] != '') {
-                launchUrl(
-                    Uri.parse("${value[Platform.operatingSystem]['url']}"));
-              } else {
-                /// 打开网址
-                launchUrl(Uri.parse(
-                    "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}"));
-              }
-            } else if (Platform.isAndroid) {
-              showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (context) {
-                    return WillPopScope(
-                        child: _UpdateDialogContent(
-                          url: value[Platform.operatingSystem]['url'] ??
-                              "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}",
-                          filename: value[Platform.operatingSystem]['file'],
-                          version: value[Platform.operatingSystem]['version'],
-                          onDownloadComplete: (filePath) {
-                            log('下載的文件位置= $filePath');
-                            // 唤起安装
-                            MethodChannel("quiet.update.app.channel.name")
-                                .invokeMethod("installApk", {"path": filePath});
-                            // 关闭弹窗
-                            Navigator.pop(context, "");
-                          },
-                          onDownloadFail: (msg) {
-                            toast(S.current.updateFail);
-                            // 关闭弹窗
-                            Navigator.pop(context, "");
-                          },
-                        ),
-                        onWillPop: () => Future.value(false));
-                  }).then((value) {
-                log("dialog $value");
-              }).catchError((error, s) {
-                log("dialog $error $s");
-              });
-            }
-          } else {
-            if (onCheckVersion != null) {
-              onCheckVersion(false);
-            }
-            // toast(context.strings.newestVersion);
-          }
-          return -2;
-        }).then((value) {
-          if (value == -1) {
-            toast('更新失败');
-          }
+    PackageInfo? info;
+    PackageInfo.fromPlatform()
+        .then((value) => info = value)
+        .then((value) => _getUpdateUrlFromGithub(value))
+        .catchError((error, s) => _getUpdateUrlFromMinio(info!))
+        .then((value) {
+      if (value == null) {
+        toast(S.current.updateFail);
+        return;
+      }
+      if (value == '') {
+        if (onCheckVersion != null) onCheckVersion(false);
+        return;
+      }
+      // 更新
+      if (Platform.isWindows || Platform.isLinux) {
+        if (value[Platform.operatingSystem]['url'] != null &&
+            value[Platform.operatingSystem]['url'] != '') {
+          launchUrl(Uri.parse("${value[Platform.operatingSystem]['url']}"));
+        } else {
+          /// 打开网址
+          launchUrl(Uri.parse(
+              "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}"));
+        }
+      } else if (Platform.isAndroid) {
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) {
+              return WillPopScope(
+                  child: _UpdateDialogContent(
+                    url: value[Platform.operatingSystem]['url'] ??
+                        "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}",
+                    filename: value[Platform.operatingSystem]['file'],
+                    version: value[Platform.operatingSystem]['version'],
+                    onDownloadComplete: (filePath) {
+                      log('下載的文件位置= $filePath');
+                      // 唤起安装
+                      MethodChannel("quiet.update.app.channel.install_app")
+                          .invokeMethod("installApk", {"path": filePath});
+                      // 关闭弹窗
+                      Navigator.pop(context, "");
+                    },
+                    onDownloadFail: (msg) {
+                      toast(S.current.updateFail);
+                      // 关闭弹窗
+                      Navigator.pop(context, "");
+                    },
+                  ),
+                  onWillPop: () => Future.value(false));
+            }).then((value) {
+          log("dialog $value");
+        }).catchError((error, s) {
+          log("dialog $error $s");
         });
       }
-    }).catchError((error) {
-      log("$error");
-      // showDialog(context: context, builder: (context) => Text('检查失败 $error'));
+    }).catchError((error, s) {
       toast(S.current.updateFail);
     });
   }
+}
+
+/// 从minio检查更新
+///
+Future<dynamic> _getUpdateUrlFromMinio(PackageInfo info) {
+  return networkRepository!.checkUpdate(false).then((value) {
+    if (value != null &&
+        value[Platform.operatingSystem] != null &&
+        value[Platform.operatingSystem]['version'] != null) {
+      if (info.version != value['version']) {
+        return Future.value(value);
+      }
+      return Future.value(''); //不更新
+    }
+    return Future.value(null); //检查更新失败
+  });
+}
+
+/// 从github检查更新
+///
+Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
+  return networkRepository!.checkUpdate(true).then((value) {
+    if (value != null) {
+      List assets = value['assets'];
+
+      final version = {
+        "linux": {
+          "version": value['tag_name'].toString().substring(1),
+          "description": "_desc_",
+          "file": "quiet/quiet-linux-latest.deb",
+          "url": assets
+              .where((element) =>
+                  element['name'].toString().contains(RegExp("linux")))
+              .first['browser_download_url']
+        },
+        "windows": {
+          "version": value['tag_name'].toString().substring(1),
+          "description": "_desc_",
+          "file": "quiet/quiet-windows-latest.zip",
+          "url": assets
+              .where((element) =>
+                  element['name'].toString().contains(RegExp("windows")))
+              .first['browser_download_url']
+        },
+        "android": {
+          "version": value['tag_name'].toString().substring(1),
+          "description": "_desc_",
+          "file": "quiet/quiet-android-latest.apk",
+          "url": assets
+              .where((element) => element['name']
+                  .toString()
+                  .contains(RegExp("android-${value['tag_name']}.apk")))
+              .first['browser_download_url']
+        }
+      };
+
+      if (info.version != version[Platform.operatingSystem]!['version']) {
+        return Future.value(version);
+      }
+      return Future.value(''); //不更新
+    }
+    return Future.value(null); //检查更新失败
+  });
 }
 
 class _UpdateDialogContent extends StatefulWidget {
