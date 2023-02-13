@@ -16,7 +16,7 @@ A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 2. install [Flutter](https://flutter.io/docs/get-started/install)
 
     * require latest flutter master channel.
-    * 最新构建基于 3.3.10
+    * 最新构建基于 3.7.3
 
 3. build & run
 
