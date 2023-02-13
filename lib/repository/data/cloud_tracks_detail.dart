@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -46,18 +47,20 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
     });
   }
 
-  _notify(List<Track> tracks, int size, int maxSize, int trackCount) {
+  _notify(List<Track> tracks, int size, int maxSize, int trackCount,
+      {int filterFlag = 0, bool intersection = false}) {
     state = CloudTracksDetailState(
         maxSize: maxSize,
         size: maxSize,
         trackCount: trackCount,
-        tracks: tracks);
+        tracks: tracks,
+        filterFlag: filterFlag,
+        intersection: intersection);
   }
 
   _save(List<Track> tracks, int size, int maxSize, int trackCount) {
     var d = CloudTracksDetail(
         tracks: tracks, size: size, maxSize: maxSize, trackCount: trackCount);
-    log('要保存的数据=${d.toJson()}');
     neteaseLocalData[_kCacheKey] = d.toJson();
   }
 
@@ -114,6 +117,12 @@ class CloudTrackDetailNotifier extends StateNotifier<CloudTracksDetailState> {
       return down();
     }
   }
+
+  filter(int filterFlag, {bool? intersection}) {
+    _notify(state.tracks, 0, 0, state.tracks.length,
+        filterFlag: filterFlag,
+        intersection: intersection ?? state.intersection);
+  }
 }
 
 @JsonSerializable()
@@ -141,13 +150,18 @@ class CloudTracksDetailState with EquatableMixin {
       {required this.tracks,
       required this.size,
       required this.maxSize,
-      required this.trackCount});
+      required this.trackCount,
+      this.filterFlag = 0,
+      this.intersection = false});
 
   final List<Track> tracks;
   final int size;
   final int maxSize;
   final int trackCount;
+  final int filterFlag;
+  final bool intersection; // 是否取交集
 
   @override
-  List<Object?> get props => [tracks, size, maxSize, trackCount];
+  List<Object?> get props =>
+      [tracks, size, maxSize, trackCount, filterFlag, intersection];
 }

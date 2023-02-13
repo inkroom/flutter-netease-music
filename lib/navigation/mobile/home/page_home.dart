@@ -7,6 +7,8 @@ import 'package:quiet/navigation/mobile/home/local_music_list.dart';
 import 'package:quiet/navigation/mobile/home/main_page_discover.dart';
 import 'package:quiet/navigation/mobile/home/main_page_my.dart';
 import 'package:quiet/navigation/mobile/home/tab_search.dart';
+import 'package:quiet/providers/cloud_tracks_provider.dart';
+import 'package:quiet/repository.dart';
 
 import '../../../providers/navigator_provider.dart';
 import '../../common/navigation_target.dart';
@@ -55,8 +57,40 @@ class _AppBar extends ConsumerWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final w = <Widget>[];
+    w.addAll(TrackFlag.values
+        .map((e) => Checkbox(
+            value: ref.watch(cloudTracksProvider
+                        .select((value) => value.filterFlag)) &
+                    e.bit ==
+                e.bit,
+            activeColor: e.color,
+            side: BorderSide(color: e.color),
+            onChanged: (bool? value) {
+              if (value == true) {
+                ref
+                    .read(cloudTracksProvider.notifier)
+                    .filter(ref.read(cloudTracksProvider).filterFlag | e.bit);
+              } else {
+                ref.read(cloudTracksProvider.notifier).filter(
+                    (ref.read(cloudTracksProvider).filterFlag | e.bit) ^ e.bit);
+              }
+            }))
+        .toList());
+
+    w.add(Switch(
+        value: ref
+            .watch(cloudTracksProvider.select((value) => value.intersection)),
+        onChanged: (bool? value) {
+          ref.read(cloudTracksProvider.notifier).filter(
+              ref.read(cloudTracksProvider).filterFlag,
+              intersection: value);
+        }));
+
     return AppBar(
-      title: const PlayListFlag(),
+      title: Row(
+        children: w,
+      ),
       centerTitle: true,
       actions: [
         IconButton(

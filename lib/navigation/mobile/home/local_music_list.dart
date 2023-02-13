@@ -18,7 +18,15 @@ class LocalMusicList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // 显示的时候倒序，存储依然正序
-    final r = ref.watch(cloudTracksProvider).tracks.reversed.toList();
+    final filterFlag =
+        ref.watch(cloudTracksProvider.select((value) => value.filterFlag));
+    final intersection = ref.watch(cloudTracksProvider
+        .select((value) => value.intersection)); //true 则是取交集，否则取并集
+    final r = ref.watch(cloudTracksProvider).tracks.reversed.where((element) {
+      if (filterFlag == 0) return true;
+      if (intersection == true) return element.flag & filterFlag == filterFlag;
+      return element.flag & filterFlag > 0;
+    }).toList();
     if (r.isEmpty) {
       return Center(
         child: Text(context.strings.emptyList),
