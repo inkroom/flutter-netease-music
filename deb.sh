@@ -18,12 +18,7 @@ sed -i '4c     version: '"$1" pubspec.yaml
   size=$(du ~/deb/opt/quiet/ --max-depth=0 | tr -cd "[0-9]")
   sed -i 's/_size_/'"$size"'/g' ~/deb/DEBIAN/control
 
-if [ -f mc ]
-then
-#  外部的 alias 无法对 .sh 文件内生效。
-  alias mc="`pwd`/mc"
-fi
 
- dpkg-deb -b ~/deb build/linux/x64/release/quiet-linux-v$1.deb &&  mc cp build/linux/x64/release/quiet-linux-v$1.deb bc/temp/quiet/v$1/quiet-linux-v$1.deb && mc cp build/linux/x64/release/quiet-linux-v$1.deb bc/temp/quiet/quiet-linux-latest.deb && ( test -e mc || mc cp version.json bc/temp ) && (test -e mc || mc cp version.json bc/temp/quiet)
+ dpkg-deb -b ~/deb build/linux/x64/release/quiet-linux-v$1.deb
 ## 删除目录
- # rm -rf ~/deb
+rm -rf ~/deb

@@ -48,13 +48,7 @@ chcp 65001
 
 @REM 开始构建
 flutter build windows
-if ("true" == "%CI%" ) {
 
-}
-
-else {
-cd build\windows\runner\Release && Rar.exe a -r quiet-windows-v%1.zip *.* && mc cp quiet-windows-v%1.zip bc/temp/quiet/v%1/quiet-windows-v%1.zip && mc cp quiet-windows-v%1.zip bc/temp/quiet/quiet-windows-latest.zip && del windows-v%1.zip && cd ../../../../ && mc cp %file% bc/temp && mc cp %file% bc/temp/quiet
-}
 
 
 
