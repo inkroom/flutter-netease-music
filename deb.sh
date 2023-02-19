@@ -3,7 +3,7 @@
 sed -i '4c     version: '"$1" pubspec.yaml
 
 ## linxu deb打包 ./deb.sh version
- flutter build linux --release
+ flutter build linux --release || exit 1
 ## 由于ubuntu双系统windows权限始终为777，所以需要换到linux目录下做操作
  cp -r linux/deb ~/
 

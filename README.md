@@ -26,11 +26,12 @@ A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 
 ### Linux requirement.
 
-**appindicator3-0.1**
+- **appindicator3-0.1**
+- **gstreamer**
 
 
    ```shell
-   sudo apt -y  install libappindicator3-dev
+   sudo apt -y  install appindicator3-0.1 libappindicaor3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
    ```
 
 如果是deepin还需要以下命令

@@ -5,7 +5,7 @@ License: MIT
 Vendor: inkbox <enpassPixiv@protonmail.com>
 Architecture: amd64
 Maintainer: inkbox <enpassPixiv@protonmail.com>
-Depends: libappindicator3-dev, zenity
+Depends: appindicator3-0.1,libappindicaor3-dev,libgstreamer1.0-dev,libgstreamer-plugins-base1.0-dev,zenity
 Section: default
 Priority: extra
 Homepage: https://github.com/inkroom/flutter-netease-music
