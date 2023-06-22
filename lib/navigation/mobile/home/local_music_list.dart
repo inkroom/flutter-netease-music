@@ -22,7 +22,8 @@ class LocalMusicList extends ConsumerWidget {
         ref.watch(cloudTracksProvider.select((value) => value.filterFlag));
     final intersection = ref.watch(cloudTracksProvider
         .select((value) => value.intersection)); //true 则是取交集，否则取并集
-    final r = ref.watch(cloudTracksProvider).tracks.reversed.where((element) {
+    final list = ref.watch(cloudTracksProvider).tracks;
+    final r = list.reversed.where((element) {
       if (filterFlag == 0) return true;
       if (intersection == true) return element.flag & filterFlag == filterFlag;
       return element.flag & filterFlag > 0;
@@ -47,7 +48,7 @@ class LocalMusicList extends ConsumerWidget {
     return Stack(
       children: [
         TrackTileContainer.cloudTracks(
-            tracks: r,
+            tracks: list,
             child: ListView.builder(
               controller: _controller,
               shrinkWrap: true,
