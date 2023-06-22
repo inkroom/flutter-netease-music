@@ -1,3 +1,4 @@
+import 'dart:developer' as dev;
 import 'dart:io';
 import 'dart:math';
 
@@ -46,6 +47,7 @@ class TracksPlayerState with EquatableMixin {
       required this.volume,
       required this.mode,
       required this.error,
+      required this.showPlayingList,
       this.position});
 
   factory TracksPlayerState.fromJson(Map json) =>
@@ -53,6 +55,7 @@ class TracksPlayerState with EquatableMixin {
 
   final bool isBuffering;
   final bool isPlaying;
+  final TrackList showPlayingList;
   final Track? playingTrack;
   final TrackList playingList;
   final Duration? duration;
@@ -67,22 +70,23 @@ class TracksPlayerState with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        isPlaying,
-        isBuffering,
-        playingTrack,
-        playingList,
-        duration,
-        volume,
-        mode,
-      ];
+    isPlaying,
+    isBuffering,
+    playingTrack,
+    playingList,
+    duration,
+    volume,
+    mode,
+  ];
 }
 
 abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   TracksPlayer(this.ref)
       : super(TracksPlayerState(
-            isPlaying: false,
+      isPlaying: false,
             isBuffering: false,
             playingTrack: null,
+            showPlayingList: TrackList.empty(),
             playingList: TrackList.empty(),
             duration: null,
             volume: 0.0,
@@ -91,11 +95,42 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
 
   factory TracksPlayer.platform(
       StateNotifierProviderRef<TracksPlayer, TracksPlayerState> ref) {
+    TracksPlayer player;
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      return TracksPlayerImplAudioPlayer(ref);
+      player = TracksPlayerImplAudioPlayer(ref);
     }
-    return TracksPlayerImplMobile(ref);
+    player = TracksPlayerImplMobile(ref);
+
+    // 显示的播放列表 启用过滤
+    final filterFlag = ref.read(settingStateProvider).playFlag;
+
+    final r = player.trackList.tracks.where((element) {
+      return element.flag & filterFlag == filterFlag;
+    }).toList();
+
+    player.showPlayingList = TrackList(id: player.trackList.id, tracks: r);
+
+    ref.listen<SettingState>(settingStateProvider, (previous, next) {
+      dev.log("监听到 flag 修改 " + next.toString());
+      final filterFlag = next.playFlag;
+
+      final r = player.trackList.tracks.where((element) {
+        return element.flag & filterFlag == filterFlag;
+      }).toList();
+
+      player.showPlayingList = TrackList(id: player.trackList.id, tracks: r);
+    });
+    return player;
   }
+
+  TrackList _showTrackList = TrackList.empty();
+
+  set showPlayingList(TrackList list) {
+    _showTrackList = _showTrackList;
+    notifyPlayStateChanged();
+  }
+
+  TrackList get showPlayingList => _showTrackList;
 
   Future<void> play();
 
@@ -200,6 +235,7 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
       isBuffering: isBuffering,
       playingTrack: current,
       playingList: trackList,
+      showPlayingList: showPlayingList,
       duration: duration,
       volume: volume,
       mode: repeatMode,

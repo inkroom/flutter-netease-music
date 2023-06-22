@@ -7,6 +7,7 @@ import 'package:quiet/navigation/mobile/playlists/dialog_selector.dart';
 import 'package:quiet/repository.dart';
 
 import '../providers/player_provider.dart';
+import '../providers/settings_provider.dart';
 
 /// Current Playing List Dialog
 ///
@@ -29,6 +30,14 @@ class PlayingListDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playingList = ref.watch(playingListProvider);
+
+    // 显示的播放列表 启用过滤
+    // final filterFlag = ref.read(settingStateProvider).playFlag;
+    //
+    // final r = playingList.tracks.reversed.where((element) {
+    //   return element.flag & filterFlag == filterFlag;
+    // }).toList();
+
     final music = ref.watch(playingTrackProvider);
 
     final controller = useMemoized(() {

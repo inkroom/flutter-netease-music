@@ -17,5 +17,5 @@ final playingTrackProvider = playerStateProvider.select(
 );
 
 final playingListProvider = playerStateProvider.select(
-  (value) => value.playingList,
+  (value) => value.showPlayingList,
 );
