@@ -50,7 +50,7 @@ class PageHome extends StatelessWidget {
   }
 }
 
-class _AppBar extends ConsumerWidget with PreferredSizeWidget {
+class _AppBar extends ConsumerWidget implements PreferredSizeWidget {
   const _AppBar({
     Key? key,
   }) : super(key: key);
