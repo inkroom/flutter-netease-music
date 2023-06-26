@@ -55,7 +55,7 @@ class NetworkRepository {
     }
     // 获取网络版本
     return Dio()
-        .get("http://minio.bcyunqian.com/temp/quiet/version.json")
+        .get("https://temp1.inkroom.cn/temp/quiet/version.json")
         .then((value) => value.data);
   }
 

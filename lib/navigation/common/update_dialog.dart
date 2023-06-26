@@ -28,8 +28,8 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
     PackageInfo? info;
     PackageInfo.fromPlatform()
         .then((value) => info = value)
-        .then((value) => _getUpdateUrlFromGithub(value))
-        .catchError((error, s) => _getUpdateUrlFromMinio(info!))
+        .then((value) => _getUpdateUrlFromMinio(value))
+        .catchError((error, s) => _getUpdateUrlFromGithub(info!))
         .then((value) {
       if (value == null) {
         toast(S.current.updateFail);
@@ -44,10 +44,6 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
         if (value[Platform.operatingSystem]['url'] != null &&
             value[Platform.operatingSystem]['url'] != '') {
           launchUrl(Uri.parse("${value[Platform.operatingSystem]['url']}"));
-        } else {
-          /// 打开网址
-          launchUrl(Uri.parse(
-              "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}"));
         }
       } else if (Platform.isAndroid) {
         showDialog(
@@ -56,8 +52,7 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
             builder: (context) {
               return WillPopScope(
                   child: _UpdateDialogContent(
-                    url: value[Platform.operatingSystem]['url'] ??
-                        "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}",
+                    url: value[Platform.operatingSystem]['url'],
                     filename: value[Platform.operatingSystem]['file'],
                     version: value[Platform.operatingSystem]['version'],
                     onDownloadComplete: (filePath) {
