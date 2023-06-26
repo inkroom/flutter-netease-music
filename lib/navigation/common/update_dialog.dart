@@ -11,8 +11,9 @@ import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository/database.dart';
 import 'package:quiet/extension.dart';
 import 'package:quiet/repository/netease.dart';
-import 'package:url_launcher/url_launcher.dart';
-
+import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
+import 'package:url_launcher_windows/url_launcher_windows.dart' as url_windows;
+import 'package:url_launcher_linux/url_launcher_linux.dart' as url_linux;
 // 软件更新dialog
 
 /// [path] 文件位置，可以拿来安装
@@ -39,11 +40,25 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
         if (onCheckVersion != null) onCheckVersion(false);
         return;
       }
+
       // 更新
       if (Platform.isWindows || Platform.isLinux) {
         if (value[Platform.operatingSystem]['url'] != null &&
             value[Platform.operatingSystem]['url'] != '') {
-          launchUrl(Uri.parse("${value[Platform.operatingSystem]['url']}"));
+          final UrlLauncherPlatform urlLauncherPlatform;
+          if (Platform.isWindows) {
+            urlLauncherPlatform = url_windows.UrlLauncherWindows();
+          } else {
+            urlLauncherPlatform = url_linux.UrlLauncherLinux();
+          }
+          urlLauncherPlatform.launch(
+              ("${value[Platform.operatingSystem]['url']}"),
+              useSafariVC: true,
+              useWebView: false,
+              enableJavaScript: true,
+              enableDomStorage: true,
+              universalLinksOnly: false,
+              headers: {});
         }
       } else if (Platform.isAndroid) {
         showDialog(
