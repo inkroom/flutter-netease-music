@@ -35,12 +35,11 @@ jobs:
         run: flutter pub get
       - name: Build
         run: sh deb.sh ${GITHUB_REF_NAME:1}
-      - name: Release
-        uses: ncipollo/release-action@v1
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
         with:
-          artifacts: "build/linux/x64/release/quiet-linux-${{ github.ref_name }}.deb"
-          draft: true
-          allowUpdates: true
+          name: quiet
+          path: build/linux/x64/release/quiet-linux-${{ github.ref_name }}.deb
   windows:
     runs-on: windows-2022
     steps:
@@ -61,12 +60,11 @@ jobs:
         with:
           files: build/windows/runner/Release/
           dest: quiet-windows-${{ github.ref_name }}.zip
-      - name: Release
-        uses: ncipollo/release-action@v1
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
         with:
-          artifacts: "quiet-windows-${{ github.ref_name }}.zip"
-          draft: true
-          allowUpdates: true
+          name: quiet
+          path: quiet-windows-${{ github.ref_name }}.zip
   android:
     runs-on: ubuntu-20.04
     steps:
@@ -96,36 +94,51 @@ jobs:
         run: flutter pub get
       - name: Build
         run: sh a.sh ${GITHUB_REF_NAME:1}
-      - name: Release
-        uses: ncipollo/release-action@v1
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
         with:
-          artifacts: "build/app/outputs/apk/release/*"
-          draft: true
-          allowUpdates: true
+          name: quiet
+          path: "build/app/outputs/apk/release/*"
   release:
     runs-on: ubuntu-20.04
     needs: [linux, android, windows]
-    steps: 
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: quiet
+          path: quiet/
       - name: Update version
         run: |
-          echo "update android version"
-          sed -i '15c     "version": "'${GITHUB_REF_NAME:1}'",' version.json
-          sed -i '17c     "file": "quiet/'$GITHUB_REF_NAME'/quiet-android-'$GITHUB_REF_NAME'.apk",' version.json
-          echo "update linux version"
-          sed -i '3c     "version": "'${GITHUB_REF_NAME:1}'",' version.json
-          sed -i '5c     "file": "quiet/'$GITHUB_REF_NAME'/quiet-linux-'$GITHUB_REF_NAME'.deb",' version.json
-          echo "update windows version"
-          sed -i '9c     "version": "'${GITHUB_REF_NAME:1}'",' version.json
-          sed -i '11c     "file": "quiet/'$GITHUB_REF_NAME'/quiet-windows-'$GITHUB_REF_NAME'.zip",' version.json
-          sed -i '12c     "url":"https://github.com/inkroom/flutter-netease-music/releases/download/'$GITHUB_REF_NAME'/quiet-windows-'$GITHUB_REF_NAME'.zip"' version.json
+          echo "update github version"
+
+          export QUIET_HOST=https://github.com/inkroom/flutter-netease-music/releases/download
+          export QUIET_VERSION=$GITHUB_REF_NAME
+          export QUIET_VERSION_NUMBER=${GITHUB_REF_NAME:1}
+          export QUIET_VERSION_DES=$GITHUB_REF_NAME
+          
+          env
+          
+          envsubst < version.json > quiet/version.json
+          echo "update minio version"
+          export QUIET_HOST=https://temp1.inkroom.cn/temp/quiet 
+          envsubst < version.json > mv-quiet-version.json
+
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "version.json"
-          allowUpdates: true
+          artifacts: "quiet/*"
           draft: false
+      - name: Install Minio
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
+          ./mc alias set ink ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
+          rm -rf quiet/version.json
+          ./mc cp -r quiet/* ink/temp/quiet/$GITHUB_REF_NAME/
+          ./mc cp mv-quiet-version.json ink/temp/quiet/version.json
       - name: Notify
         if: failure()
         run: |

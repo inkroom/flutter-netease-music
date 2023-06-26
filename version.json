@@ -1,20 +1,20 @@
 {
   "linux": {
-    "version": "0.9.4",
-    "description": "_desc_",
-    "file": "quiet/quiet-linux-latest.deb",
-    "url": "https://github.com/inkroom/flutter-netease-music/releases/download/v0.9.3/quiet-linux-v0.9.3.deb"
+    "version": "$QUIET_VERSION_NUMBER",
+    "description": "$QUIET_VERSION_DES",
+    "file": "quiet/quiet-linux-$QUIET_VERSION.deb",
+    "url": "$QUIET_HOST/$QUIET_VERSION/quiet-linux-$QUIET_VERSION.deb"
   },
   "windows": {
-    "version": "0.9.4",
-    "description": "_desc_",
-    "file": "quiet/quiet-windows-latest.zip",
-    "url": "https://github.com/inkroom/flutter-netease-music/releases/download/v0.9.3/quiet-windows-v0.9.3.zip"
+    "version": "$QUIET_VERSION_NUMBER",
+    "description": "$QUIET_VERSION_DES",
+    "file": "quiet/quiet-windows-$QUIET_VERSION.zip",
+    "url": "$QUIET_HOST/$QUIET_VERSION/quiet-windows-$QUIET_VERSION.zip"
   },
   "android": {
-    "version": "0.9.4",
-    "description": "_desc_",
-    "file": "quiet/quiet-android-latest.apk",
-    "url": "https://github.com/inkroom/flutter-netease-music/releases/download/v0.9.3/quiet-android-v0.9.3.apk"
+    "version": "$QUIET_VERSION_NUMBER",
+    "description": "$QUIET_VERSION_DES",
+    "file": "quiet/quiet-android-$QUIET_VERSION.apk",
+    "url": "$QUIET_HOST/$QUIET_VERSION/quiet-android-$QUIET_VERSION.apk"
   }
 }
