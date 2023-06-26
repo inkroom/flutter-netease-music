@@ -26,11 +26,12 @@ A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 
 ### Linux requirement.
 
-**appindicator3-0.1**
+- **appindicator3-0.1**
+- **gstreamer**
 
 
    ```shell
-   sudo apt -y  install libappindicator3-dev
+   sudo apt -y  install appindicator3-0.1 libappindicaor3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
    ```
 
 如果是deepin还需要以下命令
@@ -132,3 +133,25 @@ flutter pub global activate intl_utils
 ```shell
 flutter --no-color pub global run intl_utils:generate
 ```
+
+
+#### 5. 引入的组件在linux平台有依赖
+
+首先在现有基础上打出 deb 包，然后进行解包，执行命令获取依赖，最后将输出的结果重新填入 **linux/deb/DEBIAN/control**的**depend**
+
+大致命令如下
+
+```shell
+sh deb.sh 0.9.3
+dpkg-deb -R build/linux/x64/release/quiet-linux-v0.9.3.deb ./tmp
+cd ./tmp
+mv DEBIAN debian
+dpkg-shlibdeps -O ./opt/quiet/quiet > ss.txt
+cat ss.txt
+```
+
+最终输入应该形式如下：
+
+> shlibs:Depends=libatk1.0-0 (>= 1.12.4), libc6 (>= 2.14), libcairo-gobject2 (>= 1.10.0), libcairo2 (>= 1.2.4), libgcc1 (>= 1:3.0), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.37.3), libgtk-3-0 (>= 3.9.12), libpango-1.0-0 (>= 1.14.0), libpangocairo-1.0-0 (>= 1.14.0), libstdc++6 (>= 5.2)
+
+只需要把**Depends=**后面的内容复制到**linux/deb/DEBIAN/control**里即可

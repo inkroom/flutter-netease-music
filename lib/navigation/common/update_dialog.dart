@@ -29,7 +29,6 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
     PackageInfo.fromPlatform()
         .then((value) => info = value)
         .then((value) => _getUpdateUrlFromGithub(value))
-        .catchError((error, s) => _getUpdateUrlFromMinio(info!))
         .then((value) {
       if (value == null) {
         toast(S.current.updateFail);
@@ -44,10 +43,6 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
         if (value[Platform.operatingSystem]['url'] != null &&
             value[Platform.operatingSystem]['url'] != '') {
           launchUrl(Uri.parse("${value[Platform.operatingSystem]['url']}"));
-        } else {
-          /// 打开网址
-          launchUrl(Uri.parse(
-              "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}"));
         }
       } else if (Platform.isAndroid) {
         showDialog(
@@ -56,8 +51,7 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
             builder: (context) {
               return WillPopScope(
                   child: _UpdateDialogContent(
-                    url: value[Platform.operatingSystem]['url'] ??
-                        "http://minio.bcyunqian.com/temp/${value[Platform.operatingSystem]['file']}",
+                    url: value[Platform.operatingSystem]['url'],
                     filename: value[Platform.operatingSystem]['file'],
                     version: value[Platform.operatingSystem]['version'],
                     onDownloadComplete: (filePath) {
@@ -87,21 +81,6 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
   }
 }
 
-/// 从minio检查更新
-///
-Future<dynamic> _getUpdateUrlFromMinio(PackageInfo info) {
-  return networkRepository!.checkUpdate(false).then((value) {
-    if (value != null &&
-        value[Platform.operatingSystem] != null &&
-        value[Platform.operatingSystem]['version'] != null) {
-      if (info.version != value['version']) {
-        return Future.value(value);
-      }
-      return Future.value(''); //不更新
-    }
-    return Future.value(null); //检查更新失败
-  });
-}
 
 /// 从github检查更新
 ///
