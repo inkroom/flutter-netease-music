@@ -1,18 +1,18 @@
 {
   "linux": {
-    "version": "0.9.3",
+    "version": "0.9.4",
     "description": "_desc_",
     "file": "quiet/quiet-linux-latest.deb",
     "url": "https://github.com/inkroom/flutter-netease-music/releases/download/v0.9.3/quiet-linux-v0.9.3.deb"
   },
   "windows": {
-    "version": "0.9.3",
+    "version": "0.9.4",
     "description": "_desc_",
     "file": "quiet/quiet-windows-latest.zip",
     "url": "https://github.com/inkroom/flutter-netease-music/releases/download/v0.9.3/quiet-windows-v0.9.3.zip"
   },
   "android": {
-    "version": "0.9.3",
+    "version": "0.9.4",
     "description": "_desc_",
     "file": "quiet/quiet-android-latest.apk",
     "url": "https://github.com/inkroom/flutter-netease-music/releases/download/v0.9.3/quiet-android-v0.9.3.apk"

@@ -16,7 +16,7 @@ A Universal copy app of [NeteaseMusic](https://music.163.com/#/download)
 2. install [Flutter](https://flutter.io/docs/get-started/install)
 
     * require latest flutter master channel.
-    * 最新构建基于 3.7.3
+    * 最新构建基于 3.10.5
 
 3. build & run
 
@@ -107,7 +107,7 @@ git push --tags
 sudo apt install -y zenity
 ```
 
-#### 2. 修改pubspec.yaml后，windows的版本号没有变
+#### 2. ~~修改pubspec.yaml后，windows的版本号没有变~~
 
 >
 > 这是flutter早期模板的[bug](https://github.com/flutter/flutter/issues/73652)
@@ -146,11 +146,10 @@ sh deb.sh 0.9.3
 dpkg-deb -R build/linux/x64/release/quiet-linux-v0.9.3.deb ./tmp
 cd ./tmp
 mv DEBIAN debian
-dpkg-shlibdeps -O ./opt/quiet/quiet > ss.txt
-cat ss.txt
+dpkg-shlibdeps -O ./opt/quiet/quiet 
 ```
 
-最终输入应该形式如下：
+最终输出应该形式如下：
 
 > shlibs:Depends=libatk1.0-0 (>= 1.12.4), libc6 (>= 2.14), libcairo-gobject2 (>= 1.10.0), libcairo2 (>= 1.2.4), libgcc1 (>= 1:3.0), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.37.3), libgtk-3-0 (>= 3.9.12), libpango-1.0-0 (>= 1.14.0), libpangocairo-1.0-0 (>= 1.14.0), libstdc++6 (>= 5.2)
 
