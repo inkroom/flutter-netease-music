@@ -16,11 +16,11 @@ enum NavigationPlatform {
 
 final debugNavigatorPlatformProvider = StateProvider<NavigationPlatform>(
   (ref) {
-    if (defaultTargetPlatform.isDesktop()) {
-      return NavigationPlatform.desktop;
-    } else {
-      return NavigationPlatform.mobile;
-    }
+    // if (defaultTargetPlatform.isDesktop()) {
+    //   return NavigationPlatform.desktop;
+    // } else {
+    return NavigationPlatform.mobile;
+    // }
   },
 );
 
