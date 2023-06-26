@@ -43,7 +43,7 @@ class AnimatedAppBottomBar extends HookConsumerWidget {
 
     assert(kMobileHomeTabs.contains(currentTab.runtimeType));
 
-    const navigationBarHeight = kBottomNavigationBarHeight + 2;
+    const navigationBarHeight = kBottomNavigationBarHeight + 3;
 
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
