@@ -20,6 +20,7 @@ TracksPlayerState _$TracksPlayerStateFromJson(Map json) => TracksPlayerState(
       volume: (json['volume'] as num).toDouble(),
       mode: $enumDecode(_$RepeatModeEnumMap, json['mode']),
       error: json['error'] as bool,
+      showPlayingList: TrackList.fromJson(json['showPlayingList'] as Map),
       position: json['position'] == null
           ? null
           : Duration(microseconds: json['position'] as int),
@@ -29,12 +30,13 @@ Map<String, dynamic> _$TracksPlayerStateToJson(TracksPlayerState instance) =>
     <String, dynamic>{
       'isBuffering': instance.isBuffering,
       'isPlaying': instance.isPlaying,
+      'showPlayingList': instance.showPlayingList.toJson(),
       'playingTrack': instance.playingTrack?.toJson(),
       'playingList': instance.playingList.toJson(),
       'duration': instance.duration?.inMicroseconds,
       'position': instance.position?.inMicroseconds,
       'volume': instance.volume,
-      'mode': _$RepeatModeEnumMap[instance.mode],
+      'mode': _$RepeatModeEnumMap[instance.mode]!,
       'error': instance.error,
     };
 

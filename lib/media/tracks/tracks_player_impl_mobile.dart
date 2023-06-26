@@ -226,6 +226,7 @@ class TracksPlayerImplMobile extends TracksPlayer {
 
   @override
   void setTrackList(TrackList trackList) {
+    super.setTrackList(trackList);
     _trackList = trackList;
   }
 

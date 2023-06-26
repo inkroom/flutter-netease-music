@@ -148,6 +148,7 @@ class TracksPlayerImplAudioPlayer extends TracksPlayer {
 
   @override
   void setTrackList(TrackList trackList) {
+    super.setTrackList(trackList);
     bool needStop = trackList.id != _trackList.id;
     if (needStop) {
       stop();

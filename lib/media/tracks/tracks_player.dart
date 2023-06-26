@@ -16,8 +16,8 @@ import 'tracks_player_impl_mobile.dart';
 
 part 'tracks_player.g.dart';
 
-final String _kPlayList = "_play_list_";
-final String _kPlayingTrack = "_playing_track_";
+const String _kPlayList = "_play_list_";
+const String _kPlayingTrack = "_playing_track_";
 
 enum RepeatMode {
   /// Repeat all the tracks.
@@ -70,14 +70,15 @@ class TracksPlayerState with EquatableMixin {
 
   @override
   List<Object?> get props => [
-    isPlaying,
-    isBuffering,
-    playingTrack,
-    playingList,
-    duration,
-    volume,
-    mode,
-  ];
+        isPlaying,
+        isBuffering,
+        playingTrack,
+        playingList,
+        showPlayingList,
+        duration,
+        volume,
+        mode,
+      ];
 }
 
 abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
@@ -98,8 +99,9 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
     TracksPlayer player;
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       player = TracksPlayerImplAudioPlayer(ref);
+    } else {
+      player = TracksPlayerImplMobile(ref);
     }
-    player = TracksPlayerImplMobile(ref);
 
     // 显示的播放列表 启用过滤
     final filterFlag = ref.read(settingStateProvider).playFlag;
@@ -108,16 +110,25 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
       return element.flag & filterFlag == filterFlag;
     }).toList();
 
+    dev.log("启动了 " +
+        filterFlag.toString() +
+        "  " +
+        r.toString() +
+        "  现有=" +
+        player.trackList.tracks.toString());
+
     player.showPlayingList = TrackList(id: player.trackList.id, tracks: r);
 
     ref.listen<SettingState>(settingStateProvider, (previous, next) {
-      dev.log("监听到 flag 修改 " + next.toString());
       final filterFlag = next.playFlag;
+      dev.log("监听到 flag 修改 " + next.toString() + " " + filterFlag.toString());
 
       final r = player.trackList.tracks.where((element) {
-        return element.flag & filterFlag == filterFlag;
+        if (filterFlag == 0) return true; // 全部都能播放，不过滤
+        return element.flag & filterFlag > 0;
       }).toList();
 
+      dev.log("处理完的 list" + r.toString());
       player.showPlayingList = TrackList(id: player.trackList.id, tracks: r);
     });
     return player;
@@ -126,7 +137,7 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   TrackList _showTrackList = TrackList.empty();
 
   set showPlayingList(TrackList list) {
-    _showTrackList = _showTrackList;
+    _showTrackList = list;
     notifyPlayStateChanged();
   }
 
@@ -150,7 +161,15 @@ abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
 
   Future<void> playFromMediaId(int trackId);
 
-  void setTrackList(TrackList trackList);
+  void setTrackList(TrackList trackList) {
+    // 显示的播放列表 启用过滤
+    final filterFlag = ref.read(settingStateProvider).playFlag;
+
+    final r = trackList.tracks.where((element) {
+      return element.flag & filterFlag == filterFlag;
+    }).toList();
+    showPlayingList = TrackList(id: this.trackList.id, tracks: r);
+  }
 
   /// 获取要播放的下一首音乐
   /// 如果返回了null，代表不能或者不需要继续播放
