@@ -18,7 +18,7 @@ jobs:
         uses: pietrobolcato/action-read-yaml@1.0.0
         id: yaml
         with:
-          file-path: 'pubspec.yaml'
+          config: 'pubspec.yaml'
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -57,7 +57,7 @@ jobs:
         uses: pietrobolcato/action-read-yaml@1.0.0
         id: yaml
         with:
-          file-path: 'pubspec.yaml'
+          config: 'pubspec.yaml'
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -90,7 +90,7 @@ jobs:
         uses: pietrobolcato/action-read-yaml@1.0.0
         id: yaml
         with:
-          file-path: 'pubspec.yaml'
+          config: 'pubspec.yaml'
       - name: Install Java
         uses: actions/setup-java@v3
         with:
@@ -130,7 +130,7 @@ jobs:
         uses: pietrobolcato/action-read-yaml@1.0.0
         id: yaml
         with:
-          file-path: 'pubspec.yaml'
+          config: 'pubspec.yaml'
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
@@ -156,11 +156,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create --target master v${{ steps.yaml.outputs['version'] }} ./quiet/*
-      - name: Release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "quiet/*"
-          draft: false
       - name: Install Minio
         run: |
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
@@ -184,7 +179,7 @@ jobs:
         uses: pietrobolcato/action-read-yaml@1.0.0
         id: yaml
         with:
-          file-path: 'pubspec.yaml'
+          config: 'pubspec.yaml'
       - name: Notify
         continue-on-error: true
         run: |
@@ -207,7 +202,7 @@ jobs:
         uses: pietrobolcato/action-read-yaml@1.0.0
         id: yaml
         with:
-          file-path: 'pubspec.yaml'
+          config: 'pubspec.yaml'
       - name: Notify
         run: |
           curl -d "${{ github.repository }}  ${{ steps.yaml.outputs['version'] }}  构建成功" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox

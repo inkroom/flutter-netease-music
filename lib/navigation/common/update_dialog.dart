@@ -104,7 +104,7 @@ Future<dynamic> _getUpdateUrlFromMinio(PackageInfo info) {
     if (value != null &&
         value[Platform.operatingSystem] != null &&
         value[Platform.operatingSystem]['version'] != null) {
-      if (info.version != value['version']) {
+      if (info.version != value[Platform.operatingSystem]['version']) {
         return Future.value(value);
       }
       return Future.value(''); //不更新
