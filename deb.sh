@@ -10,15 +10,28 @@ cp -r linux/deb ~/
 mkdir -p  ~/deb/opt/quiet/
 cp -r build/linux/x64/release/bundle/* ~/deb/opt/quiet/
 chmod 755 -R ~/deb/DEBIAN/
-## 更换版本号
 
-sed -i 's/_version_/'"$1"'/g' ~/deb/DEBIAN/control
-## 处理更新信息
-sed -i '3c     "version": "'$1'",' version.json
+test -f ~/deb/opt/quiet/quiet || ( echo "构建失败，没有可执行文件" && exit 1  )
+
 size=$(du ~/deb/opt/quiet/ --max-depth=0 | tr -cd "[0-9]")
-sed -i 's/_size_/'"$size"'/g' ~/deb/DEBIAN/control
+export QUIET_VERSION=$1
+export QUIET_SIZE=$size
+env
+echo "替换"
+cat ~/deb/DEBIAN/control
+echo "ing"
+home_dir=$(pwd)
+## 更换版本号
+cd ~/deb/DEBIAN/
+(cat control | envsubst) > control2
+cat control2
+echo "替换完成"
+# 原文件输出会出问题，但是换个文件就正常了 不知道为什么
+rm -f control
+mv control2 control
+cat control
 
-
-dpkg-deb -b ~/deb build/linux/x64/release/quiet-linux-v$1.deb
+cd $home_dir
+dpkg-deb -b ~/deb build/linux/x64/release/quiet-linux-v$1.deb || exit 1
 ## 删除目录
 rm -rf ~/deb

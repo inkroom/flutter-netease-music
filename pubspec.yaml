@@ -28,7 +28,7 @@ dependencies:
   scoped_model: ^2.0.0-nullsafety.0
   loader:
     git:
-      url: https://gitee.com/inkroom/t1.git
+      url: https://github.com/boyan01/loader.git
       ref: e1ef2d9957bc8615c7f19f989d4fcfc142e20e93
   encrypt: ^5.0.0
   scrollable_positioned_list: ^0.3.8
