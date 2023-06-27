@@ -131,12 +131,12 @@ jobs:
         id: yaml
         with:
           config: 'pubspec.yaml'
-      - name: Download artifacts
+      - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
           name: quiet
           path: quiet/
-      - name: Update version
+      - name: Update Version
         run: |
           echo "update github version"
 
@@ -145,25 +145,47 @@ jobs:
           export QUIET_VERSION_NUMBER=${{ steps.yaml.outputs['version'] }}
           export QUIET_VERSION_DES=$QUIET_VERSION
           
-          env
+          envsubst < version.json > github-version.json
           
-          envsubst < version.json > quiet/version.json
           echo "update minio version"
           export QUIET_HOST=https://temp1.inkroom.cn/temp/quiet 
-          envsubst < version.json > mv-quiet-version.json
-      - name: Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release create --target master v${{ steps.yaml.outputs['version'] }} ./quiet/*
-      - name: Install Minio
+          envsubst < version.json > minio-version.json
+          
+          echo "update cos version"
+          export QUIET_HOST=https://windows-1252774288.cos.ap-chengdu.myqcloud.com/quiet
+          envsubst < version.json > cos-version.json
+
+      - name: Upload To Cos
+        uses: TencentCloud/cos-action@v1
+        with:
+          secret_id: ${{ secrets.COS_SECRET_ID }}
+          secret_key: ${{ secrets.COS_SECRET_KEY }}
+          cos_bucket: ${{ secrets.COS_BUCKET }}
+          cos_region: ${{ secrets.COS_REGION }}
+          local_path: quiet
+          remote_path: v${{ steps.yaml.outputs['version'] }}
+      - name: Upload To Cos Version
+        uses: TencentCloud/cos-action@v1
+        with:
+          secret_id: ${{ secrets.COS_SECRET_ID }}
+          secret_key: ${{ secrets.COS_SECRET_KEY }}
+          cos_bucket: ${{ secrets.COS_BUCKET }}
+          cos_region: ${{ secrets.COS_REGION }}
+          local_path: cos-version.json
+          remote_path: version.json
+      - name: Upload To Minio
         run: |
           wget https://dl.min.io/client/mc/release/linux-amd64/mc
           chmod +x mc
           ./mc alias set ink ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
-          rm -rf quiet/version.json
           ./mc cp -r quiet/* ink/temp/quiet/v${{ steps.yaml.outputs['version'] }}/
-          ./mc cp mv-quiet-version.json ink/temp/quiet/version.json
+          ./mc cp minio-version.json ink/temp/quiet/version.json
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp github-version.json quiet/version.json
+          gh release create --target master v${{ steps.yaml.outputs['version'] }} ./quiet/*
       - name: Notify
         if: failure()
         run: |

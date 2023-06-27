@@ -46,17 +46,14 @@ class NetworkRepository {
 
   /// 检查是否需要更新
   /// 需要更新返回新的版本号，否则返回null
-  Future<dynamic> checkUpdate(bool github) {
-    if (github) {
-      return Dio()
-          .get(
-              "https://api.github.com/repos/inkroom/flutter-netease-music/releases/latest")
-          .then((value) => value.data);
-    }
-    // 获取网络版本
-    return Dio()
-        .get("https://temp1.inkroom.cn/temp/quiet/version.json")
-        .then((value) => value.data);
+  /// [github] 0 github ， 1 自建minio， 2 腾讯cos
+  Future<dynamic> checkUpdate(int github) {
+    Map<int, String> map = {
+      0: "https://api.github.com/repos/inkroom/flutter-netease-music/releases/latest",
+      1: "https://temp1.inkroom.cn/temp/quiet/version.json",
+      2: "https://quiet-1252774288.cos.ap-chengdu.myqcloud.com/version.json"
+    };
+    return Dio().get(map[github]!).then((value) => value.data);
   }
 
   /// Fetch lyric by track id

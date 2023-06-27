@@ -1,19 +1,19 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:async';
+
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:quiet/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/providers/settings_provider.dart';
 import 'package:quiet/repository/database.dart';
-import 'package:quiet/extension.dart';
 import 'package:quiet/repository/netease.dart';
+import 'package:url_launcher_linux/url_launcher_linux.dart' as url_linux;
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 import 'package:url_launcher_windows/url_launcher_windows.dart' as url_windows;
-import 'package:url_launcher_linux/url_launcher_linux.dart' as url_linux;
 // 软件更新dialog
 
 /// [path] 文件位置，可以拿来安装
@@ -22,15 +22,12 @@ typedef OnDownloadFail = void Function(String msg);
 typedef OnCheckVersion = void Function(bool shouldUpdate);
 
 void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
-  if (!kReleaseMode) return;
+  // if (!kReleaseMode) return;
 
   /// 当前只支持android平台自动更新，windows平台自动打开网页下载最新版
   if (NetworkSingleton.instance.allowNetwork()) {
-    PackageInfo? info;
     PackageInfo.fromPlatform()
-        .then((value) => info = value)
-        .then((value) => _getUpdateUrlFromMinio(value))
-        .catchError((error, s) => _getUpdateUrlFromGithub(info!))
+        .then((value) => _getUpdateUrl(value))
         .then((value) {
       if (value == null) {
         toast(S.current.updateFail);
@@ -92,15 +89,30 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
         });
       }
     }).catchError((error, s) {
+      log(s.toString());
       toast(S.current.updateFail);
     });
   }
 }
 
+Future<dynamic> _getUpdateUrl(PackageInfo info) {
+  return _getUpdateUrlFromCos(info)
+      .catchError((error, s) => _getUpdateUrlFromMinio(info))
+      .then((value) {
+    return (value == null || value == '')
+        ? _getUpdateUrlFromMinio(info)
+            .catchError((error, s) => _getUpdateUrlFromGithub(info))
+        : value;
+  }).then((value) {
+    return (value == '') ? _getUpdateUrlFromGithub(info) : value;
+  });
+}
+
 /// 从minio检查更新
 ///
 Future<dynamic> _getUpdateUrlFromMinio(PackageInfo info) {
-  return networkRepository!.checkUpdate(false).then((value) {
+  return networkRepository!.checkUpdate(1).then((value) {
+    log("从minio获取更新");
     if (value != null &&
         value[Platform.operatingSystem] != null &&
         value[Platform.operatingSystem]['version'] != null) {
@@ -113,10 +125,31 @@ Future<dynamic> _getUpdateUrlFromMinio(PackageInfo info) {
   });
 }
 
+/// 从cos检查更新
+///
+Future<dynamic> _getUpdateUrlFromCos(PackageInfo info) {
+  return networkRepository!.checkUpdate(2).then((value) {
+    if (value != null &&
+        value[Platform.operatingSystem] != null &&
+        value[Platform.operatingSystem]['version'] != null) {
+      log("从cos获取更新 " + value.toString());
+      if (info.version != value[Platform.operatingSystem]['version']) {
+        log('cos 更新');
+        return Future.value(value);
+      }
+      log("cos 不更新");
+      return Future.value(''); //不更新
+    }
+    return Future.value(null); //检查更新失败
+  });
+}
+
 /// 从github检查更新
 ///
 Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
-  return networkRepository!.checkUpdate(true).then((value) {
+  return networkRepository!.checkUpdate(0).then((value) {
+    log("从github获取更新");
+
     if (value != null) {
       List assets = value['assets'];
 
@@ -127,7 +160,7 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
           "file": "quiet/quiet-linux-latest.deb",
           "url": assets
               .where((element) =>
-                  element['name'].toString().contains(RegExp("linux")))
+              element['name'].toString().contains(RegExp("linux")))
               .first['browser_download_url']
         },
         "windows": {
@@ -136,7 +169,7 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
           "file": "quiet/quiet-windows-latest.zip",
           "url": assets
               .where((element) =>
-                  element['name'].toString().contains(RegExp("windows")))
+              element['name'].toString().contains(RegExp("windows")))
               .first['browser_download_url']
         },
         "android": {
@@ -145,8 +178,8 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
           "file": "quiet/quiet-android-latest.apk",
           "url": assets
               .where((element) => element['name']
-                  .toString()
-                  .contains(RegExp("android-${value['tag_name']}.apk")))
+              .toString()
+              .contains(RegExp("android-${value['tag_name']}.apk")))
               .first['browser_download_url']
         }
       };
@@ -161,13 +194,12 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
 }
 
 class _UpdateDialogContent extends StatefulWidget {
-  const _UpdateDialogContent(
-      {Key? key,
-      required this.url,
-      required this.filename,
-      required this.version,
-      required this.onDownloadComplete,
-      required this.onDownloadFail})
+  const _UpdateDialogContent({Key? key,
+    required this.url,
+    required this.filename,
+    required this.version,
+    required this.onDownloadComplete,
+    required this.onDownloadFail})
       : super(key: key);
 
   final String url;
@@ -201,14 +233,14 @@ class _UpdateDialogState extends State<_UpdateDialogContent> {
     super.initState();
     getApkDirectory().then((value) {
       Dio().download(widget.url, "$value/${widget.filename}",
-              onReceiveProgress: (int count, int total) {
-        setState(() {
-          _processValue = count / total;
-          if (_processValue >= 1) {
-            widget.onDownloadComplete("$value/${widget.filename}");
-          }
-        });
-      }).catchError((e) {
+          onReceiveProgress: (int count, int total) {
+            setState(() {
+              _processValue = count / total;
+              if (_processValue >= 1) {
+                widget.onDownloadComplete("$value/${widget.filename}");
+              }
+            });
+          }).catchError((e) {
         widget.onDownloadFail(e.toString());
       }) //The error handler of Future.catchError must return a value of the future's type  这里会报个错，不知道怎么解决，反正也没什么影响，就不管了
           ;
