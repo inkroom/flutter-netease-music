@@ -72,14 +72,15 @@ sudo apt install -y zenity
 
 ### github action
 
- 注意：action会将**所有平台**一起构建
+注意：action会将**所有平台**一起构建
 
- 构建成功或失败，将会通过 ntfy 通知
+构建成功或失败，将会通过 ntfy 通知
+
+修改 pubspec.yaml 的版本号
 
 ```shell
 
-git tag v0.6.0 # 前缀 v 不能少
-git push --tags
+git push origin master
 
 ```
 

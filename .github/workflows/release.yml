@@ -1,16 +1,24 @@
-name: CI
+name: release
 
 on:
   push:
+    branches: [ 'master' ]
     tags:
       - 'v*'
-
+    paths-ignore:
+      - 'README.md'
+  workflow_dispatch:
 jobs:
   linux:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Read Version
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: yaml
+        with:
+          file-path: 'pubspec.yaml'
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -19,32 +27,37 @@ jobs:
           cache: false
       - name: Flutter Config
         run: flutter config --enable-linux-desktop
-#   github 的机器居然也会出现 镜像连不上问题，不知道是哪边的问题
+          #   github 的机器居然也会出现 镜像连不上问题，不知道是哪边的问题
           # sudo sed -i "s@http://.*archive.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@g" /etc/apt/sources.list
-          # sudo sed -i "s@http://.*security.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@g" /etc/apt/sources.list
+        # sudo sed -i "s@http://.*security.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@g" /etc/apt/sources.list
       - name: Update Runtime
         run: |
           sudo apt update -y && sudo apt upgrade -y
-      - name: Patch for linux build
+      - name: Patch for Build
         run: |
-          sudo apt-get install -y ninja-build libgtk-3-dev
-      - name: Patch for linux build
+          sudo apt install -y ninja-build libgtk-3-dev
+      - name: Patch for Runtime
         run: |
           sudo apt install -y libappindicator3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
       - name: Dependency
         run: flutter pub get
       - name: Build
-        run: sh deb.sh ${GITHUB_REF_NAME:1}
+        run: sh deb.sh ${{ steps.yaml.version }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: quiet
-          path: build/linux/x64/release/quiet-linux-${{ github.ref_name }}.deb
+          path: build/linux/x64/release/quiet-linux-v${{ steps.yaml.outputs['version'] }}.deb
   windows:
     runs-on: windows-2022
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Read Version
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: yaml
+        with:
+          file-path: 'pubspec.yaml'
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -54,22 +67,30 @@ jobs:
       - name: Dependency
         run: flutter pub get
       - name: Build
-        run: .\w.bat %GITHUB_REF_NAME:~1%
+        env:
+          QUIET_VERSION: ${{ steps.yaml.outputs['version'] }}
+        run: |
+          .\w.bat %QUIET_VERSION%
       - name: Zip
         uses: vimtor/action-zip@v1
         with:
           files: build/windows/runner/Release/
-          dest: quiet-windows-${{ github.ref_name }}.zip
+          dest: quiet-windows-v${{  steps.yaml.outputs['version'] }}.zip
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: quiet
-          path: quiet-windows-${{ github.ref_name }}.zip
+          path: quiet-windows-v${{ steps.yaml.outputs['version'] }}.zip
   android:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Read Version
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: yaml
+        with:
+          file-path: 'pubspec.yaml'
       - name: Install Java
         uses: actions/setup-java@v3
         with:
@@ -93,7 +114,7 @@ jobs:
       - name: Dependency
         run: flutter pub get
       - name: Build
-        run: sh a.sh ${GITHUB_REF_NAME:1}
+        run: sh a.sh ${{ steps.yaml.outputs['version'] }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -105,6 +126,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Read Version
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: yaml
+        with:
+          file-path: 'pubspec.yaml'
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
@@ -115,9 +141,9 @@ jobs:
           echo "update github version"
 
           export QUIET_HOST=https://github.com/inkroom/flutter-netease-music/releases/download
-          export QUIET_VERSION=$GITHUB_REF_NAME
-          export QUIET_VERSION_NUMBER=${GITHUB_REF_NAME:1}
-          export QUIET_VERSION_DES=$GITHUB_REF_NAME
+          export QUIET_VERSION=v${{ steps.yaml.outputs['version'] }}
+          export QUIET_VERSION_NUMBER=${{ steps.yaml.outputs['version'] }}
+          export QUIET_VERSION_DES=$QUIET_VERSION
           
           env
           
@@ -125,7 +151,11 @@ jobs:
           echo "update minio version"
           export QUIET_HOST=https://temp1.inkroom.cn/temp/quiet 
           envsubst < version.json > mv-quiet-version.json
-
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create --target master v${{ steps.yaml.outputs['version'] }} ./quiet/*
       - name: Release
         uses: ncipollo/release-action@v1
         with:
@@ -137,12 +167,12 @@ jobs:
           chmod +x mc
           ./mc alias set ink ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
           rm -rf quiet/version.json
-          ./mc cp -r quiet/* ink/temp/quiet/$GITHUB_REF_NAME/
+          ./mc cp -r quiet/* ink/temp/quiet/v${{ steps.yaml.outputs['version'] }}/
           ./mc cp mv-quiet-version.json ink/temp/quiet/version.json
       - name: Notify
         if: failure()
         run: |
-          curl -d "${{ github.repository }}  ${{ github.ref_name  }}  上传构建失败" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox
+          curl -d "${{ github.repository }}  v${{ steps.yaml.outputs['version'] }}  上传构建失败" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox
   fail:
     runs-on: ubuntu-20.04
     needs: [linux, android, windows] # 最好是在 release 也失败后执行 ，但是如果前置任务失败， release直接不执行，导致fail 也不会执行
@@ -150,14 +180,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Read Version
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: yaml
+        with:
+          file-path: 'pubspec.yaml'
       - name: Notify
         continue-on-error: true
         run: |
-          curl -d "${{ github.repository }}  ${{ github.ref_name  }}  构建失败" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox
+          curl -d "${{ github.repository }}  ${{ steps.yaml.outputs['version'] }}  构建失败" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox
       - name: Delete tag
         uses: pr-mpt/actions-delete-tag@v1
         continue-on-error: true
-      - name: Delete Release 
+      - name: Delete Release
         run: gh release delete ${{ github.ref_name  }}
         continue-on-error: true
         env:
@@ -166,6 +201,13 @@ jobs:
     runs-on: ubuntu-20.04
     needs: [release]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Read Version
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: yaml
+        with:
+          file-path: 'pubspec.yaml'
       - name: Notify
         run: |
-          curl -d "${{ github.repository }}  ${{ github.ref_name  }}  构建成功" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox
+          curl -d "${{ github.repository }}  ${{ steps.yaml.outputs['version'] }}  构建成功" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox
