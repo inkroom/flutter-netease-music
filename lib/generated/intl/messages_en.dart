@@ -80,6 +80,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Drop your music file to here to upload."),
         "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("Music Count"),
         "collectionLike": MessageLookupByLibrary.simpleMessage("Collections"),
+        "copyMusicName": MessageLookupByLibrary.simpleMessage("Copy Name"),
         "createdDate": m2,
         "createdSongList":
             MessageLookupByLibrary.simpleMessage("Created Song List"),

@@ -1,7 +1,7 @@
 name: quiet
 description: 多源音乐播放器
 
-version: 0.9.8
+version: 0.9.9
 publish_to: none
 
 environment:

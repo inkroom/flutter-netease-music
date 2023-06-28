@@ -1,4 +1,5 @@
 {
+  "copyMusicName":"Copy Name",
   "alterActionClose": "Close",
   "alertAppLaunched": "App Has Launched",
   "trayItemShow": "Show",

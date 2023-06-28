@@ -74,6 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("将音乐文件拖放到这里进行上传"),
         "cloudMusicUsage": MessageLookupByLibrary.simpleMessage("歌曲数目"),
         "collectionLike": MessageLookupByLibrary.simpleMessage("已购"),
+        "copyMusicName": MessageLookupByLibrary.simpleMessage("复制歌名"),
         "createdDate": m2,
         "createdSongList": MessageLookupByLibrary.simpleMessage("创建歌单"),
         "currentPlaying": MessageLookupByLibrary.simpleMessage("当前播放"),

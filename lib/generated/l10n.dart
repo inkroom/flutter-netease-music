@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -48,6 +49,16 @@ class S {
 
   static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
+  }
+
+  /// `Copy Name`
+  String get copyMusicName {
+    return Intl.message(
+      'Copy Name',
+      name: 'copyMusicName',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Close`

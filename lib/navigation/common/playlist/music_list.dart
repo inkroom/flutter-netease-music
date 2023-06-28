@@ -1,10 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:quiet/material.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/media/tracks/track_list.dart';
 import 'package:quiet/media/tracks/tracks_player.dart';
 import 'package:quiet/navigation/common/navigation_target.dart';
@@ -47,6 +48,10 @@ class TrackOperator {
         ref.read(cloudTracksProvider.notifier).remove(track);
       }
     });
+  }
+
+  void copyMusicName(Track track) {
+    Clipboard.setData(ClipboardData(text: track.name));
   }
 
   void downloadOperator(Track track) {

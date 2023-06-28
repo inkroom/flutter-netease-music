@@ -152,7 +152,7 @@ jobs:
           envsubst < version.json > minio-version.json
           
           echo "update cos version"
-          export QUIET_HOST=https://windows-1252774288.cos.ap-chengdu.myqcloud.com/quiet
+          export QUIET_HOST=https://quiet-1252774288.cos.ap-chengdu.myqcloud.com
           envsubst < version.json > cos-version.json
 
       - name: Upload To Cos

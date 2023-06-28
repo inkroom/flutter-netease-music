@@ -105,6 +105,10 @@ class TrackTile extends ConsumerWidget {
                   child: Text(context.strings.trackFlagSetting),
                   value: 4,
                 ),
+                PopupMenuItem(
+                  child: Text(context.strings.copyMusicName),
+                  value: 5,
+                ),
               ],
               icon: const Icon(Icons.more_vert),
               onSelected: (value) {
@@ -154,6 +158,8 @@ class TrackTile extends ConsumerWidget {
                   //             ),
                   //           ),
                   //         ));
+                } else if (value == 5) {
+                  operator.copyMusicName(track);
                 }
                 debugPrint('v=$value');
               },
