@@ -18,6 +18,7 @@ class HomeTabSearch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchResult = ref.watch(searchMusicProvider(''));
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: _SearchTextField(),
       body: searchResult.value.when(
         data: (data) => data.isEmpty
@@ -27,14 +28,14 @@ class HomeTabSearch extends ConsumerWidget {
             : TrackTileContainer.cloudTracks(
                 tracks: data,
                 child: ListView.builder(
-                  shrinkWrap: true,
+                  // shrinkWrap: true,
                   itemBuilder: (context, index) => TrackTile(
-                    track: data[index],
-                    index: index + 1,
-                  ),
-                  itemCount: data.length,
-                ),
-                player: ref.read(playerProvider)),
+                track: data[index],
+                index: index + 1,
+              ),
+              itemCount: data.length,
+            ),
+            player: ref.read(playerProvider)),
         error: (error, stacktrace) => Center(
           child: Text(context.formattedError(error, stacktrace: stacktrace)),
         ),

@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quiet/navigation/common/settings.dart';
 import 'package:quiet/navigation/mobile/home/local_music_list.dart';
 import 'package:quiet/navigation/mobile/home/main_page_discover.dart';
 import 'package:quiet/navigation/mobile/home/main_page_my.dart';
@@ -46,7 +45,8 @@ class PageHome extends StatelessWidget {
         body = MainPageMy();
         break;
     }
-    return Scaffold(appBar: const _AppBar(), body: body);
+    return Scaffold(
+        resizeToAvoidBottomInset: false, appBar: const _AppBar(), body: body);
   }
 }
 
