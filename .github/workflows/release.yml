@@ -162,7 +162,7 @@ jobs:
           secret_key: ${{ secrets.COS_SECRET_KEY }}
           cos_bucket: ${{ secrets.COS_BUCKET }}
           cos_region: ${{ secrets.COS_REGION }}
-          accelerate: true
+          accelerate: false
           local_path: quiet
           remote_path: v${{ steps.yaml.outputs['version'] }}
       - name: Upload To Cos Version
@@ -172,7 +172,7 @@ jobs:
           secret_key: ${{ secrets.COS_SECRET_KEY }}
           cos_bucket: ${{ secrets.COS_BUCKET }}
           cos_region: ${{ secrets.COS_REGION }}
-          accelerate: true
+          accelerate: false
           local_path: cos-version.json
           remote_path: version.json
       - name: Upload To Minio
