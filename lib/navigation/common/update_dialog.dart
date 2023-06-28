@@ -90,21 +90,25 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
       }
     }).catchError((error, s) {
       log(s.toString());
+      log(error);
       toast(S.current.updateFail);
     });
   }
 }
 
 Future<dynamic> _getUpdateUrl(PackageInfo info) {
-  return _getUpdateUrlFromCos(info)
+  // 请求顺序 github -> minio -> cos
+
+  return _getUpdateUrlFromGithub(info)
       .catchError((error, s) => _getUpdateUrlFromMinio(info))
       .then((value) {
     return (value == null || value == '')
         ? _getUpdateUrlFromMinio(info)
-            .catchError((error, s) => _getUpdateUrlFromGithub(info))
+            .catchError((error, s) => _getUpdateUrlFromCos(info))
         : value;
   }).then((value) {
-    return (value == '') ? _getUpdateUrlFromGithub(info) : value;
+    log("minio value " + value.toString());
+    return value.toString() == '' ? _getUpdateUrlFromCos(info) : value;
   });
 }
 
@@ -112,7 +116,7 @@ Future<dynamic> _getUpdateUrl(PackageInfo info) {
 ///
 Future<dynamic> _getUpdateUrlFromMinio(PackageInfo info) {
   return networkRepository!.checkUpdate(1).then((value) {
-    log("从minio获取更新");
+    log("从minio获取更新 " + value.toString());
     if (value != null &&
         value[Platform.operatingSystem] != null &&
         value[Platform.operatingSystem]['version'] != null) {
@@ -160,7 +164,7 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
           "file": "quiet/quiet-linux-latest.deb",
           "url": assets
               .where((element) =>
-              element['name'].toString().contains(RegExp("linux")))
+                  element['name'].toString().contains(RegExp("linux")))
               .first['browser_download_url']
         },
         "windows": {
@@ -169,7 +173,7 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
           "file": "quiet/quiet-windows-latest.zip",
           "url": assets
               .where((element) =>
-              element['name'].toString().contains(RegExp("windows")))
+                  element['name'].toString().contains(RegExp("windows")))
               .first['browser_download_url']
         },
         "android": {
@@ -178,8 +182,8 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
           "file": "quiet/quiet-android-latest.apk",
           "url": assets
               .where((element) => element['name']
-              .toString()
-              .contains(RegExp("android-${value['tag_name']}.apk")))
+                  .toString()
+                  .contains(RegExp("android-${value['tag_name']}.apk")))
               .first['browser_download_url']
         }
       };
@@ -190,16 +194,21 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
       return Future.value(''); //不更新
     }
     return Future.value(null); //检查更新失败
-  });
+  })
+      //     .catchError((error, s) {
+      //   return Future.value();
+      // })
+      ;
 }
 
 class _UpdateDialogContent extends StatefulWidget {
-  const _UpdateDialogContent({Key? key,
-    required this.url,
-    required this.filename,
-    required this.version,
-    required this.onDownloadComplete,
-    required this.onDownloadFail})
+  const _UpdateDialogContent(
+      {Key? key,
+      required this.url,
+      required this.filename,
+      required this.version,
+      required this.onDownloadComplete,
+      required this.onDownloadFail})
       : super(key: key);
 
   final String url;
@@ -233,14 +242,14 @@ class _UpdateDialogState extends State<_UpdateDialogContent> {
     super.initState();
     getApkDirectory().then((value) {
       Dio().download(widget.url, "$value/${widget.filename}",
-          onReceiveProgress: (int count, int total) {
-            setState(() {
-              _processValue = count / total;
-              if (_processValue >= 1) {
-                widget.onDownloadComplete("$value/${widget.filename}");
-              }
-            });
-          }).catchError((e) {
+              onReceiveProgress: (int count, int total) {
+        setState(() {
+          _processValue = count / total;
+          if (_processValue >= 1) {
+            widget.onDownloadComplete("$value/${widget.filename}");
+          }
+        });
+      }).catchError((e) {
         widget.onDownloadFail(e.toString());
       }) //The error handler of Future.catchError must return a value of the future's type  这里会报个错，不知道怎么解决，反正也没什么影响，就不管了
           ;
