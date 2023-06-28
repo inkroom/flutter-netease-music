@@ -148,13 +148,19 @@ jobs:
           envsubst < version.json > github-version.json
           
           echo "update minio version"
-          export QUIET_HOST=https://temp1.inkroom.cn/temp/quiet 
+          export QUIET_HOST=https://temp1.inkroom.cn/temp/quiet
           envsubst < version.json > minio-version.json
           
           echo "update cos version"
           export QUIET_HOST=https://quiet-1252774288.cos.ap-chengdu.myqcloud.com
           envsubst < version.json > cos-version.json
-
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        #          先上传到 github 然后触发 webhook，可以更快 把文件同步上去，之后action再慢慢传
+        run: |
+          cp github-version.json quiet/version.json
+          gh release create --target master v${{ steps.yaml.outputs['version'] }} ./quiet/*
       - name: Upload To Cos
         uses: TencentCloud/cos-action@b0aa648235fb35a1bdd6a77f529eb0ac4c2f1c25
         with:
@@ -182,12 +188,6 @@ jobs:
           ./mc alias set ink ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
           ./mc cp -r quiet/* ink/temp/quiet/v${{ steps.yaml.outputs['version'] }}/
           ./mc cp minio-version.json ink/temp/quiet/version.json
-      - name: Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          cp github-version.json quiet/version.json
-          gh release create --target master v${{ steps.yaml.outputs['version'] }} ./quiet/*
       - name: Notify
         if: failure()
         run: |
