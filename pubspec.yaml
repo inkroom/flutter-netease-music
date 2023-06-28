@@ -1,11 +1,11 @@
 name: quiet
 description: 多源音乐播放器
 
-version: 0.9.7
+version: 0.9.8
 publish_to: none
 
 environment:
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: '>=2.14.0'
 
 dependencies:
   flutter:
