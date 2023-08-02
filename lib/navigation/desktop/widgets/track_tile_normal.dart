@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quiet/material.dart';
 import 'package:quiet/extension.dart';
+import 'package:quiet/material.dart';
 import 'package:quiet/navigation/common/like_button.dart';
 import 'package:quiet/navigation/common/playlist/music_list.dart';
 import 'package:quiet/providers/navigator_provider.dart';
@@ -59,7 +59,7 @@ class _TrackTableContainerState extends State<_TrackTableContainer> {
   final int artistFlex = 18;
   final int albumFlex = 20;
   final int durationFlex = 6;
-  final int operatorFlex = 14;
+  final int operatorFlex = 16;
 
   @override
   Widget build(BuildContext context) {
