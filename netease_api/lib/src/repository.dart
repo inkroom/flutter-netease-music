@@ -194,13 +194,25 @@ class Repository extends MusicApi {
 
   ///根据音乐id获取歌词
   @override
-  Future<String?> lyric(Track id) {
+  Future<LyricContent?> lyric(Track id) {
     return doRequest('/lyric', {"id": id.id}).then((value) {
       final Map? lyc = value.asValue?.value["lrc"];
+      final Map? tlyc = value.asValue?.value["tlyric"];
       if (lyc == null) {
         return null;
       }
-      return lyc["lyric"];
+      String? res = lyc["lyric"];
+      String? tres;
+      if (tlyc != null && res != null && (tres = tlyc["lyric"]) != null) {
+        // 有中文歌词，尝试合并
+
+        final ly = LyricContent.from(res);
+        final tly = LyricContent.from(tres!);
+
+        return ly.contact(tly);
+      }
+
+      return res == null ? null : LyricContent.from(res);
     });
   }
 
@@ -480,7 +492,7 @@ class Repository extends MusicApi {
 
     final l = result.asValue!.value['data'] as List;
     if (l.first['url'] == null) {
-      return Future.error(PlayDetailException('fail'));
+      return Future.error(PlayDetailException('fail', track));
     }
     track.mp3Url = l.first['url'] as String;
     return Future.value(track);

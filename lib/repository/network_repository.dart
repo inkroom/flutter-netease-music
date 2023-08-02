@@ -57,12 +57,12 @@ class NetworkRepository {
   }
 
   /// Fetch lyric by track id
-  Future<String?> lyric(Track id) {
+  Future<LyricContent?> lyric(Track id) {
     final key = CacheKey.fromString(
         id.id.toString() + id.extra); // 如果修改歌词文件缓存位置，注意调整导出功能
     return _lyricCache.get(key).then((value) {
       if (value != null) {
-        return Future.value(value.toString());
+        return Future.value(LyricContent.from(value.toString()));
       }
       if (!NetworkSingleton().allowNetwork()) {
         return Future.error(NetworkException('网络设置不允许'));
@@ -72,7 +72,7 @@ class NetworkRepository {
           .then((value) => value.lyric(id));
     }).then((value) {
       if (value == null) return Future.error(LyricException(''));
-      _lyricCache.update(key, value);
+      _lyricCache.update(key, value.toString());
       return value;
     });
   }

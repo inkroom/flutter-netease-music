@@ -34,7 +34,7 @@ class KuApi extends MusicApi {
         .then((e) {
       log('歌曲详情=$e');
       if (e['err_code'] != 0) {
-        return Future.error(PlayDetailException('获取歌曲详情失败'));
+        return Future.error(PlayDetailException('获取歌曲详情失败', track));
       }
       log('playUrl=${e['data']['play_url']} play_backup_url=${e['data']['play_backup_url']}');
       log('img=${e['data']['img']}');
@@ -119,7 +119,7 @@ class KuApi extends MusicApi {
   String get icon => "assets/icon.ico";
 
   @override
-  Future<String?> lyric(Track track) {
+  Future<LyricContent?> lyric(Track track) {
     return _doRequest(
             'https://wwwapi.kugou.com/yy/index.php?r=play%2Fgetdata&hash=${track.extra}&appid=1014&platid=4&album_id=${track.album?.id}',
             {
@@ -133,10 +133,12 @@ class KuApi extends MusicApi {
         .then((e) {
       log('歌词详情==$e');
       if (e['err_code'] != 0) {
-        return Future.error(PlayDetailException('获取歌词失败'));
+        return Future.error(PlayDetailException('获取歌词失败', track));
       }
       log('歌词=${e['data']['lyrics']}');
-      return Future.value(e['data']['lyrics']);
+      String? r = e['data']['lyrics'];
+      if (r == null) return Future.value(null);
+      return Future.value(LyricContent.from(r));
     });
   }
 }

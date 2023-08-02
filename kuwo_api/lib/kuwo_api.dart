@@ -34,7 +34,7 @@ class KuWoApi extends MusicApi {
         .then((e) {
       log('歌曲详情=$e');
       if (e['code'] != 200) {
-        return Future.error(PlayDetailException('获取歌曲详情失败'));
+        return Future.error(PlayDetailException('获取歌曲详情失败', track));
       }
       log('playUrl=${e['data']['url']}');
       return Track(
@@ -125,7 +125,7 @@ class KuWoApi extends MusicApi {
   String get icon => "assets/icon.ico";
 
   @override
-  Future<String?> lyric(Track track) {
+  Future<LyricContent?> lyric(Track track) {
     return Future.error(LyricException(''));
     // return _doRequest(
     //         'https://wwwapi.kugou.com/yy/index.php?r=play%2Fgetdata&hash=${track.extra}&appid=1014&platid=4&album_id=${track.album?.id}',

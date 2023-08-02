@@ -33,18 +33,18 @@ class MiGuApi extends MusicApi {
         .then((e) {
       log('歌曲详情=$e');
       if (e['code'] != "000000") {
-        return Future.error(PlayDetailException('获取歌曲详情失败'));
+        return Future.error(PlayDetailException('获取歌曲详情失败', track));
       }
 
       final rs = e['resource'] as List;
       if (rs.isEmpty) {
-        return Future.error(PlayDetailException('获取歌曲详情失败'));
+        return Future.error(PlayDetailException('获取歌曲详情失败', track));
       }
       final r = rs[0];
 
       final rates = r['rateFormats'] as List;
       if (rates.isEmpty) {
-        return Future.error(PlayDetailException('获取歌曲详情失败'));
+        return Future.error(PlayDetailException('获取歌曲详情失败', track));
       }
       return Track(
           id: track.id,
@@ -138,7 +138,7 @@ class MiGuApi extends MusicApi {
   String get icon => "assets/icon.ico";
 
   @override
-  Future<String?> lyric(Track track) {
+  Future<LyricContent?> lyric(Track track) {
     log("歌词 extra = ${track.extra}");
 
     return _doRequest(
@@ -155,12 +155,14 @@ class MiGuApi extends MusicApi {
         })
         .then((value) => json.decode(value))
         .then((e) {
-          log('歌词详情==$e');
+      log('歌词详情==$e');
           if (e['returnCode'] != '000000') {
             return Future.error(PlayDetailException('获取歌词失败'));
           }
           log('歌词=${e['lyric']}');
-          return Future.value(e['lyric']);
+          String? r = e['lyric'];
+          if (r == null) return Future.value(null);
+          return Future.value(LyricContent.from(r));
         });
   }
 }
