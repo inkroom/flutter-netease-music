@@ -16,6 +16,7 @@ class PageSearch extends StatelessWidget {
     if (target is NavigationTargetSearchMusicResult) {
       child = PageMusicSearchResult(
         query: (target as NavigationTargetSearchMusicResult).keyword,
+        origin: (target as NavigationTargetSearchMusicResult).origin,
       );
     } else {
       throw UnsupportedError('unsupported target: $target');

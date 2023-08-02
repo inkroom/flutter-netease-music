@@ -1283,13 +1283,13 @@ class S {
     );
   }
 
-  /// `Find {value} music`
-  String searchMusicResultCount(Object value) {
+  /// `Find {count} music, From {from}`
+  String searchMusicResultCount(Object count, Object from) {
     return Intl.message(
-      'Find $value music',
+      'Find $count music, From $from',
       name: 'searchMusicResultCount',
       desc: '',
-      args: [value],
+      args: [count, from],
     );
   }
 

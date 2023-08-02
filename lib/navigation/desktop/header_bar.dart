@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -124,14 +122,21 @@ class _SearchBar extends HookConsumerWidget {
                   ),
                   onSubmitted: (value) {
                     if (value.trim().isNotEmpty) {
+                      SearchQueryState v = ref.read(searchMusicQueryProvider);
+
                       ref
-                          .read(searchMusicProvider(value.trim()).notifier)
-                          .search(value.trim(),
-                              origin: ref
-                                  .read(searchMusicProvider('').notifier)
-                                  .origin);
+                          .read(searchMusicProvider(
+                                  value.trim() + v.origin.toString())
+                              .notifier)
+                          .search(value.trim(), origin: v.origin);
+
+                      ref
+                          .read(searchMusicQueryProvider.notifier)
+                          .setQuery(value.trim(), v.origin);
+
                       ref.read(navigatorProvider.notifier).navigate(
-                          NavigationTargetSearchMusicResult(value.trim()));
+                          NavigationTargetSearchMusicResult(
+                              value.trim(), v.origin));
                     }
                   }),
             ),

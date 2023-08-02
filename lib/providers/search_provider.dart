@@ -9,6 +9,25 @@ import 'package:quiet/repository/data/search_result.dart';
 final searchMusicProvider = StateNotifierProvider.family<_SearchNotify,
     SearchResultState<Track>, String>((ref, query) => _SearchNotify());
 
+final searchMusicQueryProvider =
+    StateNotifierProvider<_SearchQueryNotify, SearchQueryState>(
+        (ref) => _SearchQueryNotify());
+
+class _SearchQueryNotify extends StateNotifier<SearchQueryState> {
+  _SearchQueryNotify() : super(SearchQueryState('', 1));
+
+  void setQuery(String query, int origin) {
+    super.state = SearchQueryState(query, origin);
+  }
+}
+
+class SearchQueryState {
+  SearchQueryState(this.query, this.origin);
+
+  final String query;
+  final int origin;
+}
+
 class _SearchNotify extends SearchResultStateNotify<Track> {
   _SearchNotify() : super();
 
@@ -74,6 +93,7 @@ abstract class SearchResultStateNotify<T>
   int get origin => _origin;
 
   set origin(int origin) {
+    log("切换来源");
     if (_origin != origin) {
       //切换来源，自动搜索
       _origin = origin;
@@ -83,6 +103,15 @@ abstract class SearchResultStateNotify<T>
       _origin = origin;
       notifyListener(const AsyncValue.data([]));
     }
+  }
+
+  void changeOrigin(int origin, String query) {
+    log("新query" + query + " " + origin.toString() + " _" + _origin.toString());
+    this.query = query;
+    //切换来源，自动搜索
+    _origin = origin;
+    notifyListener(const AsyncValue.data([]));
+    _loadQuery(_page);
   }
 
   void _loadQuery(int page) async {

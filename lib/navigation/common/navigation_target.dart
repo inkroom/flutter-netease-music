@@ -118,15 +118,18 @@ class NavigationTargetDailyRecommend extends NavigationTarget {
 }
 
 class NavigationTargetSearchMusicResult extends NavigationTarget {
-  NavigationTargetSearchMusicResult(this.keyword);
+  NavigationTargetSearchMusicResult(this.keyword, this.origin);
 
   final String keyword;
+
+  final int origin;
 
   @override
   bool isTheSameTarget(NavigationTarget other) {
     return super.isTheSameTarget(other) &&
         other is NavigationTargetSearchMusicResult &&
-        other.keyword == keyword;
+        other.keyword == keyword &&
+        other.origin == origin;
   }
 }
 

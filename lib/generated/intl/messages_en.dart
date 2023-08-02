@@ -44,7 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m10(value) => "Track Count: ${value}";
 
-  static String m11(value) => "Find ${value} music";
+  static String m11(count, from) => "Find ${count} music, From ${from}";
 
   static String m12(version) => "New Version ${version}, Updating";
 

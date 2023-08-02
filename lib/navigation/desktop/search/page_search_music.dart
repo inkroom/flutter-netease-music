@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiet/component/utils/scroll_controller.dart';
@@ -11,20 +13,24 @@ import '../../../providers/search_provider.dart';
 import 'page_search.dart';
 
 class PageMusicSearchResult extends ConsumerWidget {
-  const PageMusicSearchResult({Key? key, required this.query})
+  const PageMusicSearchResult(
+      {Key? key, required this.query, required this.origin})
       : super(key: key);
 
   final String query;
+  final int origin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchResult = ref.watch(searchMusicProvider(query));
+    log("得到的 query = $query");
+    final searchResult =
+        ref.watch(searchMusicProvider(query + origin.toString()));
     return searchResult.value.when(
       data: (data) => SearchResultScaffold(
         query: query,
         queryResultDescription: context.strings.searchMusicResultCount(
-          searchResult.totalItemCount,
-        ),
+            searchResult.totalItemCount,
+            MusicApiContainer.instance.getApiSync(origin)?.name ?? "未知"),
         body: data.isEmpty
             ? Center(
                 child: Text(context.strings.noMusic),

@@ -5,11 +5,21 @@ import 'package:quiet/component.dart';
 import 'package:quiet/providers/search_provider.dart';
 import 'package:quiet/repository.dart';
 
+import '../../providers/navigator_provider.dart';
+import 'navigation_target.dart';
+
 /// 搜索来源选择框
 class SearchOrigin extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final origin = ref.watch(searchMusicProvider('')).origin;
+    final int origin;
+
+    if (ref.read(debugNavigatorPlatformProvider) == NavigationPlatform.mobile) {
+      // 移动端和桌面端需要采用不同的策略。桌面端支持搜索结果返回，移动端不需要
+      origin = ref.watch(searchMusicProvider('')).origin;
+    } else {
+      origin = ref.watch(searchMusicQueryProvider).origin;
+    }
     return Row(
       children: MusicApiContainer.instance.list
           .map((e) => Expanded(
@@ -20,7 +30,26 @@ class SearchOrigin extends ConsumerWidget {
                   groupValue: origin,
                   onChanged: (value) {
                     if (value != null) {
-                      ref.read(searchMusicProvider('').notifier).origin = value;
+                      if (ref.read(debugNavigatorPlatformProvider) ==
+                          NavigationPlatform.mobile) {
+                        // 移动端和桌面端需要采用不同的策略。桌面端支持搜索结果返回，移动端不需要
+                        ref.read(searchMusicProvider('').notifier).origin =
+                            value;
+                      } else {
+                        SearchQueryState v = ref.read(searchMusicQueryProvider);
+                        ref
+                            .read(
+                                searchMusicProvider(v.query + value.toString())
+                                    .notifier)
+                            .search(v.query, origin: value);
+
+                        ref
+                            .read(searchMusicQueryProvider.notifier)
+                            .setQuery(v.query, value);
+
+                        ref.read(navigatorProvider.notifier).navigate(
+                            NavigationTargetSearchMusicResult(v.query, value));
+                      }
                     }
                   })))
           .toList(),

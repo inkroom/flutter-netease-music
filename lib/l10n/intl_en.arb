@@ -122,7 +122,7 @@
   "dailyRecommend": "Daily Recommend",
   "dailyRecommendDescription": "Daily recommend music from Netease cloud music. Refresh every day at 06:00.",
   "currentPlaying": "Current Playing",
-  "searchMusicResultCount": "Find {value} music",
+  "searchMusicResultCount": "Find {count} music, From {from}",
   "songs": "Songs",
   "cloudMusicUsage": "Music Count",
   "cloudMusicFileDropDescription": "Drop your music file to here to upload.",

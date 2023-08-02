@@ -44,7 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m10(value) => "歌曲数: ${value}";
 
-  static String m11(value) => "找到 ${value} 首歌曲";
+  static String m11(count, from) => "找到 ${count} 首歌曲，来自 ${from}";
 
   static String m12(version) => "检测到新版本${version}，即将更新";
 
