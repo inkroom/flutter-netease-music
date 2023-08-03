@@ -114,18 +114,18 @@ bool _checkVersion(String newVersion, String oldVersion) {
 }
 
 Future<dynamic> _getUpdateUrl(PackageInfo info) {
-  // 请求顺序 github -> minio -> cos
+  // 请求顺序 github -> cos -> minio
 
   return _getUpdateUrlFromGithub(info)
-      .catchError((error, s) => _getUpdateUrlFromMinio(info))
+      .catchError((error, s) => _getUpdateUrlFromCos(info))
       .then((value) {
     return (value == null || value == '')
-        ? _getUpdateUrlFromMinio(info)
-            .catchError((error, s) => _getUpdateUrlFromCos(info))
+        ? _getUpdateUrlFromCos(info)
+            .catchError((error, s) => _getUpdateUrlFromMinio(info))
         : value;
   }).then((value) {
     log("minio value " + value.toString());
-    return value.toString() == '' ? _getUpdateUrlFromCos(info) : value;
+    return value.toString() == '' ? _getUpdateUrlFromMinio(info) : value;
   });
 }
 
