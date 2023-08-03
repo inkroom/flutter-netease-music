@@ -97,6 +97,22 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
   }
 }
 
+///
+/// 校验版本号
+/// @return true代表低于新版本，false代表等于或高于新版本
+bool _checkVersion(String newVersion, String oldVersion) {
+  if (newVersion == oldVersion) return false;
+  var newVersions = newVersion.split('.');
+  var oldVersions = oldVersion.split('.');
+
+  for (var i = 0; i < newVersions.length; i++) {
+    if (newVersions[i].compareTo(oldVersions[i]) > 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
 Future<dynamic> _getUpdateUrl(PackageInfo info) {
   // 请求顺序 github -> minio -> cos
 
@@ -121,7 +137,8 @@ Future<dynamic> _getUpdateUrlFromMinio(PackageInfo info) {
     if (value != null &&
         value[Platform.operatingSystem] != null &&
         value[Platform.operatingSystem]['version'] != null) {
-      if (info.version != value[Platform.operatingSystem]['version']) {
+      if (_checkVersion(
+          value[Platform.operatingSystem]['version'], info.version)) {
         return Future.value(value);
       }
       return Future.value(''); //不更新
@@ -138,7 +155,8 @@ Future<dynamic> _getUpdateUrlFromCos(PackageInfo info) {
         value[Platform.operatingSystem] != null &&
         value[Platform.operatingSystem]['version'] != null) {
       log("从cos获取更新 " + value.toString());
-      if (info.version != value[Platform.operatingSystem]['version']) {
+      if (_checkVersion(
+          value[Platform.operatingSystem]['version'], info.version)) {
         log('cos 更新');
         return Future.value(value);
       }
@@ -189,7 +207,8 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
         }
       };
 
-      if (info.version != version[Platform.operatingSystem]!['version']) {
+      if (_checkVersion(
+          value[Platform.operatingSystem]['version'], info.version)) {
         return Future.value(version);
       }
       return Future.value(''); //不更新

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 sed -i '4c     version: '"$1" pubspec.yaml
 
 ## linxu deb打包 ./deb.sh version
