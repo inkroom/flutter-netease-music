@@ -161,33 +161,33 @@ jobs:
         run: |
           cp github-version.json quiet/version.json
           gh release create --target master v${{ steps.yaml.outputs['version'] }} ./quiet/*
-      - name: Upload To Cos
-        uses: sylingd/tencent-cos-and-cdn-action@v1.0.2
-        with:
-          secret_id: ${{ secrets.COS_SECRET_ID }}
-          secret_key: ${{ secrets.COS_SECRET_KEY }}
-          cos_bucket: ${{ secrets.COS_BUCKET }}
-          cos_region: ${{ secrets.COS_REGION }}
-          cos_accelerate: false
-          local_path: quiet
-          remote_path: v${{ steps.yaml.outputs['version'] }}
-      - name: Upload To Cos Version
-        uses: sylingd/tencent-cos-and-cdn-action@v1.0.2
-        with:
-          secret_id: ${{ secrets.COS_SECRET_ID }}
-          secret_key: ${{ secrets.COS_SECRET_KEY }}
-          cos_bucket: ${{ secrets.COS_BUCKET }}
-          cos_region: ${{ secrets.COS_REGION }}
-          cos_accelerate: false
-          local_path: cos-version.json
-          remote_path: version.json
-      - name: Upload To Minio
-        run: |
-          wget https://dl.min.io/client/mc/release/linux-amd64/mc
-          chmod +x mc
-          ./mc alias set ink ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
-          ./mc cp -r quiet/* ink/temp/quiet/v${{ steps.yaml.outputs['version'] }}/
-          ./mc cp minio-version.json ink/temp/quiet/version.json
+      #      - name: Upload To Cos
+      #        uses: sylingd/tencent-cos-and-cdn-action@v1.0.2
+      #        with:
+      #          secret_id: ${{ secrets.COS_SECRET_ID }}
+      #          secret_key: ${{ secrets.COS_SECRET_KEY }}
+      #          cos_bucket: ${{ secrets.COS_BUCKET }}
+      #          cos_region: ${{ secrets.COS_REGION }}
+      #          cos_accelerate: false
+      #          local_path: quiet
+      #          remote_path: v${{ steps.yaml.outputs['version'] }}
+      #      - name: Upload To Cos Version
+      #        uses: sylingd/tencent-cos-and-cdn-action@v1.0.2
+      #        with:
+      #          secret_id: ${{ secrets.COS_SECRET_ID }}
+      #          secret_key: ${{ secrets.COS_SECRET_KEY }}
+      #          cos_bucket: ${{ secrets.COS_BUCKET }}
+      #          cos_region: ${{ secrets.COS_REGION }}
+      #          cos_accelerate: false
+      #          local_path: cos-version.json
+      #          remote_path: version.json
+      #      - name: Upload To Minio
+      #        run: |
+      #          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+      #          chmod +x mc
+      #          ./mc alias set ink ${{ secrets.MINIO_SITE}} ${{ secrets.MINIO_USER }} ${{ secrets.MINIO_PASSWORD }} --api s3v2
+      #          ./mc cp -r quiet/* ink/temp/quiet/v${{ steps.yaml.outputs['version'] }}/
+      #          ./mc cp minio-version.json ink/temp/quiet/version.json
       - name: Notify
         if: failure()
         run: |
