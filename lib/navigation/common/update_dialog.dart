@@ -106,7 +106,7 @@ bool _checkVersion(String newVersion, String oldVersion) {
   var oldVersions = oldVersion.split('.');
 
   for (var i = 0; i < newVersions.length; i++) {
-    if (newVersions[i].compareTo(oldVersions[i]) > 0) {
+    if (int.parse(newVersions[i]) < int.parse(oldVersions[i])) {
       return false;
     }
   }
