@@ -207,13 +207,9 @@ jobs:
       - name: Notify
         continue-on-error: true
         run: |
-          curl -d "${{ github.repository }}  ${{ steps.yaml.outputs['version'] }}  构建失败" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox
-      - name: Delete tag
-        uses: pr-mpt/actions-delete-tag@v1
-        continue-on-error: true
+          curl -d "${{ github.repository }}  v${{ steps.yaml.outputs['version'] }}  构建失败" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox
       - name: Delete Release
-        run: gh release delete ${{ github.ref_name  }}
-        continue-on-error: true
+        run: gh release delete --cleanup-tag -y v${{ steps.yaml.outputs['version']  }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   success:

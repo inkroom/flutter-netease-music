@@ -152,6 +152,30 @@ dpkg-shlibdeps -O ./opt/quiet/quiet
 
 最终输出应该形式如下：
 
-> shlibs:Depends=libatk1.0-0 (>= 1.12.4), libc6 (>= 2.14), libcairo-gobject2 (>= 1.10.0), libcairo2 (>= 1.2.4), libgcc1 (>= 1:3.0), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.37.3), libgtk-3-0 (>= 3.9.12), libpango-1.0-0 (>= 1.14.0), libpangocairo-1.0-0 (>= 1.14.0), libstdc++6 (>= 5.2)
+> shlibs:Depends=libatk1.0-0 (>= 1.12.4), libc6 (>= 2.14), libcairo-gobject2 (>= 1.10.0),
+> libcairo2 (>= 1.2.4), libgcc1 (>= 1:3.0), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.37.3),
+> libgtk-3-0 (>= 3.9.12), libpango-1.0-0 (>= 1.14.0), libpangocairo-1.0-0 (>= 1.14.0), libstdc++6 (>=
+> 5.2)
 
 只需要把**Depends=**后面的内容复制到**linux/deb/DEBIAN/control**里即可
+
+#### 6. android构建失败
+
+如果出现类似以下错误
+
+```
+ Could not find method disable() for arguments [InvalidPackage] on task ':audioplayers_android:lint' of type com.android.build.gradle.tasks.LintGlobalTask.
+```
+
+这是 gradle 不兼容问题，目前找不到能够兼容的 gradle 版本，只能修改出现这个错误的依赖的 gradle 配置
+
+去掉相应配置即可，具体修改逻辑可在 /a.sh 中看到，
+
+涉及的第三方依赖为
+
+- audioplayers
+- file_picker
+- package_info_plus
+
+目前上述依赖版本已锁死，如需升级，需要修改相应脚本
+
