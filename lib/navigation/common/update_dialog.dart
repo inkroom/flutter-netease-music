@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -90,9 +91,9 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
         });
       }
     }).catchError((error, s) {
+      toast(S.current.updateFail);
       log(s.toString());
       log(error);
-      toast(S.current.updateFail);
     });
   }
 }
@@ -152,6 +153,7 @@ Future<dynamic> _getUpdateUrlFromMinio(PackageInfo info) {
 Future<dynamic> _getUpdateUrlFromCos(PackageInfo info) {
   return networkRepository!.checkUpdate(2).then((value) {
     if (value != null &&
+        (value = ((value is String) ? jsonDecode(value) : value)) != null &&
         value[Platform.operatingSystem] != null &&
         value[Platform.operatingSystem]['version'] != null) {
       log("从cos获取更新 " + value.toString());
