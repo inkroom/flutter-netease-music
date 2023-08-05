@@ -57,11 +57,14 @@ class KuWoApi extends MusicApi {
     return _doRequest(
             "http://www.kuwo.cn/api/www/search/searchMusicBykeyWord?key=${Uri.encodeFull(keyword)}&pn=$page&rn=$size&httpsStatus=1&reqId=3e5b4f20-ab44-11ec-bac5-bfdfcde1c601",
             {
-              "Cookie": "kw_token=CUQ9R4J2L4",
+              'Cookie':
+                  'Hm_lvt_cdb524f42f0ce19b169a8071123a4797=1691246796; _ga=GA1.2.1036361046.1691246796; _gid=GA1.2.1524982465.1691246796; Hm_lpvt_cdb524f42f0ce19b169a8071123a4797=1691250747; _gat=1; Hm_Iuvt_cdb524f42f0ce19b169b8072123a4727=CYcsc7PzFx3PTnkYht2K2QGH4XNAabjE; _ga_ETPBRPM9ML=GS1.2.1691250748.2.1.1691250767.41.0.0',
               'Referer': 'http://www.kuwo.cn',
               'csrf': 'CUQ9R4J2L4',
-              "User-Agent":
-                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0",
+              'Secret':
+                  '1d05191f99b3bd73f843de10f088f2a455c1cbc38fbc7bc34c244290c5db7d7e02caa302',
+              'User-Agent':
+                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188',
               'Pragma': 'no-cache',
               'Cache-Control': 'no-cache'
             },
