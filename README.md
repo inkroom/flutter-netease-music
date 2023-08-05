@@ -179,3 +179,8 @@ dpkg-shlibdeps -O ./opt/quiet/quiet
 
 目前上述依赖版本已锁死，如需升级，需要修改相应脚本
 
+#### 7. Nuget.exe
+
+如果执行 `flutter build windows -v` 中出现 `Nuget.exe not found, trying to download or use cached version`
+
+下载 [NuGet.exe](https://dist.nuget.org/win-x86-commandline/latest/nuget.exe) 放到 PATH 路径下
