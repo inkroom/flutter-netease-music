@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
@@ -107,6 +106,8 @@ class CachedImage extends ImageProvider<CachedImage> implements CacheKey {
     //request network source
     final Uri resolved = Uri.base.resolve(key.url);
     final HttpClientRequest request = await _httpClient.getUrl(resolved);
+    request.headers.set("User-Agent",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0"); // 默认的User-Agent会403
     headers?.forEach((String name, String value) {
       request.headers.add(name, value);
     });
