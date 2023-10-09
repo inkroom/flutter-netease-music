@@ -1,0 +1,142 @@
+name: release
+
+on:
+  push:
+    branches: [ 'dev' ]
+    tags:
+      - 'v*'
+    paths-ignore:
+      - 'README.md'
+  workflow_dispatch:
+jobs:
+  linux:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Read Version
+        uses: pietrobolcato/action-read-yaml@1.1.0
+        id: yaml
+        with:
+          config: 'pubspec.yaml'
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.5'
+          channel: 'stable'
+          cache: false
+      - name: Flutter Config
+        run: flutter config --enable-linux-desktop
+          #   github 的机器居然也会出现 镜像连不上问题，不知道是哪边的问题
+        # sudo sed -i "s@http://.*archive.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@g" /etc/apt/sources.list
+        # sudo sed -i "s@http://.*security.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@g" /etc/apt/sources.list
+      - name: Update Runtime
+        run: |
+          sudo apt update -y && sudo apt upgrade -y
+      - name: Patch for Build
+        run: |
+          sudo apt install -y ninja-build libgtk-3-dev
+      - name: Patch for Runtime
+        run: |
+          sudo apt install -y libappindicator3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
+      - name: Dependency
+        run: flutter pub get
+      - name: Build
+        run: sh deb.sh ${{ steps.yaml.outputs['version'] }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: quiet
+          path: build/linux/x64/release/quiet-linux-v${{ steps.yaml.outputs['version'] }}.deb
+  windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Read Version
+        uses: pietrobolcato/action-read-yaml@1.1.0
+        id: yaml
+        with:
+          config: 'pubspec.yaml'
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.5'
+          channel: 'stable'
+          cache: false
+      - name: Dependency
+        run: flutter pub get
+      - name: Build
+        env:
+          QUIET_VERSION: ${{ steps.yaml.outputs['version'] }}
+        run: |
+          .\w.bat %QUIET_VERSION%
+      - name: Zip
+        uses: vimtor/action-zip@v1
+        with:
+          files: build/windows/runner/Release/
+          dest: quiet-windows-v${{  steps.yaml.outputs['version'] }}.zip
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: quiet
+          path: quiet-windows-v${{ steps.yaml.outputs['version'] }}.zip
+  android:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Read Version
+        uses: pietrobolcato/action-read-yaml@1.1.0
+        id: yaml
+        with:
+          config: 'pubspec.yaml'
+      - name: Install Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.6'
+          channel: 'stable'
+          cache: false
+      - name: Create the Keystore
+        env:
+          APK_KEY_STORE_BASE64: ${{ secrets.APK_KEY_STORE_BASE64 }}
+          APK_KEY_PROPERTIES_BASE64: ${{ secrets.APK_KEY_PROPERTIES_BASE64 }}
+        run: |
+          # import keystore from secrets
+          ls -all
+          echo $APK_KEY_STORE_BASE64 | base64 -di > android/app/upload-keystore.jks
+          echo $APK_KEY_PROPERTIES_BASE64 | base64 -di > android/key.properties
+      - name: Dependency
+        run: flutter pub get
+      - name: Build
+        run: sh a.sh ${{ steps.yaml.outputs['version'] }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: quiet
+          path: "build/app/outputs/apk/release/*"
+  fail:
+    runs-on: ubuntu-20.04
+    needs: [ linux, android, windows ] # 最好是在 release 也失败后执行 ，但是如果前置任务失败， release直接不执行，导致fail 也不会执行
+    if: failure()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Read Version
+        uses: pietrobolcato/action-read-yaml@1.1.0
+        id: yaml
+        with:
+          config: 'pubspec.yaml'
+      - name: Notify
+        continue-on-error: true
+        run: |
+          curl -d "${{ github.repository }}  v${{ steps.yaml.outputs['version'] }}  测试构建失败" -H 't: ${{ github.repository }} action' ntfy.sh/inkbox_inkbox
+      - name: Delete Release
+        run: gh release delete --cleanup-tag -y v${{ steps.yaml.outputs['version']  }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
