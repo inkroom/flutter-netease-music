@@ -2,4 +2,6 @@
 <resources>
     <color name="color_launcher_background">#DD4237</color>
     <color name="color_splash">#FFd92e29</color>
+    <color name="notification_text">#DDB5B5</color>
+    <color name="notification_background">#272020</color>
 </resources>

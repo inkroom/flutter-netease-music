@@ -23,7 +23,8 @@ import androidx.media.app.NotificationCompat.MediaStyle;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
-
+import android.widget.RemoteViews;
+import android.view.View;
 public class MusicPlayerService extends Service implements AudioManager.OnAudioFocusChangeListener {
 
     @Override
@@ -164,15 +165,53 @@ public class MusicPlayerService extends Service implements AudioManager.OnAudioF
                 mediaStyle.setShowActionsInCompactView(0);
             }
         }
+        //普通notification用到的视图
+        RemoteViews normalView = new RemoteViews(getPackageName(), R.layout.notification);
+
+//                normalView.setImageViewUri(R.id.action_image, new Uri.Builder().scheme("https").appendPath("temp1.inkroom.cn/temp/quiet/s.jpg").build());
+        normalView.setImageViewBitmap(R.id.action_image, music.image);
+        normalView.setTextViewText(R.id.title_name,music.title);
+        normalView.setTextViewText(R.id.author_name,music.artist);
+        normalView.setOnClickPendingIntent(R.id.media_previous,pendingIntent(1,MusicAction.previous));
+        normalView.setOnClickPendingIntent(R.id.media_play,pendingIntent(2,MusicAction.play));
+        normalView.setOnClickPendingIntent(R.id.media_pause,pendingIntent(2,MusicAction.pause));
+        normalView.setOnClickPendingIntent(R.id.media_next,pendingIntent(3,MusicAction.next));
+
+
+        //显示bigView的notification用到的视图
+        RemoteViews bigView = new RemoteViews(getPackageName(), R.layout.big_notification);
+        bigView.setImageViewBitmap(R.id.action_image, music.image);
+        bigView.setTextViewText(R.id.title_name, music.title);
+        bigView.setTextViewText(R.id.author_name, music.artist);
+        bigView.setOnClickPendingIntent(R.id.media_previous,pendingIntent(1,MusicAction.previous));
+        bigView.setOnClickPendingIntent(R.id.media_play,pendingIntent(2,MusicAction.play));
+        bigView.setOnClickPendingIntent(R.id.media_pause,pendingIntent(2,MusicAction.pause));
+        bigView.setOnClickPendingIntent(R.id.media_next,pendingIntent(3,MusicAction.next));
+
+        if (music.isPlaying){
+            bigView.setViewVisibility(R.id.media_play, View.GONE);
+            bigView.setViewVisibility(R.id.media_pause, View.VISIBLE);
+            normalView.setViewVisibility(R.id.media_play, View.GONE);
+            normalView.setViewVisibility(R.id.media_pause, View.VISIBLE);
+        }else{
+            bigView.setViewVisibility(R.id.media_play, View.VISIBLE);
+            bigView.setViewVisibility(R.id.media_pause, View.GONE);
+            normalView.setViewVisibility(R.id.media_play, View.VISIBLE);
+            normalView.setViewVisibility(R.id.media_pause, View.GONE);
+        }
+
 
         NotificationCompat.Builder builder = new NotificationCompat
                 .Builder(getApplicationContext(), channelId)
                 .setContentTitle(music.title)
                 .setContentText(music.artist)
                 .setLargeIcon(music.image)
+                .setContent(normalView)//设置普通notification视图
+                .setCustomBigContentView(bigView)//设置显示bigView的notification视图
                 .setSmallIcon(R.drawable.notification_icon)
                 .setOngoing(music.isPlaying)
-                .setStyle(mediaStyle);
+//                .setStyle(mediaStyle)
+                ;
 
         int secpos = music.position / 1000;
         int hour = secpos / 3600;

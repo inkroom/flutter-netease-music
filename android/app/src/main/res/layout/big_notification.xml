@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/notification_background"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:id="@+id/action_image" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="歌名"
+            android:textColor="@color/notification_text"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/author_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/notification_text"
+            android:text="歌手"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!--            <ImageButton-->
+            <!--                android:layout_marginEnd="10dp"-->
+            <!--                android:layout_width="26dp"-->
+            <!--                android:layout_height="26dp"-->
+            <!--                android:background="@null"-->
+            <!--                android:scaleType="fitCenter"-->
+            <!--                android:src="@mipmap/like"/>-->
+
+            <ImageButton
+                android:layout_weight="1"
+                android:id="@+id/media_previous"
+                android:layout_marginEnd="10dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/media_previous" />
+
+            <ImageButton
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:id="@+id/media_play"
+                android:layout_marginEnd="10dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/media_play" />
+
+            <ImageButton
+                android:layout_weight="1"
+                android:id="@+id/media_pause"
+                android:layout_marginEnd="10dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/media_pause" />
+
+            <ImageButton
+                android:layout_weight="1"
+                android:id="@+id/media_next"
+                android:layout_marginEnd="10dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/media_next" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
