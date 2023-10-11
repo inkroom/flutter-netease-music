@@ -170,8 +170,8 @@ public class MusicPlayerService extends Service implements AudioManager.OnAudioF
 
 //                normalView.setImageViewUri(R.id.action_image, new Uri.Builder().scheme("https").appendPath("temp1.inkroom.cn/temp/quiet/s.jpg").build());
         normalView.setImageViewBitmap(R.id.action_image, music.image);
-        normalView.setTextViewText(R.id.title_name,music.title);
-        normalView.setTextViewText(R.id.author_name,music.artist);
+        normalView.setTextViewText(R.id.title_name, music.title);
+        normalView.setTextViewText(R.id.author_name, music.artist);
         normalView.setOnClickPendingIntent(R.id.media_previous,pendingIntent(1,MusicAction.previous));
         normalView.setOnClickPendingIntent(R.id.media_play,pendingIntent(2,MusicAction.play));
         normalView.setOnClickPendingIntent(R.id.media_pause,pendingIntent(2,MusicAction.pause));
@@ -183,6 +183,8 @@ public class MusicPlayerService extends Service implements AudioManager.OnAudioF
         bigView.setImageViewBitmap(R.id.action_image, music.image);
         bigView.setTextViewText(R.id.title_name, music.title);
         bigView.setTextViewText(R.id.author_name, music.artist);
+        bigView.setProgressBar(R.id.progress, music.duration, music.position, false);
+
         bigView.setOnClickPendingIntent(R.id.media_previous,pendingIntent(1,MusicAction.previous));
         bigView.setOnClickPendingIntent(R.id.media_play,pendingIntent(2,MusicAction.play));
         bigView.setOnClickPendingIntent(R.id.media_pause,pendingIntent(2,MusicAction.pause));
