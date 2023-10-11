@@ -109,6 +109,8 @@ bool _checkVersion(String newVersion, String oldVersion) {
   for (var i = 0; i < newVersions.length; i++) {
     if (int.parse(newVersions[i]) < int.parse(oldVersions[i])) {
       return false;
+    } else if (int.parse(newVersions[i]) > int.parse(oldVersions[i])) {
+      return true;
     }
   }
   return true;
@@ -176,7 +178,6 @@ Future<dynamic> _getUpdateUrlFromCos(PackageInfo info) {
 ///
 Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
   return networkRepository!.checkUpdate(0).then((value) {
-
     if (value != null) {
       log("从github获取更新 " + value.toString());
       List assets = value['assets'];
@@ -197,7 +198,7 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
           "file": "quiet/quiet-windows-latest.zip",
           "url": assets
               .where((element) =>
-              element['name'].toString().contains(RegExp("windows")))
+                  element['name'].toString().contains(RegExp("windows")))
               .first['browser_download_url']
         },
         "android": {
@@ -206,8 +207,8 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
           "file": "quiet/quiet-android-latest.apk",
           "url": assets
               .where((element) => element['name']
-              .toString()
-              .contains(RegExp("android-${value['tag_name']}.apk")))
+                  .toString()
+                  .contains(RegExp("android-${value['tag_name']}.apk")))
               .first['browser_download_url']
         }
       };
