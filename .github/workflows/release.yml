@@ -220,7 +220,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Read Version
-        uses: pietrobolcato/action-read-yaml@1.1.0
+        uses: pietrobolcato/action-read-yaml@dd664040f4883322f6d143e58302062b35a46e4d
         id: yaml
         with:
           config: 'pubspec.yaml'
