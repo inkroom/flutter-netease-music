@@ -132,9 +132,10 @@ jobs:
         with:
           config: 'pubspec.yaml'
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           pattern: quiet-*
+          merge-multiple: true
           path: quiet/
       - name: Update Version
         run: |
