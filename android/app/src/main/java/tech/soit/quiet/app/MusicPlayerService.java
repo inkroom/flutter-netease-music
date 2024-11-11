@@ -281,7 +281,7 @@ public class MusicPlayerService extends Service implements AudioManager.OnAudioF
         builder.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0,
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         Notification n = builder.build();
-
+        startForeground(notifyId, n);
         if (manager != null) {
             manager.notify(notifyId, n);
         }
