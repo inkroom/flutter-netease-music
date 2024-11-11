@@ -46,7 +46,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: quiet
+          name: quiet-linux
           path: build/linux/x64/release/quiet-linux-v${{ steps.yaml.outputs['version'] }}.deb
   windows:
     runs-on: windows-2022
@@ -72,14 +72,14 @@ jobs:
         run: |
           .\w.bat %QUIET_VERSION%
       - name: Zip
-        uses: vimtor/action-zip@v1.1
+        uses: vimtor/action-zip@v1.2
         with:
           files: build/windows/runner/Release/
           dest: quiet-windows-v${{  steps.yaml.outputs['version'] }}.zip
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: quiet
+          name: quiet-windows
           path: quiet-windows-v${{ steps.yaml.outputs['version'] }}.zip
   android:
     runs-on: ubuntu-20.04
@@ -118,7 +118,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: quiet
+          name: quiet-android
           path: "build/app/outputs/apk/release/*"
   release:
     runs-on: ubuntu-20.04
@@ -134,7 +134,7 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: quiet
+          pattern: quiet-*
           path: quiet/
       - name: Update Version
         run: |
