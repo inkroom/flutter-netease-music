@@ -35,7 +35,7 @@ void updateApp(BuildContext context, {OnCheckVersion? onCheckVersion}) {
         toast(S.current.updateFail);
         return;
       }
-      if (value == '') {
+      if (value.toString() == '') {
         if (onCheckVersion != null) onCheckVersion(false);
         return;
       }
@@ -109,6 +109,8 @@ bool _checkVersion(String newVersion, String oldVersion) {
   for (var i = 0; i < newVersions.length; i++) {
     if (int.parse(newVersions[i]) < int.parse(oldVersions[i])) {
       return false;
+    } else if (int.parse(newVersions[i]) > int.parse(oldVersions[i])) {
+      return true;
     }
   }
   return true;
@@ -117,10 +119,13 @@ bool _checkVersion(String newVersion, String oldVersion) {
 Future<dynamic> _getUpdateUrl(PackageInfo info) {
   // 请求顺序 github -> cos -> minio
 
-  return _getUpdateUrlFromGithub(info)
-      .catchError((error, s) => _getUpdateUrlFromCos(info))
-      .then((value) {
-    return (value == null || value == '')
+  return _getUpdateUrlFromGithub(info).catchError((error, s) {
+    log("github error" + error.toString());
+    log(error);
+
+    return _getUpdateUrlFromCos(info);
+  }).then((value) {
+    return (value == null || value.toString() == '')
         ? _getUpdateUrlFromCos(info)
             .catchError((error, s) => _getUpdateUrlFromMinio(info))
         : value;
@@ -173,9 +178,8 @@ Future<dynamic> _getUpdateUrlFromCos(PackageInfo info) {
 ///
 Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
   return networkRepository!.checkUpdate(0).then((value) {
-    log("从github获取更新");
-
     if (value != null) {
+      log("从github获取更新 " + value.toString());
       List assets = value['assets'];
 
       final version = {
@@ -210,7 +214,7 @@ Future<dynamic> _getUpdateUrlFromGithub(PackageInfo info) {
       };
 
       if (_checkVersion(
-          value[Platform.operatingSystem]['version'], info.version)) {
+          version[Platform.operatingSystem]!['version'], info.version)) {
         return Future.value(version);
       }
       return Future.value(''); //不更新
