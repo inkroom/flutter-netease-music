@@ -46,7 +46,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: quiet
+          name: quiet-linux
           path: build/linux/x64/release/quiet-linux-v${{ steps.yaml.outputs['version'] }}.deb
   windows:
     runs-on: windows-2022
@@ -79,7 +79,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: quiet
+          name: quiet-windows
           path: quiet-windows-v${{ steps.yaml.outputs['version'] }}.zip
   android:
     runs-on: ubuntu-20.04
@@ -118,7 +118,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: quiet
+          name: quiet-android
           path: "build/app/outputs/apk/release/*"
   fail:
     runs-on: ubuntu-20.04
