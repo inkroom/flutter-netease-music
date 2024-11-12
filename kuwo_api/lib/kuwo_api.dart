@@ -132,11 +132,16 @@ class KuWoApi extends MusicApi {
   String get icon => "assets/icon.ico";
 
   String _formatDuration(Duration v) {
-    return v.inMinutes.toString().padLeft(2, '0') +
-        ":" +
-        v.inSeconds.toString().padLeft(2, '0') +
-        '.' +
-        v.inMilliseconds.toString().padRight(4, '0').substring(0, 3);
+    String minutes =
+        duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    String seconds =
+        duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    String mill = duration.inMilliseconds
+        .remainder(60)
+        .toString()
+        .padRight(3, '0')
+        .substring(0, 3);
+    return "$minutes:$seconds.$mill";
   }
 
   @override
