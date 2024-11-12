@@ -131,7 +131,7 @@ class KuWoApi extends MusicApi {
   @override
   String get icon => "assets/icon.ico";
 
-  String _formatDuration(Duration v) {
+  String _formatDuration(Duration duration) {
     String minutes =
         duration.inMinutes.remainder(60).toString().padLeft(2, '0');
     String seconds =
