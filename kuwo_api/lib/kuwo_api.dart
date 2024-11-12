@@ -137,7 +137,7 @@ class KuWoApi extends MusicApi {
     String seconds =
         duration.inSeconds.remainder(60).toString().padLeft(2, '0');
     String mill = duration.inMilliseconds
-        .remainder(60)
+        .remainder(1000)
         .toString()
         .padRight(3, '0')
         .substring(0, 3);
