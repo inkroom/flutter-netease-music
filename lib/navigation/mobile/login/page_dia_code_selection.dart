@@ -143,7 +143,9 @@ class _DiaCodeListState extends State<_DiaCodeList> {
             ),
           AZSelection(
             onSelection: (selection) {
-              showToastWidget(_AzSelectionOverlay(content: selection),dismissOtherToast: true, duration: const Duration(milliseconds: 500));
+              showToastWidget(_AzSelectionOverlay(content: selection),
+                  dismissOtherToast: true,
+                  duration: const Duration(milliseconds: 500));
               _jumpToAlphabet(selection.toLowerCase());
             },
             textStyle: Theme.of(context).textTheme.bodyText1,

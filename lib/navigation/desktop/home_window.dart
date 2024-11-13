@@ -51,8 +51,7 @@ class _HomeWindowState extends ConsumerState<HomeWindow>
   }
 
   void _initTrayMenu() async {
-    tray.Menu menu = tray.Menu(
-        items: [
+    tray.Menu menu = tray.Menu(items: [
       if (ref.read(playerStateProvider).isPlaying)
         tray.MenuItem(
           // 这里不能直接用 context.strings

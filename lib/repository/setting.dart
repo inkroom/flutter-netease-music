@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String _prefix = 'quiet:settings:';
+
 enum NetworkMode {
   /// 仅使用wifi
   WIFI,

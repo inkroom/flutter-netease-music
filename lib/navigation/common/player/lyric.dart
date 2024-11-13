@@ -501,4 +501,3 @@ class LyricPainter extends ChangeNotifier implements CustomPainter {
   bool shouldRebuildSemantics(CustomPainter oldDelegate) =>
       shouldRepaint(oldDelegate as LyricPainter);
 }
-

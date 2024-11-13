@@ -84,7 +84,7 @@ class TracksPlayerState with EquatableMixin {
 abstract class TracksPlayer extends StateNotifier<TracksPlayerState> {
   TracksPlayer(this.ref)
       : super(TracksPlayerState(
-      isPlaying: false,
+            isPlaying: false,
             isBuffering: false,
             playingTrack: null,
             showPlayingList: TrackList.empty(),

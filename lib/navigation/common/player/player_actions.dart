@@ -37,6 +37,7 @@ class PlayingOperationBar extends ConsumerWidget {
     );
   }
 }
+
 /// 播放模式控制器
 class RepeatModeControl extends ConsumerWidget {
   const RepeatModeControl({Key? key}) : super(key: key);

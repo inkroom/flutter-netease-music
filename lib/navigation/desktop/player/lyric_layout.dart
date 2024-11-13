@@ -26,17 +26,17 @@ class LyricLayout extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SizedBox(height: 20),
-          if(Platform.isLinux)
-          Text(
-            track.name,
-          ),
-          if(Platform.isWindows || Platform.isWindows) 
-          Text(
-            track.name,
-            style: context.textTheme.headline6.bold,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
+          if (Platform.isLinux)
+            Text(
+              track.name,
+            ),
+          if (Platform.isWindows || Platform.isWindows)
+            Text(
+              track.name,
+              style: context.textTheme.headline6.bold,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           const SizedBox(height: 10),
           Row(
             children: [

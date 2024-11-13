@@ -117,7 +117,7 @@ class _LandscapePlayingListContainer extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
         padding:
-        EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         width: 520,
         child: Material(
           borderRadius: BorderRadius.circular(8),
@@ -154,7 +154,7 @@ class _Header extends ConsumerWidget {
                   return;
                 }
                 final succeed =
-                await PlaylistSelectorDialog.addSongs(context, ids);
+                    await PlaylistSelectorDialog.addSongs(context, ids);
                 if (succeed == null) {
                   return;
                 }
@@ -229,15 +229,15 @@ class _MusicTile extends ConsumerWidget {
             leading,
             Expanded(
                 child: Text.rich(
-                  TextSpan(children: [
-                    TextSpan(text: music.name, style: TextStyle(color: name)),
-                    TextSpan(
-                        text: " - ${music.displaySubtitle}",
-                        style: TextStyle(color: artist, fontSize: 12))
-                  ]),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                )),
+              TextSpan(children: [
+                TextSpan(text: music.name, style: TextStyle(color: name)),
+                TextSpan(
+                    text: " - ${music.displaySubtitle}",
+                    style: TextStyle(color: artist, fontSize: 12))
+              ]),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            )),
             IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () {

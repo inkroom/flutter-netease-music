@@ -84,8 +84,7 @@ class _MainPageMyState extends ConsumerState<MainPageMy>
       List<Element> children,
       int start,
       int end,
-    )
-        callback,
+    ) callback,
   ) {
     SliverMultiBoxAdaptorElement? playListSliver;
     void playListSliverFinder(Element element) {

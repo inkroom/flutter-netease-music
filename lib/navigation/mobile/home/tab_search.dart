@@ -30,12 +30,12 @@ class HomeTabSearch extends ConsumerWidget {
                 child: ListView.builder(
                   // shrinkWrap: true,
                   itemBuilder: (context, index) => TrackTile(
-                track: data[index],
-                index: index + 1,
-              ),
-              itemCount: data.length,
-            ),
-            player: ref.read(playerProvider)),
+                    track: data[index],
+                    index: index + 1,
+                  ),
+                  itemCount: data.length,
+                ),
+                player: ref.read(playerProvider)),
         error: (error, stacktrace) => Center(
           child: Text(context.formattedError(error, stacktrace: stacktrace)),
         ),

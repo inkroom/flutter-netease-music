@@ -6,30 +6,31 @@ import 'package:quiet/component.dart';
 
 Future<bool> showNeedLoginToast(BuildContext context) async {
   final completer = Completer();
-  showToastWidget(Opacity(
-        opacity: 0.5,
-        child: _Toast(
-            child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(context.strings.needLogin),
-            InkWell(
-              onTap: () async {
-                dismissAllToast();
-                final loginResult =
-                    await Navigator.pushNamed(context, pageLogin);
-                completer.complete(loginResult == true);
-              },
-              child: Text(
-                context.strings.toLoginPage,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: Colors.blue),
-              ),
-            )
-          ],
-        ))),
+  showToastWidget(
+      Opacity(
+          opacity: 0.5,
+          child: _Toast(
+              child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(context.strings.needLogin),
+              InkWell(
+                onTap: () async {
+                  dismissAllToast();
+                  final loginResult =
+                      await Navigator.pushNamed(context, pageLogin);
+                  completer.complete(loginResult == true);
+                },
+                child: Text(
+                  context.strings.toLoginPage,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Colors.blue),
+                ),
+              )
+            ],
+          ))),
       duration: const Duration(milliseconds: 2000));
   return await (completer.future as FutureOr<bool>);
 }

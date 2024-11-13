@@ -201,8 +201,6 @@ class _PlayerControlWidget extends StatelessWidget {
   }
 }
 
-
-
 class _PlayingListButton extends ConsumerWidget {
   const _PlayingListButton({Key? key}) : super(key: key);
 

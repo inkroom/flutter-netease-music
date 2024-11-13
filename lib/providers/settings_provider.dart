@@ -111,7 +111,7 @@ class SettingState with EquatableMixin {
 class Settings extends StateNotifier<SettingState> {
   Settings()
       : super(const SettingState(
-    networkMode: NetworkMode.NONE,
+          networkMode: NetworkMode.NONE,
           themeMode: ThemeMode.system,
           skipWelcomePage: true,
           skipAccompaniment: false,
