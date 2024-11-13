@@ -13,16 +13,16 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Read Version
-        uses: pietrobolcato/action-read-yaml@1.1.0
+        uses: pietrobolcato/action-read-yaml@dd664040f4883322f6d143e58302062b35a46e4d
         id: yaml
         with:
           config: 'pubspec.yaml'
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.5'
+          flutter-version: '3.10.6'
           channel: 'stable'
           cache: false
       - name: Flutter Config
@@ -44,7 +44,7 @@ jobs:
       - name: Build
         run: sh deb.sh ${{ steps.yaml.outputs['version'] }}
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: quiet
           path: build/linux/x64/release/quiet-linux-v${{ steps.yaml.outputs['version'] }}.deb
@@ -52,9 +52,9 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Read Version
-        uses: pietrobolcato/action-read-yaml@1.1.0
+        uses: pietrobolcato/action-read-yaml@dd664040f4883322f6d143e58302062b35a46e4d
         id: yaml
         with:
           config: 'pubspec.yaml'
@@ -77,7 +77,7 @@ jobs:
           files: build/windows/runner/Release/
           dest: quiet-windows-v${{  steps.yaml.outputs['version'] }}.zip
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: quiet
           path: quiet-windows-v${{ steps.yaml.outputs['version'] }}.zip
@@ -85,14 +85,14 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Read Version
-        uses: pietrobolcato/action-read-yaml@1.1.0
+        uses: pietrobolcato/action-read-yaml@dd664040f4883322f6d143e58302062b35a46e4d
         id: yaml
         with:
           config: 'pubspec.yaml'
       - name: Install Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '11'
@@ -116,7 +116,7 @@ jobs:
       - name: Build
         run: sh a.sh ${{ steps.yaml.outputs['version'] }}
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: quiet
           path: "build/app/outputs/apk/release/*"
@@ -125,9 +125,9 @@ jobs:
     needs: [linux, android, windows]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Read Version
-        uses: pietrobolcato/action-read-yaml@1.1.0
+        uses: pietrobolcato/action-read-yaml@dd664040f4883322f6d143e58302062b35a46e4d
         id: yaml
         with:
           config: 'pubspec.yaml'
@@ -198,9 +198,9 @@ jobs:
     if: failure()
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Read Version
-        uses: pietrobolcato/action-read-yaml@1.1.0
+        uses: pietrobolcato/action-read-yaml@dd664040f4883322f6d143e58302062b35a46e4d
         id: yaml
         with:
           config: 'pubspec.yaml'
@@ -217,7 +217,7 @@ jobs:
     needs: [release]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Read Version
         uses: pietrobolcato/action-read-yaml@1.1.0
         id: yaml

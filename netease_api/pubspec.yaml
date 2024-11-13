@@ -15,7 +15,7 @@ dependencies:
   dio_cookie_manager: 2.0.0
   netease_music_api:
     git:
-      url: https://github.com/boyan01/NeteaseCloudMusicApi.git
+      url: https://gitee.com/inkroom/t3.git
       ref: 8bdb36f3efda3cefa57efc8e2190c188d9a05a86
   json_annotation: ^4.3.0
   track_music_api:
